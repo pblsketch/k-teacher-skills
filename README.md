@@ -42,6 +42,32 @@ AI로 수업자료를 "딸깍" 생성하는 대신, 교사의 수업 의도·학
    - 질문을 많이 던지는 것이 목적이 아닙니다.
    - `references/interview-readiness.md`의 readiness gate로 더 물을지, 요약할지, 산출물로 넘어갈지 판단합니다.
 
+## Migration to v2.0
+
+v2.0부터 `skills/` 폴더는 7개 그룹(`entry/`, `lesson-design/`, `inquiry-pbl/`, `assessment/`, `individualization/`, `diagnostics/`, `ai-era/`)으로 계층화되었습니다. **개별 스킬의 내용(SKILL.md)은 변경되지 않았고**, 폴더 경로만 바뀝니다.
+
+설치 스크립트(`install-claude.ps1`, `install-codex.ps1`)는 자동으로 새 계층을 walk하면서 기존처럼 `~/.claude/skills/<skill-name>/` 평면 구조로 복사합니다. **이미 v1.x로 설치한 사용자도 그냥 새 스크립트를 다시 실행하면 됩니다** (덮어쓰기). 수동 `cp -r skills/<skill> ~/.claude/skills/` 명령을 쓰던 경우만 새 경로(`skills/<group>/<skill>`)로 갱신하면 됩니다.
+
+| v1.x 경로 | v2.0 경로 |
+|-----------|-----------|
+| `skills/grill-me-for-k-teacher/` | `skills/entry/grill-me-for-k-teacher/` |
+| `skills/grill-with-curriculum/` | `skills/entry/grill-with-curriculum/` |
+| `skills/k-teacher-workflow-router/` | `skills/entry/k-teacher-workflow-router/` |
+| `skills/lesson-prototype/` | `skills/lesson-design/lesson-prototype/` |
+| `skills/to-lesson-brief/` | `skills/lesson-design/to-lesson-brief/` |
+| `skills/improve-lesson-architecture/` | `skills/lesson-design/improve-lesson-architecture/` |
+| `skills/zoom-out-lesson/` | `skills/lesson-design/zoom-out-lesson/` |
+| `skills/thinking-routine-selector/` | `skills/lesson-design/thinking-routine-selector/` |
+| `skills/concept-based-inquiry-designer/` | `skills/inquiry-pbl/concept-based-inquiry-designer/` |
+| `skills/pbl-design-coach/` | `skills/inquiry-pbl/pbl-design-coach/` |
+| `skills/assessment-first-design/` | `skills/assessment/assessment-first-design/` |
+| `skills/rubric-quality-guard/` | `skills/assessment/rubric-quality-guard/` |
+| `skills/hinge-question-designer/` | `skills/assessment/hinge-question-designer/` |
+| `skills/differentiate-lesson-pathways/` | `skills/individualization/differentiate-lesson-pathways/` |
+| `skills/udl-barrier-remover/` | `skills/individualization/udl-barrier-remover/` |
+| `skills/diagnose-lesson-failure/` | `skills/diagnostics/diagnose-lesson-failure/` |
+| `skills/ai-resilient-assignment-redesign/` | `skills/ai-era/ai-resilient-assignment-redesign/` |
+
 ## Quick install
 
 Windows PowerShell에서 저장소 루트에서 실행합니다.
@@ -403,41 +429,31 @@ k-teacher-skills/
 │  ├─ install-codex.ps1
 │  ├─ install-claude.ps1
 │  └─ install-all.ps1
-├─ skills/
-│  ├─ grill-me-for-k-teacher/
-│  │  └─ SKILL.md
-│  ├─ grill-with-curriculum/
-│  │  └─ SKILL.md
-│  ├─ assessment-first-design/
-│  │  └─ SKILL.md
-│  ├─ diagnose-lesson-failure/
-│  │  └─ SKILL.md
-│  ├─ improve-lesson-architecture/
-│  │  └─ SKILL.md
-│  ├─ zoom-out-lesson/
-│  │  └─ SKILL.md
-│  ├─ lesson-prototype/
-│  │  └─ SKILL.md
-│  ├─ to-lesson-brief/
-│  │  └─ SKILL.md
-│  ├─ ai-resilient-assignment-redesign/
-│  │  └─ SKILL.md
-│  ├─ thinking-routine-selector/
-│  │  └─ SKILL.md
-│  ├─ concept-based-inquiry-designer/
-│  │  └─ SKILL.md
-│  ├─ differentiate-lesson-pathways/
-│  │  └─ SKILL.md
-│  ├─ rubric-quality-guard/
-│  │  └─ SKILL.md
-│  ├─ hinge-question-designer/
-│  │  └─ SKILL.md
-│  ├─ pbl-design-coach/
-│  │  └─ SKILL.md
-│  ├─ udl-barrier-remover/
-│  │  └─ SKILL.md
-│  └─ k-teacher-workflow-router/
-│     └─ SKILL.md
+├─ skills/                                # v2.0: 7-group hierarchy
+│  ├─ entry/                              # 진입점·인터뷰
+│  │  ├─ k-teacher-workflow-router/
+│  │  ├─ grill-me-for-k-teacher/
+│  │  └─ grill-with-curriculum/
+│  ├─ lesson-design/                      # 수업 설계
+│  │  ├─ lesson-prototype/
+│  │  ├─ to-lesson-brief/
+│  │  ├─ improve-lesson-architecture/
+│  │  ├─ zoom-out-lesson/
+│  │  └─ thinking-routine-selector/
+│  ├─ inquiry-pbl/                        # 탐구·프로젝트
+│  │  ├─ concept-based-inquiry-designer/
+│  │  └─ pbl-design-coach/
+│  ├─ assessment/                         # 평가·루브릭
+│  │  ├─ assessment-first-design/
+│  │  ├─ rubric-quality-guard/
+│  │  └─ hinge-question-designer/
+│  ├─ individualization/                  # 개별화·접근성
+│  │  ├─ differentiate-lesson-pathways/
+│  │  └─ udl-barrier-remover/
+│  ├─ diagnostics/                        # 진단
+│  │  └─ diagnose-lesson-failure/
+│  └─ ai-era/                             # AI 시대 과제
+│     └─ ai-resilient-assignment-redesign/
 ├─ workflows/
 │  ├─ new-lesson-design.md
 │  ├─ curriculum-grounded-redesign.md
@@ -472,27 +488,33 @@ k-teacher-skills/
 
 Claude Skills use folders containing `SKILL.md` files.
 
-Option A — Claude Code local skills:
+Option A — Claude Code local skills (권장: 설치 스크립트 사용):
+
+```powershell
+.\scripts\install-claude.ps1
+```
+
+수동으로 복사하려면 7개 그룹을 순회합니다:
 
 ```bash
 mkdir -p ~/.claude/skills
-cp -r skills/grill-me-for-k-teacher ~/.claude/skills/
-cp -r skills/grill-with-curriculum ~/.claude/skills/
-cp -r skills/assessment-first-design ~/.claude/skills/
-cp -r skills/diagnose-lesson-failure ~/.claude/skills/
-cp -r skills/improve-lesson-architecture ~/.claude/skills/
-cp -r skills/zoom-out-lesson ~/.claude/skills/
-cp -r skills/lesson-prototype ~/.claude/skills/
-cp -r skills/to-lesson-brief ~/.claude/skills/
-cp -r skills/ai-resilient-assignment-redesign ~/.claude/skills/
-cp -r skills/thinking-routine-selector ~/.claude/skills/
-cp -r skills/concept-based-inquiry-designer ~/.claude/skills/
-cp -r skills/differentiate-lesson-pathways ~/.claude/skills/
-cp -r skills/rubric-quality-guard ~/.claude/skills/
-cp -r skills/hinge-question-designer ~/.claude/skills/
-cp -r skills/pbl-design-coach ~/.claude/skills/
-cp -r skills/udl-barrier-remover ~/.claude/skills/
-cp -r skills/k-teacher-workflow-router ~/.claude/skills/
+cp -r skills/entry/k-teacher-workflow-router ~/.claude/skills/
+cp -r skills/entry/grill-me-for-k-teacher ~/.claude/skills/
+cp -r skills/entry/grill-with-curriculum ~/.claude/skills/
+cp -r skills/lesson-design/lesson-prototype ~/.claude/skills/
+cp -r skills/lesson-design/to-lesson-brief ~/.claude/skills/
+cp -r skills/lesson-design/improve-lesson-architecture ~/.claude/skills/
+cp -r skills/lesson-design/zoom-out-lesson ~/.claude/skills/
+cp -r skills/lesson-design/thinking-routine-selector ~/.claude/skills/
+cp -r skills/inquiry-pbl/concept-based-inquiry-designer ~/.claude/skills/
+cp -r skills/inquiry-pbl/pbl-design-coach ~/.claude/skills/
+cp -r skills/assessment/assessment-first-design ~/.claude/skills/
+cp -r skills/assessment/rubric-quality-guard ~/.claude/skills/
+cp -r skills/assessment/hinge-question-designer ~/.claude/skills/
+cp -r skills/individualization/differentiate-lesson-pathways ~/.claude/skills/
+cp -r skills/individualization/udl-barrier-remover ~/.claude/skills/
+cp -r skills/diagnostics/diagnose-lesson-failure ~/.claude/skills/
+cp -r skills/ai-era/ai-resilient-assignment-redesign ~/.claude/skills/
 ```
 
 Option B — Claude.ai Skills:
@@ -511,27 +533,33 @@ grill-me-for-k-teacher를 사용해서 이 수업 아이디어를 먼저 질문�
 
 Codex skills also use `SKILL.md` files with YAML frontmatter.
 
-Local install example:
+Local install example (권장: 설치 스크립트 사용):
+
+```powershell
+.\scripts\install-codex.ps1
+```
+
+수동으로 복사하려면 7개 그룹을 순회합니다:
 
 ```bash
 mkdir -p ~/.codex/skills
-cp -r skills/grill-me-for-k-teacher ~/.codex/skills/
-cp -r skills/grill-with-curriculum ~/.codex/skills/
-cp -r skills/assessment-first-design ~/.codex/skills/
-cp -r skills/diagnose-lesson-failure ~/.codex/skills/
-cp -r skills/improve-lesson-architecture ~/.codex/skills/
-cp -r skills/zoom-out-lesson ~/.codex/skills/
-cp -r skills/lesson-prototype ~/.codex/skills/
-cp -r skills/to-lesson-brief ~/.codex/skills/
-cp -r skills/ai-resilient-assignment-redesign ~/.codex/skills/
-cp -r skills/thinking-routine-selector ~/.codex/skills/
-cp -r skills/concept-based-inquiry-designer ~/.codex/skills/
-cp -r skills/differentiate-lesson-pathways ~/.codex/skills/
-cp -r skills/rubric-quality-guard ~/.codex/skills/
-cp -r skills/hinge-question-designer ~/.codex/skills/
-cp -r skills/pbl-design-coach ~/.codex/skills/
-cp -r skills/udl-barrier-remover ~/.codex/skills/
-cp -r skills/k-teacher-workflow-router ~/.codex/skills/
+cp -r skills/entry/k-teacher-workflow-router ~/.codex/skills/
+cp -r skills/entry/grill-me-for-k-teacher ~/.codex/skills/
+cp -r skills/entry/grill-with-curriculum ~/.codex/skills/
+cp -r skills/lesson-design/lesson-prototype ~/.codex/skills/
+cp -r skills/lesson-design/to-lesson-brief ~/.codex/skills/
+cp -r skills/lesson-design/improve-lesson-architecture ~/.codex/skills/
+cp -r skills/lesson-design/zoom-out-lesson ~/.codex/skills/
+cp -r skills/lesson-design/thinking-routine-selector ~/.codex/skills/
+cp -r skills/inquiry-pbl/concept-based-inquiry-designer ~/.codex/skills/
+cp -r skills/inquiry-pbl/pbl-design-coach ~/.codex/skills/
+cp -r skills/assessment/assessment-first-design ~/.codex/skills/
+cp -r skills/assessment/rubric-quality-guard ~/.codex/skills/
+cp -r skills/assessment/hinge-question-designer ~/.codex/skills/
+cp -r skills/individualization/differentiate-lesson-pathways ~/.codex/skills/
+cp -r skills/individualization/udl-barrier-remover ~/.codex/skills/
+cp -r skills/diagnostics/diagnose-lesson-failure ~/.codex/skills/
+cp -r skills/ai-era/ai-resilient-assignment-redesign ~/.codex/skills/
 ```
 
 Project-local usage:

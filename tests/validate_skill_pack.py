@@ -6,45 +6,53 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-SKILLS = [
-    "grill-me-for-k-teacher",
-    "grill-with-curriculum",
-    "assessment-first-design",
-    "diagnose-lesson-failure",
-    "improve-lesson-architecture",
-    "zoom-out-lesson",
-    "lesson-prototype",
-    "to-lesson-brief",
-    "ai-resilient-assignment-redesign",
-    "thinking-routine-selector",
-    "concept-based-inquiry-designer",
-    "differentiate-lesson-pathways",
-    "rubric-quality-guard",
-    "hinge-question-designer",
-    "pbl-design-coach",
-    "udl-barrier-remover",
-    "k-teacher-workflow-router",
-]
+
+# v2.0: skills are organized into 7 group folders.
+SKILL_PATHS = {
+    "grill-me-for-k-teacher": "entry/grill-me-for-k-teacher",
+    "grill-with-curriculum": "entry/grill-with-curriculum",
+    "k-teacher-workflow-router": "entry/k-teacher-workflow-router",
+    "lesson-prototype": "lesson-design/lesson-prototype",
+    "to-lesson-brief": "lesson-design/to-lesson-brief",
+    "improve-lesson-architecture": "lesson-design/improve-lesson-architecture",
+    "zoom-out-lesson": "lesson-design/zoom-out-lesson",
+    "thinking-routine-selector": "lesson-design/thinking-routine-selector",
+    "concept-based-inquiry-designer": "inquiry-pbl/concept-based-inquiry-designer",
+    "pbl-design-coach": "inquiry-pbl/pbl-design-coach",
+    "assessment-first-design": "assessment/assessment-first-design",
+    "rubric-quality-guard": "assessment/rubric-quality-guard",
+    "hinge-question-designer": "assessment/hinge-question-designer",
+    "differentiate-lesson-pathways": "individualization/differentiate-lesson-pathways",
+    "udl-barrier-remover": "individualization/udl-barrier-remover",
+    "diagnose-lesson-failure": "diagnostics/diagnose-lesson-failure",
+    "ai-resilient-assignment-redesign": "ai-era/ai-resilient-assignment-redesign",
+}
+
+SKILLS = list(SKILL_PATHS.keys())
+
+
+def skill_dir(skill: str) -> Path:
+    return ROOT / "skills" / SKILL_PATHS[skill]
 
 
 REQUIRED_TERMS = {
     "privacy": [
-        "\uac1c\uc778\uc815\ubcf4",
-        "\ubbfc\uac10\uc815\ubcf4",
-        "\uc2e4\uba85",
+        "개인정보",
+        "민감정보",
+        "실명",
     ],
     "anti_click": [
-        "\ubc14\ub85c \ub9cc\ub4e4\uc9c0",
-        "\uba3c\uc800",
-        "\uc989\uc2dc \ub9cc\ub4e4\uc9c0",
-        "\uc0c8 \uc790\ub8cc\ub97c \ub9cc\ub4e4\uae30 \uc804\uc5d0",
-        "\uc644\uc131",
-        "\uc0c8 \uc9c8\ubb38\uc744 \uba3c\uc800 \ub358\uc9c0\uc9c0",
+        "바로 만들지",
+        "먼저",
+        "즉시 만들지",
+        "새 자료를 만들기 전에",
+        "완성",
+        "새 질문을 먼저 던지지",
     ],
     "udl": [
-        "\ucc38\uc5ec",
-        "\ud45c\ud604",
-        "\uc7a5\ubcbd",
+        "참여",
+        "표현",
+        "장벽",
     ],
 }
 
@@ -135,6 +143,16 @@ def main() -> None:
     )
     manifest_skills = {item["name"] for item in manifest["skills"]}
     assert manifest_skills == set(SKILLS), "manifest skills do not match SKILLS"
+    # v2.0: ensure manifest paths match the hierarchical layout
+    for item in manifest["skills"]:
+        expected_path = f"skills/{SKILL_PATHS[item['name']]}"
+        assert item["path"] == expected_path, (
+            f"manifest skill path mismatch for {item['name']}: "
+            f"{item['path']} != {expected_path}"
+        )
+        assert (ROOT / item["path"]).exists(), (
+            f"manifest skill path does not exist on disk: {item['path']}"
+        )
     assert len(manifest["workflows"]) == 10, "manifest workflow count mismatch"
     for workflow in manifest["workflows"]:
         assert (ROOT / workflow["path"]).exists(), (
@@ -146,10 +164,10 @@ def main() -> None:
             )
 
     for skill in SKILLS:
-        skill_dir = ROOT / "skills" / skill
-        skill_md = skill_dir / "SKILL.md"
-        sample = skill_dir / "examples" / "sample-dialogue.md"
-        assert skill_md.exists(), f"{skill}: SKILL.md missing"
+        sd = skill_dir(skill)
+        skill_md = sd / "SKILL.md"
+        sample = sd / "examples" / "sample-dialogue.md"
+        assert skill_md.exists(), f"{skill}: SKILL.md missing at {skill_md}"
         assert sample.exists(), f"{skill}: sample dialogue missing"
 
         text = skill_md.read_text(encoding="utf-8")
@@ -160,17 +178,17 @@ def main() -> None:
         for label, terms in REQUIRED_TERMS.items():
             assert_contains_any(skill, text, label, terms)
 
-    diagnose = (ROOT / "skills" / "diagnose-lesson-failure" / "SKILL.md").read_text(
+    diagnose = (skill_dir("diagnose-lesson-failure") / "SKILL.md").read_text(
         encoding="utf-8"
     )
-    assert "\ub9cc\uc57d [\uc6d0\uc778]\uc774 \ubb38\uc81c\ub77c\uba74" in diagnose, (
+    assert "만약 [원인]이 문제라면" in diagnose, (
         "diagnose-lesson-failure: missing falsifiable hypothesis format"
     )
 
     architecture = (
-        ROOT / "skills" / "improve-lesson-architecture" / "SKILL.md"
+        skill_dir("improve-lesson-architecture") / "SKILL.md"
     ).read_text(encoding="utf-8")
-    assert "deletion test" in architecture.lower() or "\uc0ad\uc81c \ud14c\uc2a4\ud2b8" in architecture, (
+    assert "deletion test" in architecture.lower() or "삭제 테스트" in architecture, (
         "improve-lesson-architecture: missing deletion test"
     )
     assert "Strong candidate" in architecture, (
@@ -178,7 +196,7 @@ def main() -> None:
     )
 
     curriculum = (
-        ROOT / "skills" / "grill-with-curriculum" / "SKILL.md"
+        skill_dir("grill-with-curriculum") / "SKILL.md"
     ).read_text(encoding="utf-8")
     assert "CURRICULUM-CONTEXT.md" in curriculum, (
         "grill-with-curriculum: missing context-file rules"
@@ -187,29 +205,29 @@ def main() -> None:
         "grill-with-curriculum: missing lesson decision record rules"
     )
 
-    zoom_out = (ROOT / "skills" / "zoom-out-lesson" / "SKILL.md").read_text(
+    zoom_out = (skill_dir("zoom-out-lesson") / "SKILL.md").read_text(
         encoding="utf-8"
     )
-    assert "\ud55c \ub2e8\uacc4 \uc704" in zoom_out, (
+    assert "한 단계 위" in zoom_out, (
         "zoom-out-lesson: missing one-layer-up rule"
     )
 
-    prototype = (ROOT / "skills" / "lesson-prototype" / "SKILL.md").read_text(
+    prototype = (skill_dir("lesson-prototype") / "SKILL.md").read_text(
         encoding="utf-8"
     )
-    assert "Prototype A" in prototype and "\ube44\uad50" in prototype, (
+    assert "Prototype A" in prototype and "비교" in prototype, (
         "lesson-prototype: missing prototype comparison structure"
     )
 
-    brief = (ROOT / "skills" / "to-lesson-brief" / "SKILL.md").read_text(
+    brief = (skill_dir("to-lesson-brief") / "SKILL.md").read_text(
         encoding="utf-8"
     )
-    assert "\ubbf8\ud655\uc815" in brief and "\ucd94\uc815" in brief, (
+    assert "미확정" in brief and "추정" in brief, (
         "to-lesson-brief: missing unknown/assumption handling"
     )
 
     ai_assignment = (
-        ROOT / "skills" / "ai-resilient-assignment-redesign" / "SKILL.md"
+        skill_dir("ai-resilient-assignment-redesign") / "SKILL.md"
     ).read_text(encoding="utf-8")
     for term in [
         "H→AI→H",
@@ -233,12 +251,12 @@ def main() -> None:
         "udl-barrier-remover": ["참여", "표상", "행동과 표현"],
     }
     for skill, terms in skill_terms.items():
-        text = (ROOT / "skills" / skill / "SKILL.md").read_text(encoding="utf-8")
+        text = (skill_dir(skill) / "SKILL.md").read_text(encoding="utf-8")
         for term in terms:
             assert term in text, f"{skill}: missing {term}"
 
     router = (
-        ROOT / "skills" / "k-teacher-workflow-router" / "SKILL.md"
+        skill_dir("k-teacher-workflow-router") / "SKILL.md"
     ).read_text(encoding="utf-8")
     assert "New lesson design" in router and "Lesson failure recovery" in router, (
         "k-teacher-workflow-router: missing workflow routing recipes"
@@ -256,7 +274,7 @@ def main() -> None:
         "udl-barrier-remover",
     ]:
         assert route in router, f"k-teacher-workflow-router: missing {route}"
-    assert "\uc120\ud0dd\uc9c0" in router and "\uae30\ud0c0" in router, (
+    assert "선택지" in router and "기타" in router, (
         "k-teacher-workflow-router: missing choice-based questioning"
     )
     assert "readiness gate" in router, (
@@ -264,8 +282,8 @@ def main() -> None:
     )
 
     for skill in SKILLS:
-        text = (ROOT / "skills" / skill / "SKILL.md").read_text(encoding="utf-8")
-        assert "\uc120\ud0dd\uc9c0" in text or "A." in text, (
+        text = (skill_dir(skill) / "SKILL.md").read_text(encoding="utf-8")
+        assert "선택지" in text or "A." in text, (
             f"{skill}: missing choice-based questioning signal"
         )
 

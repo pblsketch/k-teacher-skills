@@ -1,7 +1,7 @@
 {
   "name": "k-teacher-skills",
   "displayName": "K-Teacher Skills",
-  "version": "0.2.0",
+  "version": "2.0.0",
   "language": "ko",
   "audience": "한국 현장 교사",
   "entrySkill": "k-teacher-workflow-router",
@@ -13,87 +13,87 @@
   "skills": [
     {
       "name": "grill-me-for-k-teacher",
-      "path": "skills/grill-me-for-k-teacher",
+      "path": "skills/entry/grill-me-for-k-teacher",
       "role": "수업 의도, 학생 맥락, 평가 증거, 오개념을 먼저 묻는 기본 인터뷰"
     },
     {
       "name": "grill-with-curriculum",
-      "path": "skills/grill-with-curriculum",
+      "path": "skills/entry/grill-with-curriculum",
       "role": "성취기준과 기존 자료에 근거한 수업 설계 검토"
     },
     {
       "name": "assessment-first-design",
-      "path": "skills/assessment-first-design",
+      "path": "skills/assessment/assessment-first-design",
       "role": "활동보다 학습 증거, 성공 기준, 피드백 루프를 먼저 설계"
     },
     {
       "name": "diagnose-lesson-failure",
-      "path": "skills/diagnose-lesson-failure",
+      "path": "skills/diagnostics/diagnose-lesson-failure",
       "role": "수업 실패를 관찰 증거와 반증 가능한 가설로 진단"
     },
     {
       "name": "improve-lesson-architecture",
-      "path": "skills/improve-lesson-architecture",
+      "path": "skills/lesson-design/improve-lesson-architecture",
       "role": "흩어진 자료를 하나의 깊은 수업 모듈로 재구조화"
     },
     {
       "name": "zoom-out-lesson",
-      "path": "skills/zoom-out-lesson",
+      "path": "skills/lesson-design/zoom-out-lesson",
       "role": "활동·자료 일부를 단원·차시·평가 흐름의 상위 맥락에서 재정렬"
     },
     {
       "name": "lesson-prototype",
-      "path": "skills/lesson-prototype",
+      "path": "skills/lesson-design/lesson-prototype",
       "role": "완성안 전 작고 버릴 수 있는 활동·발문·평가 prototype 비교"
     },
     {
       "name": "to-lesson-brief",
-      "path": "skills/to-lesson-brief",
+      "path": "skills/lesson-design/to-lesson-brief",
       "role": "대화와 설계 맥락을 동료 공유 또는 다음 AI 작업용 브리프로 정리"
     },
     {
       "name": "ai-resilient-assignment-redesign",
-      "path": "skills/ai-resilient-assignment-redesign",
+      "path": "skills/ai-era/ai-resilient-assignment-redesign",
       "role": "AI로 대체되기 쉬운 과제와 수행평가를 H→AI→H 구조로 재설계"
     },
     {
       "name": "thinking-routine-selector",
-      "path": "skills/thinking-routine-selector",
+      "path": "skills/lesson-design/thinking-routine-selector",
       "role": "학생 사고를 보이게 하는 사고 루틴 선택과 발문 설계"
     },
     {
       "name": "concept-based-inquiry-designer",
-      "path": "skills/concept-based-inquiry-designer",
+      "path": "skills/inquiry-pbl/concept-based-inquiry-designer",
       "role": "핵심 개념, 일반화, 탐구 질문 중심의 개념 기반 탐구 설계"
     },
     {
       "name": "differentiate-lesson-pathways",
-      "path": "skills/differentiate-lesson-pathways",
+      "path": "skills/individualization/differentiate-lesson-pathways",
       "role": "기초·표준·심화 경로, 선택형 과제, 소그룹 지원 설계"
     },
     {
       "name": "rubric-quality-guard",
-      "path": "skills/rubric-quality-guard",
+      "path": "skills/assessment/rubric-quality-guard",
       "role": "루브릭 준거, 수준 기술, 성취기준 정렬 검토"
     },
     {
       "name": "hinge-question-designer",
-      "path": "skills/hinge-question-designer",
+      "path": "skills/assessment/hinge-question-designer",
       "role": "오개념을 드러내는 힌지 질문과 형성평가 설계"
     },
     {
       "name": "pbl-design-coach",
-      "path": "skills/pbl-design-coach",
+      "path": "skills/inquiry-pbl/pbl-design-coach",
       "role": "실생활·지역사회 문제 기반 PBL 설계"
     },
     {
       "name": "udl-barrier-remover",
-      "path": "skills/udl-barrier-remover",
+      "path": "skills/individualization/udl-barrier-remover",
       "role": "참여·표상·행동과 표현 장벽 진단과 UDL 대안 설계"
     },
     {
       "name": "k-teacher-workflow-router",
-      "path": "skills/k-teacher-workflow-router",
+      "path": "skills/entry/k-teacher-workflow-router",
       "role": "교사 요청을 분석해 적절한 workflow와 첫 스킬로 라우팅"
     }
   ],
