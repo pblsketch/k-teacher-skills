@@ -1,14 +1,16 @@
 {
   "name": "k-teacher-skills",
   "displayName": "K-Teacher Skills",
-  "version": "2.0.0",
+  "version": "2.2.0",
   "language": "ko",
   "audience": "한국 현장 교사",
   "entrySkill": "k-teacher-workflow-router",
   "description": "AI로 수업자료를 바로 생성하지 않고, 수업 의도·학생 맥락·평가 증거·학습 장벽을 먼저 질문하고 검증하는 한국 교사용 Skill Pack.",
+  "website": "https://pblsketch.github.io/k-teacher-skills/",
   "installTargets": {
     "codex": "~/.codex/skills",
-    "claude": "~/.claude/skills"
+    "claude": "~/.claude/skills",
+    "antigravity": "~/.gemini/antigravity/skills"
   },
   "skills": [
     {
