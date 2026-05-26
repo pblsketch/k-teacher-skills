@@ -358,17 +358,17 @@ footer .footer-tag { font-family: 'Archivo Black', sans-serif; font-size: 1.4rem
     <div class="tool-grid">
       <div class="tool-card">
         <div class="tool-name">🟢 Gemini</div>
-        <p>한국 교사가 가장 많이 쓰는 AI 서비스. 무료 버전도 됨. Google Workspace 학교 계정이면 더 안정적. 학습지 파일(<strong>HWPX</strong>, PDF) 첨부 후 프롬프트 붙여넣기.</p>
+        <p>Google의 AI 서비스. <strong>무료(Gemini 3.0 Flash)</strong> + 유료 Pro/Ultra(Gemini 3.1 Pro). 파일 첨부: <strong>PDF·DOCX·TXT·PPTX·이미지</strong> (HWPX는 PDF 변환 권장). Workspace 학교 계정은 관리자가 Gemini 앱 활성화 필요.</p>
         <a href="https://gemini.google.com/" target="_blank" rel="noopener">Gemini 열기 →</a>
       </div>
       <div class="tool-card">
         <div class="tool-name">🟠 Claude</div>
-        <p>Anthropic의 Claude. 200K 컨텍스트로 교과서 통째로 처리 강점. 한국어 자연스러움. <strong>무료(claude.ai)</strong>로 시작 가능. 파일(<strong>HWPX</strong>, PDF, DOCX) 첨부 후 프롬프트 붙여넣기. Artifacts로 학습지·루브릭 미리보기.</p>
+        <p>Anthropic의 Claude. <strong>1M 토큰 컨텍스트(Sonnet 4.6 / Opus 4.7)</strong> — 교과서 단원 통째로 처리 강점. 한국어 자연스러움. <strong>무료(claude.ai)</strong> 시작 가능. <strong>PDF·DOCX·이미지</strong> 첨부 + Artifacts로 학습지·루브릭 미리보기.</p>
         <a href="https://claude.ai/" target="_blank" rel="noopener">Claude 열기 →</a>
       </div>
       <div class="tool-card">
         <div class="tool-name">⚫ ChatGPT</div>
-        <p>긴 인터뷰 흐름을 끝까지 따라가는 데 안정적. 무료 GPT-4o로 충분. <strong>파일 첨부</strong> 후 프롬프트 붙여넣기. Custom GPT로 박아두면 매번 복붙 안 해도 됨.</p>
+        <p>OpenAI의 ChatGPT. <strong>무료 기본 GPT-5.3 Instant</strong>, 한도 내 GPT-5.5도 사용. 긴 인터뷰 흐름 안정적. <strong>PDF·DOCX·이미지</strong> 첨부 가능. <strong>Custom GPT 생성은 Plus(유료)</strong> 필요, 무료는 GPT 스토어에서 사용만.</p>
         <a href="https://chat.openai.com/" target="_blank" rel="noopener">ChatGPT 열기 →</a>
       </div>
     </div>
@@ -425,7 +425,7 @@ cd k-teacher-skills
 
 <footer>
   <div class="footer-tag">★ K-TEACHER PROMPTS ★</div>
-  <p>v2.3 · MIT License · <a href="https://github.com/pblsketch/k-teacher-skills" target="_blank" rel="noopener">GitHub 저장소</a></p>
+  <p>v2.4 · MIT License · <a href="https://github.com/pblsketch/k-teacher-skills" target="_blank" rel="noopener">GitHub 저장소</a></p>
   <p style="margin-top:10px;font-size:0.9rem;opacity:0.7;">학생 개인정보·민감정보를 AI에 입력하지 마세요. 익명화된 학급 수준 맥락만 사용하는 것이 원칙입니다.</p>
 </footer>
 
@@ -788,12 +788,12 @@ F. 문화와 소통
 - H→AI→H 구조: 인간 탐구 질문(시작) → AI 활용(중간) → 인간 성찰·성장(끝). AI 출력은 학생 성찰 자료이지 최종 산출물이 아님.
 - 과정 중심 평가 비중 50% 이상.
 - 프롬프트 로그(학생이 AI에 물어본 질문·답변·그대로 안 쓴 이유·바꾼 점·출처) 포함.
-- SHIFT 성찰지 포함 — 학생이 AI 답변을 직접 검토하는 5칸 표:
-  · S(Start curiosity): AI 답변에서 궁금해진 점은?
-  · H(Hone in): AI가 맞게/틀리게 말한 부분과 그 근거는?
-  · I(Identify context): 이 답변이 우리 수업·지역·내 경험과 어떻게 연결되나?
-  · F(Frame differently): 다른 관점에서 보면 무엇이 달라지나?
-  · T(Talk about missing): AI 답변에 빠진 점·한계·편향은?
+- SHIFT 성찰지 포함 — 학생이 AI 답변을 검토하는 5칸 비판적 사고 표 (출처: 워싱턴주 OSPI Human-Centered AI Guidance v3.0):
+  · S(Start your curiosity engine / 호기심 엔진 켜기): AI 출력에서 무엇이 내 호기심을 자극하는가?
+  · H(Hone in on a detail / 세부 사항 집중): AI가 어떤 구체적 세부를 맞히거나 틀렸는가, 어떻게 알 수 있는가?
+  · I(Identify your Context / 문맥 식별): AI는 내 작업의 더 큰 그림에서 어떤 역할을 하는가?
+  · F(Frame it from a new perspective / 새 관점 재구성): AI가 밝혀낼 수 있는 다른 관점은 무엇인가?
+  · T(Talk about what's missing / 빠진 것 이야기): 고려해야 할 AI의 한계나 과제는 무엇인가?
 - 기기 없는 학생 대안 보장.
 - 학생 실명 금지.
 
