@@ -2,13 +2,13 @@
 
 AI로 수업자료를 "딸깍" 생성하는 대신, 교사의 수업 의도·학생 맥락·평가 기준을 먼저 묻고 검증하게 만드는 한국 교사용 Skill Pack입니다.
 
-## 🌐 웹페이지 — Gemini/ChatGPT/NotebookLM 사용자용
+## 🌐 웹페이지 — Gemini/Claude/ChatGPT 사용자용
 
 터미널·설치 없이 **그냥 복사해서 붙여넣고 싶다면**:
 
 **👉 [pblsketch.github.io/k-teacher-skills](https://pblsketch.github.io/k-teacher-skills/)**
 
-17개 스킬을 상황별 카드로 정리. 클릭 → 프롬프트 복사 → 평소 쓰시는 AI 서비스(Gemini·ChatGPT·NotebookLM)에 붙여넣기. 회원가입·설치 없음.
+17개 스킬을 상황별 카드로 정리. 클릭 → 프롬프트 복사 → 평소 쓰시는 AI 서비스(Gemini·Claude·ChatGPT)에 붙여넣기. 회원가입·설치 없음.
 
 Claude Code / Codex 사용자는 아래 Quick install 절차로 SKILL.md 자동 등록도 가능합니다.
 
