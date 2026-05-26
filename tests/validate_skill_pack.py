@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import re
 from pathlib import Path
 
@@ -66,7 +67,15 @@ def assert_contains_any(skill: str, text: str, label: str, terms: list[str]) -> 
 
 def main() -> None:
     assert (ROOT / "README.md").exists(), "README.md missing"
+    assert (ROOT / "WORKFLOWS.md").exists(), "WORKFLOWS.md missing"
+    assert (ROOT / "skill-pack.json").exists(), "skill-pack.json missing"
     assert (ROOT / "LICENSE").exists(), "LICENSE missing"
+    for script in [
+        "install-codex.ps1",
+        "install-claude.ps1",
+        "install-all.ps1",
+    ]:
+        assert (ROOT / "scripts" / script).exists(), f"{script} missing"
     assert (ROOT / "tests" / "expected-behaviors.md").exists(), (
         "expected-behaviors.md missing"
     )
@@ -105,12 +114,36 @@ def main() -> None:
 
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
     assert "Which skill should I use?" in readme, "README missing skill-selection guide"
+    assert "Quick install" in readme, "README missing quick install guide"
+    assert "k-teacher-workflow-router로 내 요청을 분석" in readme, (
+        "README missing router-first prompt"
+    )
     assert "interview-readiness.md" in readme, "README missing interview readiness guide"
     assert "Claude" in readme and "Codex" in readme, (
         "README missing Claude/Codex guidance"
     )
     for skill in SKILLS:
         assert skill in readme, f"README missing {skill}"
+
+    workflows_md = (ROOT / "WORKFLOWS.md").read_text(encoding="utf-8")
+    assert "Router-first rule" in workflows_md, "WORKFLOWS missing router-first rule"
+    assert "to-lesson-brief" in workflows_md, "WORKFLOWS missing final handoff"
+
+    manifest = json.loads((ROOT / "skill-pack.json").read_text(encoding="utf-8"))
+    assert manifest["entrySkill"] == "k-teacher-workflow-router", (
+        "manifest entrySkill mismatch"
+    )
+    manifest_skills = {item["name"] for item in manifest["skills"]}
+    assert manifest_skills == set(SKILLS), "manifest skills do not match SKILLS"
+    assert len(manifest["workflows"]) == 10, "manifest workflow count mismatch"
+    for workflow in manifest["workflows"]:
+        assert (ROOT / workflow["path"]).exists(), (
+            f"manifest workflow path missing: {workflow['path']}"
+        )
+        for skill in workflow["chain"]:
+            assert skill in manifest_skills, (
+                f"manifest workflow references unknown skill: {skill}"
+            )
 
     for skill in SKILLS:
         skill_dir = ROOT / "skills" / skill

@@ -42,6 +42,45 @@ AI로 수업자료를 "딸깍" 생성하는 대신, 교사의 수업 의도·학
    - 질문을 많이 던지는 것이 목적이 아닙니다.
    - `references/interview-readiness.md`의 readiness gate로 더 물을지, 요약할지, 산출물로 넘어갈지 판단합니다.
 
+## Quick install
+
+Windows PowerShell에서 저장소 루트에서 실행합니다.
+
+Codex에 설치:
+
+```powershell
+.\scripts\install-codex.ps1
+```
+
+Claude Code에 설치:
+
+```powershell
+.\scripts\install-claude.ps1
+```
+
+둘 다 설치:
+
+```powershell
+.\scripts\install-all.ps1
+```
+
+설치 후 첫 프롬프트는 router-first 방식으로 시작하는 것을 권장합니다.
+
+```text
+k-teacher-workflow-router로 내 요청을 분석하고 적절한 K-Teacher Skills workflow를 시작해줘.
+```
+
+## Skill pack manifest
+
+`skill-pack.json`은 이 저장소를 하나의 Skill Pack으로 설명합니다.
+
+- entry skill: `k-teacher-workflow-router`
+- skills: 17개
+- workflows: 10개
+- install targets: Codex, Claude
+
+자세한 workflow 연결은 `WORKFLOWS.md`를 참고하세요.
+
 ## Included skills
 
 ### `grill-me-for-k-teacher`
@@ -357,7 +396,13 @@ assessment-first-design
 ```text
 k-teacher-skills/
 ├─ README.md
+├─ WORKFLOWS.md
+├─ skill-pack.json
 ├─ LICENSE
+├─ scripts/
+│  ├─ install-codex.ps1
+│  ├─ install-claude.ps1
+│  └─ install-all.ps1
 ├─ skills/
 │  ├─ grill-me-for-k-teacher/
 │  │  └─ SKILL.md
