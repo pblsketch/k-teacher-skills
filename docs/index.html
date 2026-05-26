@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>K-TEACHER PROMPTS — 한국 교사용 AI 수업 설계 프롬프트</title>
-<meta name="description" content="AI에게 '딸깍' 자료 대신 '내 수업을 끝까지 질문해줘'. 한국 중·고 교사가 Gemini, ChatGPT, NotebookLM에 바로 붙여넣는 17개 수업 설계 프롬프트.">
+<meta name="description" content="AI에게 '딸깍' 자료 대신 '내 수업을 끝까지 질문해줘'. 한국 중·고 교사가 Gemini, Claude, ChatGPT에 바로 붙여넣는 17개 수업 설계 프롬프트.">
 <meta property="og:title" content="K-TEACHER PROMPTS">
 <meta property="og:description" content="한국 교사를 위한 AI 수업 설계 프롬프트 — 복사해서 어디든 붙여넣기">
 <meta property="og:type" content="website">
@@ -319,7 +319,7 @@ footer .footer-tag { font-family: 'Archivo Black', sans-serif; font-size: 1.4rem
   <div class="hero-inner">
     <span class="tag">한국 교사용 ★ AI 프롬프트 팩</span>
     <h1 class="display">AI에게 자료 만들지 말고<br><span class="accent">내 수업을 끝까지 질문하라고</span> 시켜라</h1>
-    <p class="subtitle">17개의 검증된 수업 설계 프롬프트. <strong>두 가지 방법</strong>으로 씁니다 — ① 일반 AI 서비스(Gemini·ChatGPT·NotebookLM)에 <strong>복사·붙여넣기</strong>, ② Claude Code·Codex·Antigravity에 <strong>한 번에 설치</strong>. 회원가입 없음, 무료.</p>
+    <p class="subtitle">17개의 검증된 수업 설계 프롬프트. <strong>두 가지 방법</strong>으로 씁니다 — ① 일반 AI 서비스(Gemini·Claude·ChatGPT)에 <strong>복사·붙여넣기</strong>, ② Claude Code·Codex·Antigravity에 <strong>한 번에 설치</strong>. 회원가입 없음, 무료.</p>
     <div class="hero-meta">
       <span>📋 17개 스킬</span>
       <span>🇰🇷 한국어</span>
@@ -337,7 +337,7 @@ footer .footer-tag { font-family: 'Archivo Black', sans-serif; font-size: 1.4rem
   <div class="container">
     <span class="tag" style="background:var(--red);color:#fff;">방법 ①</span>
     <h2 class="section-title" style="margin-top:14px;">상황별 프롬프트 — AI 서비스에 복사·붙여넣기</h2>
-    <p class="section-lead">Gemini, ChatGPT, NotebookLM 같은 <strong>일반 AI 서비스</strong>를 쓰신다면 여기서 시작. 상황을 클릭하면 프롬프트가 열립니다. 복사해서 평소 쓰시는 AI에 붙여넣으면 끝.</p>
+    <p class="section-lead">Gemini, Claude, ChatGPT 같은 <strong>일반 AI 서비스</strong>를 쓰신다면 여기서 시작. 상황을 클릭하면 프롬프트가 열립니다. 복사해서 평소 쓰시는 AI에 붙여넣으면 끝.</p>
     <div class="grid" id="situation-grid"></div>
   </div>
 </section>
@@ -362,9 +362,9 @@ footer .footer-tag { font-family: 'Archivo Black', sans-serif; font-size: 1.4rem
         <a href="https://gemini.google.com/" target="_blank" rel="noopener">Gemini 열기 →</a>
       </div>
       <div class="tool-card">
-        <div class="tool-name">🟣 NotebookLM</div>
-        <p>교과서·지도서·평가 자료를 통째로 넣고 분석할 때. 자료 여러 개 묶어서 일반화 발견·요약·오디오 개요 생성 가능. <strong>Source 업로드</strong> 후 프롬프트 입력.</p>
-        <a href="https://notebooklm.google.com/" target="_blank" rel="noopener">NotebookLM 열기 →</a>
+        <div class="tool-name">🟠 Claude</div>
+        <p>Anthropic의 Claude. 200K 컨텍스트로 교과서 통째로 처리 강점. 한국어 자연스러움. <strong>무료(claude.ai)</strong>로 시작 가능. 파일(<strong>HWPX</strong>, PDF, DOCX) 첨부 후 프롬프트 붙여넣기. Artifacts로 학습지·루브릭 미리보기.</p>
+        <a href="https://claude.ai/" target="_blank" rel="noopener">Claude 열기 →</a>
       </div>
       <div class="tool-card">
         <div class="tool-name">⚫ ChatGPT</div>
@@ -425,7 +425,7 @@ cd k-teacher-skills
 
 <footer>
   <div class="footer-tag">★ K-TEACHER PROMPTS ★</div>
-  <p>v2.2 · MIT License · <a href="https://github.com/pblsketch/k-teacher-skills" target="_blank" rel="noopener">GitHub 저장소</a></p>
+  <p>v2.3 · MIT License · <a href="https://github.com/pblsketch/k-teacher-skills" target="_blank" rel="noopener">GitHub 저장소</a></p>
   <p style="margin-top:10px;font-size:0.9rem;opacity:0.7;">학생 개인정보·민감정보를 AI에 입력하지 마세요. 익명화된 학급 수준 맥락만 사용하는 것이 원칙입니다.</p>
 </footer>
 
@@ -440,7 +440,7 @@ cd k-teacher-skills
     <div class="modal-actions">
       <button class="btn btn-copy" id="copy-btn">📋 복사하기</button>
       <a class="btn btn-open" href="https://gemini.google.com/" target="_blank" rel="noopener">Gemini ↗</a>
-      <a class="btn btn-open" href="https://notebooklm.google.com/" target="_blank" rel="noopener">NotebookLM ↗</a>
+      <a class="btn btn-open" href="https://claude.ai/" target="_blank" rel="noopener">Claude ↗</a>
       <a class="btn btn-open" href="https://chat.openai.com/" target="_blank" rel="noopener">ChatGPT ↗</a>
     </div>
     <div class="modal-tips">
@@ -647,6 +647,7 @@ E. 피드백 방식
 - 학년·시간·모둠 구성에 맞게 절차 조정.
 - 사고 루틴은 교과 학습과 분리하지 않고 핵심 개념·자료·평가 증거에 연결.
 - 학생 실명 금지.
+- 활용 가능한 사고 루틴 예시 (Project Zero·기타): See-Think-Wonder(관찰·해석·궁금), K-W-L(아는 것·알고 싶은 것·배운 것), Claim-Support-Question(주장·근거·남은 질문), Circle of Viewpoints(다관점), P-M-I(좋은·나쁜·흥미로운 점), Think-Puzzle-Explore(생각·의문·탐구), I Used to Think Now I Think(생각 변화), Two Stars and a Wish(강점 2·바람 1).
 
 첫 질문에 답해줘:
 이번 수업에서 어떤 사고를 보이게 하고 싶나요?
@@ -743,8 +744,8 @@ F. 문화와 소통
 
 규칙:
 - 단순 암기 퀴즈를 만들지 않는다.
-- 선택지는 학생의 실제 사고 경로(오개념 포함)를 드러내야 한다.
-- 1~2분 안에 답할 수 있고, 결과에 따라 다음 수업 행동이 달라진다.
+- 힌지 질문(hinge question)이란: 수업 중간 1~2분 안에 학생 전원이 답하고, 결과 패턴에 따라 교사가 다음 수업 행동을 즉시 바꾸는 형성평가 1문항.
+- 선택지는 학생의 실제 사고 경로(오개념 포함)를 드러내야 한다 — 정답·오답 모두 그럴듯해야 한다.
 - 학생 실명 금지.
 
 내 수업을 알려주면 이 순서로:
@@ -786,7 +787,13 @@ F. 문화와 소통
 - 탐지 도구 단독에 의존하지 않는다.
 - H→AI→H 구조: 인간 탐구 질문(시작) → AI 활용(중간) → 인간 성찰·성장(끝). AI 출력은 학생 성찰 자료이지 최종 산출물이 아님.
 - 과정 중심 평가 비중 50% 이상.
-- 프롬프트 로그 + SHIFT 성찰지 포함.
+- 프롬프트 로그(학생이 AI에 물어본 질문·답변·그대로 안 쓴 이유·바꾼 점·출처) 포함.
+- SHIFT 성찰지 포함 — 학생이 AI 답변을 직접 검토하는 5칸 표:
+  · S(Start curiosity): AI 답변에서 궁금해진 점은?
+  · H(Hone in): AI가 맞게/틀리게 말한 부분과 그 근거는?
+  · I(Identify context): 이 답변이 우리 수업·지역·내 경험과 어떻게 연결되나?
+  · F(Frame differently): 다른 관점에서 보면 무엇이 달라지나?
+  · T(Talk about missing): AI 답변에 빠진 점·한계·편향은?
 - 기기 없는 학생 대안 보장.
 - 학생 실명 금지.
 
