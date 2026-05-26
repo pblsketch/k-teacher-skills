@@ -72,6 +72,64 @@ AI로 수업자료를 "딸깍" 생성하는 대신, 교사의 수업 의도·학
 
 지금까지의 대화와 설계 맥락을 동료 공유나 다음 AI 작업에 넘길 수 있는 수업 설계 브리프로 정리합니다.
 
+### `k-teacher-workflow-router`
+
+교사의 요청을 분석해 단일 스킬이 아니라 적절한 workflow를 선택하고 첫 스킬로 연결합니다. 교사가 스킬 이름을 명시하지 않아도 자동 진입점을 제공합니다.
+
+## Workflow recipes
+
+이 저장소는 개별 스킬뿐 아니라 스킬 체인도 제공합니다.
+
+### New lesson design
+
+```text
+grill-me-for-k-teacher
+→ assessment-first-design
+→ lesson-prototype
+→ to-lesson-brief
+```
+
+### Curriculum-grounded redesign
+
+```text
+grill-with-curriculum
+→ zoom-out-lesson
+→ assessment-first-design
+→ improve-lesson-architecture
+→ to-lesson-brief
+```
+
+### Lesson failure recovery
+
+```text
+diagnose-lesson-failure
+→ zoom-out-lesson
+→ lesson-prototype
+→ to-lesson-brief
+```
+
+### Material architecture improvement
+
+```text
+improve-lesson-architecture
+→ assessment-first-design
+→ lesson-prototype
+→ to-lesson-brief
+```
+
+## Questioning style
+
+교사에게 질문할 때는 기본적으로 선택지를 제공합니다.
+
+```text
+A. 선택지 1
+B. 선택지 2
+C. 선택지 3
+D. 기타: 직접 적기
+```
+
+가능하면 추천 선택지도 함께 제시합니다. 자세한 규칙은 `references/questioning-style.md`를 참고하세요.
+
 ## Which skill should I use?
 
 처음에는 아래 기준으로 고르세요.
@@ -99,6 +157,9 @@ AI로 수업자료를 "딸깍" 생성하는 대신, 교사의 수업 의도·학
 
 - **긴 대화를 동료 공유용 또는 다음 AI 작업용 수업 브리프로 정리하고 싶다**
   - `to-lesson-brief`
+
+- **어떤 스킬을 써야 할지 모르겠고, 요청에 맞는 흐름을 자동으로 고르고 싶다**
+  - `k-teacher-workflow-router`
 
 추천 흐름:
 
@@ -153,8 +214,17 @@ k-teacher-skills/
 │  │  └─ SKILL.md
 │  ├─ lesson-prototype/
 │  │  └─ SKILL.md
-│  └─ to-lesson-brief/
+│  ├─ to-lesson-brief/
+│  │  └─ SKILL.md
+│  └─ k-teacher-workflow-router/
 │     └─ SKILL.md
+├─ workflows/
+│  ├─ new-lesson-design.md
+│  ├─ curriculum-grounded-redesign.md
+│  ├─ lesson-failure-recovery.md
+│  └─ material-architecture-improvement.md
+├─ references/
+│  └─ questioning-style.md
 └─ examples/
    ├─ classroom-context-template.md
    ├─ curriculum-context-template.md
@@ -179,6 +249,7 @@ cp -r skills/improve-lesson-architecture ~/.claude/skills/
 cp -r skills/zoom-out-lesson ~/.claude/skills/
 cp -r skills/lesson-prototype ~/.claude/skills/
 cp -r skills/to-lesson-brief ~/.claude/skills/
+cp -r skills/k-teacher-workflow-router ~/.claude/skills/
 ```
 
 Option B — Claude.ai Skills:
@@ -209,6 +280,7 @@ cp -r skills/improve-lesson-architecture ~/.codex/skills/
 cp -r skills/zoom-out-lesson ~/.codex/skills/
 cp -r skills/lesson-prototype ~/.codex/skills/
 cp -r skills/to-lesson-brief ~/.codex/skills/
+cp -r skills/k-teacher-workflow-router ~/.codex/skills/
 ```
 
 Project-local usage:

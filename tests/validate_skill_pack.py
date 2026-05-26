@@ -14,6 +14,7 @@ SKILLS = [
     "zoom-out-lesson",
     "lesson-prototype",
     "to-lesson-brief",
+    "k-teacher-workflow-router",
 ]
 
 
@@ -61,6 +62,16 @@ def main() -> None:
     assert (ROOT / "tests" / "expected-behaviors.md").exists(), (
         "expected-behaviors.md missing"
     )
+    assert (ROOT / "references" / "questioning-style.md").exists(), (
+        "questioning-style.md missing"
+    )
+    for workflow in [
+        "new-lesson-design.md",
+        "curriculum-grounded-redesign.md",
+        "lesson-failure-recovery.md",
+        "material-architecture-improvement.md",
+    ]:
+        assert (ROOT / "workflows" / workflow).exists(), f"{workflow} missing"
 
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
     assert "Which skill should I use?" in readme, "README missing skill-selection guide"
@@ -129,6 +140,22 @@ def main() -> None:
     assert "\ubbf8\ud655\uc815" in brief and "\ucd94\uc815" in brief, (
         "to-lesson-brief: missing unknown/assumption handling"
     )
+
+    router = (
+        ROOT / "skills" / "k-teacher-workflow-router" / "SKILL.md"
+    ).read_text(encoding="utf-8")
+    assert "New lesson design" in router and "Lesson failure recovery" in router, (
+        "k-teacher-workflow-router: missing workflow routing recipes"
+    )
+    assert "\uc120\ud0dd\uc9c0" in router and "\uae30\ud0c0" in router, (
+        "k-teacher-workflow-router: missing choice-based questioning"
+    )
+
+    for skill in SKILLS:
+        text = (ROOT / "skills" / skill / "SKILL.md").read_text(encoding="utf-8")
+        assert "\uc120\ud0dd\uc9c0" in text or "A." in text, (
+            f"{skill}: missing choice-based questioning signal"
+        )
 
     print("VALIDATION_OK")
 
