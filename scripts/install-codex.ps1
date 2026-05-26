@@ -10,14 +10,22 @@ if (-not (Test-Path $Source)) {
 
 New-Item -ItemType Directory -Force -Path $Target | Out-Null
 
+# v2: walk 2-level hierarchy (skills/<group>/<skill>/), flatten on copy to target
 $installed = @()
 Get-ChildItem -Path $Source -Directory | Sort-Object Name | ForEach-Object {
-    $destination = Join-Path $Target $_.Name
-    Copy-Item -Path $_.FullName -Destination $destination -Recurse -Force
-    $installed += $_.Name
+    $group = $_
+    Get-ChildItem -Path $group.FullName -Directory | Sort-Object Name | ForEach-Object {
+        $skill = $_
+        $destination = Join-Path $Target $skill.Name
+        if (Test-Path $destination) {
+            Remove-Item -Path $destination -Recurse -Force
+        }
+        Copy-Item -Path $skill.FullName -Destination $destination -Recurse -Force
+        $installed += "$($group.Name)/$($skill.Name)"
+    }
 }
 
-Write-Host "K-Teacher Skills installed for Codex:"
+Write-Host "K-Teacher Skills installed for Codex (v2 hierarchical source -> flat target):"
 $installed | ForEach-Object { Write-Host "- $_" }
 Write-Host ""
 Write-Host "Recommended first prompt:"
