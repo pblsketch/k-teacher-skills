@@ -1,6 +1,6 @@
 ---
 name: k-teacher-workflow-router
-description: 교사의 수업 준비, 평가 설계, 자료 개선, 수업 실패 진단, AI 대응 과제 재설계 요청을 분석해 적절한 K-Teacher Skills workflow를 선택하고 첫 스킬로 연결한다. 사용자가 명시적으로 스킬 이름을 부르지 않아도 교사 맥락의 요청이면 사용한다.
+description: 교사의 수업 준비, 평가 설계, 자료 개선, 수업 실패 진단, AI 대응 과제 재설계, 사고 루틴, 개념 기반 탐구, 개별화, 루브릭, 힌지 질문, PBL, UDL 요청을 분석해 적절한 K-Teacher Skills workflow를 선택하고 첫 스킬로 연결한다. 사용자가 명시적으로 스킬 이름을 부르지 않아도 교사 맥락의 요청이면 사용한다.
 ---
 
 # K-Teacher Workflow Router
@@ -75,6 +75,64 @@ improve-lesson-architecture
 ```text
 ai-resilient-assignment-redesign
 → assessment-first-design
+→ to-lesson-brief
+```
+
+### 6. Conceptual inquiry lesson
+
+성취기준과 단원을 핵심 개념·일반화·탐구 질문으로 깊게 재구성할 때.
+
+```text
+grill-with-curriculum
+→ concept-based-inquiry-designer
+→ thinking-routine-selector
+→ assessment-first-design
+→ to-lesson-brief
+```
+
+### 7. Differentiated lesson redesign
+
+학생 편차, 참여 장벽, 기초/심화 경로가 중요할 때.
+
+```text
+diagnose-lesson-failure
+→ udl-barrier-remover
+→ differentiate-lesson-pathways
+→ lesson-prototype
+→ to-lesson-brief
+```
+
+### 8. Assessment quality upgrade
+
+평가 증거, 힌지 질문, 루브릭 품질을 함께 높일 때.
+
+```text
+assessment-first-design
+→ hinge-question-designer
+→ rubric-quality-guard
+→ to-lesson-brief
+```
+
+### 9. PBL design
+
+실생활·지역사회 문제 기반 프로젝트 수업을 설계할 때.
+
+```text
+zoom-out-lesson
+→ pbl-design-coach
+→ assessment-first-design
+→ rubric-quality-guard
+→ to-lesson-brief
+```
+
+### 10. UDL accessible lesson redesign
+
+수업 자료나 활동은 있지만 일부 학생에게 장벽이 큰 경우.
+
+```text
+improve-lesson-architecture
+→ udl-barrier-remover
+→ lesson-prototype
 → to-lesson-brief
 ```
 
@@ -180,18 +238,158 @@ Start:
 ai-resilient-assignment-redesign
 ```
 
+### If the user asks for visible thinking or routines
+
+Example:
+
+```text
+학생 생각을 보이게 하는 발문이나 사고 루틴 추천해줘.
+```
+
+Route:
+
+```text
+Thinking routine selection
+```
+
+Start:
+
+```text
+thinking-routine-selector
+```
+
+### If the user asks for concept-based inquiry
+
+Example:
+
+```text
+이 단원을 핵심 개념과 탐구 질문 중심으로 바꾸고 싶어.
+```
+
+Route:
+
+```text
+Conceptual inquiry lesson
+```
+
+Start:
+
+```text
+concept-based-inquiry-designer
+```
+
+### If the user asks for differentiation
+
+Example:
+
+```text
+학생 수준 차이가 커서 기초/심화 경로가 필요해.
+```
+
+Route:
+
+```text
+Differentiated lesson redesign
+```
+
+Start:
+
+```text
+differentiate-lesson-pathways
+```
+
+### If the user asks for rubric quality
+
+Example:
+
+```text
+이 루브릭의 채점 기준이 괜찮은지 봐줘.
+```
+
+Route:
+
+```text
+Assessment quality upgrade
+```
+
+Start:
+
+```text
+rubric-quality-guard
+```
+
+### If the user asks for hinge questions or formative checks
+
+Example:
+
+```text
+수업 중 오개념을 확인할 힌지 질문을 만들어줘.
+```
+
+Route:
+
+```text
+Assessment quality upgrade
+```
+
+Start:
+
+```text
+hinge-question-designer
+```
+
+### If the user asks for PBL
+
+Example:
+
+```text
+지역 문제를 활용한 PBL을 설계하고 싶어.
+```
+
+Route:
+
+```text
+PBL design
+```
+
+Start:
+
+```text
+pbl-design-coach
+```
+
+### If the user asks for UDL or accessibility
+
+Example:
+
+```text
+말하기 부담이 큰 학생도 참여하게 UDL 관점으로 바꿔줘.
+```
+
+Route:
+
+```text
+UDL accessible lesson redesign
+```
+
+Start:
+
+```text
+udl-barrier-remover
+```
+
 ## Ambiguous request handling
 
 애매하면 선택지를 준다.
 
 ```text
-요청을 보니 다섯 가지 방향이 가능합니다.
+요청을 보니 여러 방향이 가능합니다.
 
 A. 새 수업을 처음부터 설계한다
 B. 성취기준/교육과정 기준으로 기존 수업을 점검한다
 C. 실패한 수업을 진단하고 다음 차시를 수정한다
-D. 흩어진 자료를 하나의 수업 모듈로 재구조화한다
-E. AI로 대체되기 쉬운 과제/수행평가를 재설계한다
+D. 평가/루브릭/힌지 질문을 개선한다
+E. 개념 탐구, 사고 루틴, UDL, PBL 중 하나로 확장한다
 기타: 직접 적기
 
 추천은 A입니다. 지금 요청은 "자료 만들기"보다 수업 의도와 평가 증거를 먼저 정해야 하는 상황으로 보입니다.
@@ -225,6 +423,11 @@ E. AI로 대체되기 쉬운 과제/수행평가를 재설계한다
 - `../../workflows/lesson-failure-recovery.md`
 - `../../workflows/material-architecture-improvement.md`
 - `../../workflows/ai-resilient-assignment-redesign.md`
+- `../../workflows/conceptual-inquiry-lesson.md`
+- `../../workflows/differentiated-lesson-redesign.md`
+- `../../workflows/assessment-quality-upgrade.md`
+- `../../workflows/pbl-design-workflow.md`
+- `../../workflows/udl-accessible-lesson-redesign.md`
 - `../../references/interview-readiness.md`
 
 ## Red flags
@@ -234,3 +437,4 @@ E. AI로 대체되기 쉬운 과제/수행평가를 재설계한다
 - 애매한 요청에 자유서술 질문만 던진다.
 - 교사에게 왜 그 스킬을 쓰는지 설명하지 않는다.
 - AI 대응 과제 요청을 일반 활동지 생성으로 잘못 라우팅한다.
+- 루브릭, 힌지 질문, 평가 증거를 모두 같은 스킬로 뭉개서 처리한다.

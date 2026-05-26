@@ -145,6 +145,104 @@ Expected:
 - 과정 중심 평가 비중을 50% 이상으로 둔다.
 - 학생 개인정보 입력 금지를 안내한다.
 
+### `thinking-routine-selector`
+
+Prompt:
+
+```text
+학생 생각을 보이게 하는 사고 루틴을 추천해줘.
+```
+
+Expected:
+
+- 루틴 이름만 나열하지 않는다.
+- 사고 목적과 수업 단계를 먼저 확인한다.
+- 루틴 결과를 평가 증거와 연결한다.
+
+### `concept-based-inquiry-designer`
+
+Prompt:
+
+```text
+이 단원을 개념 기반 탐구 질문 중심으로 바꾸고 싶어.
+```
+
+Expected:
+
+- 성취기준을 지어내지 않는다.
+- 핵심 개념, 일반화, 사실적/개념적/논쟁적 질문을 구분한다.
+- 학생이 일반화를 도출할 흐름을 제안한다.
+
+### `differentiate-lesson-pathways`
+
+Prompt:
+
+```text
+학생 수준 차이가 커서 기초/표준/심화 활동이 필요해.
+```
+
+Expected:
+
+- 같은 핵심 목표를 유지한다.
+- 학생을 고정 수준으로 낙인찍지 않는다.
+- 기초/표준/심화 경로와 공통 평가 증거를 제시한다.
+
+### `rubric-quality-guard`
+
+Prompt:
+
+```text
+이 루브릭의 채점 기준이 괜찮은지 봐줘.
+```
+
+Expected:
+
+- 과제 구성요소와 평가 준거를 구분한다.
+- 수준 기술을 관찰 가능한 수행으로 바꾼다.
+- 성취기준과 평가 증거의 정렬을 확인한다.
+
+### `hinge-question-designer`
+
+Prompt:
+
+```text
+수업 중 오개념을 확인할 힌지 질문을 만들어줘.
+```
+
+Expected:
+
+- 많은 문항을 바로 만들지 않는다.
+- 확인하려는 오개념과 다음 수업 결정을 먼저 정한다.
+- 선택지별 학생 사고와 교사 대응을 제시한다.
+
+### `pbl-design-coach`
+
+Prompt:
+
+```text
+지역 문제를 활용한 PBL을 설계하고 싶어.
+```
+
+Expected:
+
+- 산출물부터 정하지 않는다.
+- 실제 문제, driving question, 학생 역할, 청중을 정한다.
+- 과정 평가와 개인 학습 증거를 포함한다.
+
+### `udl-barrier-remover`
+
+Prompt:
+
+```text
+말하기 부담이 큰 학생도 참여하게 UDL 관점으로 바꿔줘.
+```
+
+Expected:
+
+- 학생을 문제로 보지 않는다.
+- 참여/표상/행동과 표현 장벽을 구분한다.
+- 목표는 유지하고 접근 경로를 다양화한다.
+
 ### `k-teacher-workflow-router`
 
 Prompt:
@@ -162,3 +260,4 @@ Expected:
 - 교사에게 질문할 때 선택지를 제공한다.
 - workflow 선택 뒤 readiness 상태나 막힌 gate를 고려한다.
 - AI 대응 과제 요청은 `ai-resilient-assignment-redesign`으로 라우팅한다.
+- 사고 루틴, 개념 탐구, 개별화, 루브릭, 힌지 질문, PBL, UDL 요청을 각각 적절한 스킬로 라우팅한다.

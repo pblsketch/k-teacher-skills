@@ -15,6 +15,13 @@ SKILLS = [
     "lesson-prototype",
     "to-lesson-brief",
     "ai-resilient-assignment-redesign",
+    "thinking-routine-selector",
+    "concept-based-inquiry-designer",
+    "differentiate-lesson-pathways",
+    "rubric-quality-guard",
+    "hinge-question-designer",
+    "pbl-design-coach",
+    "udl-barrier-remover",
     "k-teacher-workflow-router",
 ]
 
@@ -72,12 +79,27 @@ def main() -> None:
     assert (ROOT / "references" / "ai-assignment-templates.md").exists(), (
         "ai-assignment-templates.md missing"
     )
+    for reference in [
+        "thinking-routines-matrix.md",
+        "concept-based-inquiry.md",
+        "differentiation-patterns.md",
+        "rubric-quality.md",
+        "hinge-question-design.md",
+        "pbl-design.md",
+        "udl-barrier-check.md",
+    ]:
+        assert (ROOT / "references" / reference).exists(), f"{reference} missing"
     for workflow in [
         "new-lesson-design.md",
         "curriculum-grounded-redesign.md",
         "lesson-failure-recovery.md",
         "material-architecture-improvement.md",
         "ai-resilient-assignment-redesign.md",
+        "conceptual-inquiry-lesson.md",
+        "differentiated-lesson-redesign.md",
+        "assessment-quality-upgrade.md",
+        "pbl-design-workflow.md",
+        "udl-accessible-lesson-redesign.md",
     ]:
         assert (ROOT / "workflows" / workflow).exists(), f"{workflow} missing"
 
@@ -168,6 +190,20 @@ def main() -> None:
             f"ai-resilient-assignment-redesign: missing {term}"
         )
 
+    skill_terms = {
+        "thinking-routine-selector": ["사고 루틴", "thinking-routines-matrix.md", "평가 증거"],
+        "concept-based-inquiry-designer": ["일반화", "개념적", "논쟁적 질문"],
+        "differentiate-lesson-pathways": ["기초", "표준", "심화"],
+        "rubric-quality-guard": ["평가 준거", "수준 기술", "rubric-quality.md"],
+        "hinge-question-designer": ["힌지 질문", "오개념", "교사 대응"],
+        "pbl-design-coach": ["driving question", "실제 문제", "과정 평가"],
+        "udl-barrier-remover": ["참여", "표상", "행동과 표현"],
+    }
+    for skill, terms in skill_terms.items():
+        text = (ROOT / "skills" / skill / "SKILL.md").read_text(encoding="utf-8")
+        for term in terms:
+            assert term in text, f"{skill}: missing {term}"
+
     router = (
         ROOT / "skills" / "k-teacher-workflow-router" / "SKILL.md"
     ).read_text(encoding="utf-8")
@@ -177,6 +213,16 @@ def main() -> None:
     assert "AI-resilient assignment redesign" in router, (
         "k-teacher-workflow-router: missing AI-resilient workflow"
     )
+    for route in [
+        "thinking-routine-selector",
+        "concept-based-inquiry-designer",
+        "differentiate-lesson-pathways",
+        "rubric-quality-guard",
+        "hinge-question-designer",
+        "pbl-design-coach",
+        "udl-barrier-remover",
+    ]:
+        assert route in router, f"k-teacher-workflow-router: missing {route}"
     assert "\uc120\ud0dd\uc9c0" in router and "\uae30\ud0c0" in router, (
         "k-teacher-workflow-router: missing choice-based questioning"
     )

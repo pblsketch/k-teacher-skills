@@ -80,6 +80,34 @@ AI로 수업자료를 "딸깍" 생성하는 대신, 교사의 수업 의도·학
 
 AI로 쉽게 대체되는 보고서, 활동지, 수행평가를 H→AI→H 구조로 재설계합니다. 프롬프트 로그, SHIFT 성찰지, AI 오용 대응, 학생용 안내문까지 포함합니다.
 
+### `thinking-routine-selector`
+
+학생 사고를 보이게 하는 Project Zero 사고 루틴을 수업 목표, 사고 목적, 학교급에 맞게 선택하고 발문·기록·평가 증거로 연결합니다.
+
+### `concept-based-inquiry-designer`
+
+성취기준과 단원을 핵심 개념, 일반화, 사실적·개념적·논쟁적 질문으로 재구성해 개념 기반 탐구 수업을 설계합니다.
+
+### `differentiate-lesson-pathways`
+
+같은 학습 목표를 유지하면서 기초·표준·심화 경로, 선택형 과제, 소그룹 지원, KSL/다국어 학습자 지원을 설계합니다.
+
+### `rubric-quality-guard`
+
+루브릭의 평가 준거, 수준 기술, 배점, 학생 친화성, 성취기준 정렬을 검토하고 개선합니다.
+
+### `hinge-question-designer`
+
+수업 중 학생 이해와 오개념을 빠르게 판별하는 힌지 질문, 형성평가 문항, 선택지별 교사 대응을 설계합니다.
+
+### `pbl-design-coach`
+
+실생활·지역사회 문제를 중심으로 PBL의 driving question, 학생 역할, 청중, 산출물, 과정 평가를 설계합니다.
+
+### `udl-barrier-remover`
+
+수업 활동, 자료, 평가에서 학생의 참여·표상·행동과 표현 장벽을 진단하고 UDL 기반 대안을 설계합니다.
+
 ### `k-teacher-workflow-router`
 
 교사의 요청을 분석해 단일 스킬이 아니라 적절한 workflow를 선택하고 첫 스킬로 연결합니다. 교사가 스킬 이름을 명시하지 않아도 자동 진입점을 제공합니다.
@@ -130,6 +158,54 @@ improve-lesson-architecture
 ```text
 ai-resilient-assignment-redesign
 → assessment-first-design
+→ to-lesson-brief
+```
+
+### Conceptual inquiry lesson
+
+```text
+grill-with-curriculum
+→ concept-based-inquiry-designer
+→ thinking-routine-selector
+→ assessment-first-design
+→ to-lesson-brief
+```
+
+### Differentiated lesson redesign
+
+```text
+diagnose-lesson-failure
+→ udl-barrier-remover
+→ differentiate-lesson-pathways
+→ lesson-prototype
+→ to-lesson-brief
+```
+
+### Assessment quality upgrade
+
+```text
+assessment-first-design
+→ hinge-question-designer
+→ rubric-quality-guard
+→ to-lesson-brief
+```
+
+### PBL design
+
+```text
+zoom-out-lesson
+→ pbl-design-coach
+→ assessment-first-design
+→ rubric-quality-guard
+→ to-lesson-brief
+```
+
+### UDL accessible lesson redesign
+
+```text
+improve-lesson-architecture
+→ udl-barrier-remover
+→ lesson-prototype
 → to-lesson-brief
 ```
 
@@ -195,6 +271,27 @@ D. 기타: 직접 적기
 - **ChatGPT 복붙, AI 대응 과제, 보고서/수행평가 재설계가 고민이다**
   - `ai-resilient-assignment-redesign`
 
+- **학생 사고를 보이게 하는 발문·사고 루틴이 필요하다**
+  - `thinking-routine-selector`
+
+- **단원을 핵심 개념, 일반화, 탐구 질문 중심으로 깊게 재구성하고 싶다**
+  - `concept-based-inquiry-designer`
+
+- **학생 수준 차이, 기초/심화 경로, 선택형 과제가 필요하다**
+  - `differentiate-lesson-pathways`
+
+- **루브릭의 준거와 수준 기술이 모호해서 검토하고 싶다**
+  - `rubric-quality-guard`
+
+- **수업 중 오개념을 확인하는 형성평가나 힌지 질문이 필요하다**
+  - `hinge-question-designer`
+
+- **PBL, 프로젝트, 지역 문제 기반 수업을 설계하고 싶다**
+  - `pbl-design-coach`
+
+- **UDL, 접근성, 참여/표상/표현 장벽을 낮추고 싶다**
+  - `udl-barrier-remover`
+
 - **어떤 스킬을 써야 할지 모르겠고, 요청에 맞는 흐름을 자동으로 고르고 싶다**
   - `k-teacher-workflow-router`
 
@@ -238,6 +335,23 @@ ai-resilient-assignment-redesign
 → to-lesson-brief
 ```
 
+개념 기반 탐구라면:
+
+```text
+grill-with-curriculum
+→ concept-based-inquiry-designer
+→ thinking-routine-selector
+→ assessment-first-design
+```
+
+평가 품질을 높이고 싶다면:
+
+```text
+assessment-first-design
+→ hinge-question-designer
+→ rubric-quality-guard
+```
+
 ## Repository structure
 
 ```text
@@ -263,6 +377,20 @@ k-teacher-skills/
 │  │  └─ SKILL.md
 │  ├─ ai-resilient-assignment-redesign/
 │  │  └─ SKILL.md
+│  ├─ thinking-routine-selector/
+│  │  └─ SKILL.md
+│  ├─ concept-based-inquiry-designer/
+│  │  └─ SKILL.md
+│  ├─ differentiate-lesson-pathways/
+│  │  └─ SKILL.md
+│  ├─ rubric-quality-guard/
+│  │  └─ SKILL.md
+│  ├─ hinge-question-designer/
+│  │  └─ SKILL.md
+│  ├─ pbl-design-coach/
+│  │  └─ SKILL.md
+│  ├─ udl-barrier-remover/
+│  │  └─ SKILL.md
 │  └─ k-teacher-workflow-router/
 │     └─ SKILL.md
 ├─ workflows/
@@ -270,11 +398,23 @@ k-teacher-skills/
 │  ├─ curriculum-grounded-redesign.md
 │  ├─ lesson-failure-recovery.md
 │  ├─ material-architecture-improvement.md
-│  └─ ai-resilient-assignment-redesign.md
+│  ├─ ai-resilient-assignment-redesign.md
+│  ├─ conceptual-inquiry-lesson.md
+│  ├─ differentiated-lesson-redesign.md
+│  ├─ assessment-quality-upgrade.md
+│  ├─ pbl-design-workflow.md
+│  └─ udl-accessible-lesson-redesign.md
 ├─ references/
 │  ├─ questioning-style.md
 │  ├─ interview-readiness.md
-│  └─ ai-assignment-templates.md
+│  ├─ ai-assignment-templates.md
+│  ├─ thinking-routines-matrix.md
+│  ├─ concept-based-inquiry.md
+│  ├─ differentiation-patterns.md
+│  ├─ rubric-quality.md
+│  ├─ hinge-question-design.md
+│  ├─ pbl-design.md
+│  └─ udl-barrier-check.md
 └─ examples/
    ├─ classroom-context-template.md
    ├─ curriculum-context-template.md
@@ -300,6 +440,13 @@ cp -r skills/zoom-out-lesson ~/.claude/skills/
 cp -r skills/lesson-prototype ~/.claude/skills/
 cp -r skills/to-lesson-brief ~/.claude/skills/
 cp -r skills/ai-resilient-assignment-redesign ~/.claude/skills/
+cp -r skills/thinking-routine-selector ~/.claude/skills/
+cp -r skills/concept-based-inquiry-designer ~/.claude/skills/
+cp -r skills/differentiate-lesson-pathways ~/.claude/skills/
+cp -r skills/rubric-quality-guard ~/.claude/skills/
+cp -r skills/hinge-question-designer ~/.claude/skills/
+cp -r skills/pbl-design-coach ~/.claude/skills/
+cp -r skills/udl-barrier-remover ~/.claude/skills/
 cp -r skills/k-teacher-workflow-router ~/.claude/skills/
 ```
 
@@ -332,6 +479,13 @@ cp -r skills/zoom-out-lesson ~/.codex/skills/
 cp -r skills/lesson-prototype ~/.codex/skills/
 cp -r skills/to-lesson-brief ~/.codex/skills/
 cp -r skills/ai-resilient-assignment-redesign ~/.codex/skills/
+cp -r skills/thinking-routine-selector ~/.codex/skills/
+cp -r skills/concept-based-inquiry-designer ~/.codex/skills/
+cp -r skills/differentiate-lesson-pathways ~/.codex/skills/
+cp -r skills/rubric-quality-guard ~/.codex/skills/
+cp -r skills/hinge-question-designer ~/.codex/skills/
+cp -r skills/pbl-design-coach ~/.codex/skills/
+cp -r skills/udl-barrier-remover ~/.codex/skills/
 cp -r skills/k-teacher-workflow-router ~/.codex/skills/
 ```
 
