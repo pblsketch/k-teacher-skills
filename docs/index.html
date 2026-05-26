@@ -137,42 +137,6 @@ h2.section-title {
 .card[data-color="purple"] { background: var(--purple); color: #fff; }
 .card[data-color="purple"] .card-subtitle { color: #f3f3f3; }
 
-/* ---------- SKILL TOGGLE ---------- */
-.skill-toggle {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  background: var(--ink);
-  color: #fff;
-  border: 3px solid var(--ink);
-  box-shadow: 6px 6px 0 var(--yellow);
-  padding: 14px 22px;
-  font-family: 'Archivo Black', sans-serif;
-  font-weight: 900;
-  font-size: 1rem;
-  text-transform: uppercase;
-  cursor: pointer;
-  margin-bottom: 32px;
-  transition: transform 120ms steps(2);
-}
-.skill-toggle:hover { transform: translate(-3px, -3px); box-shadow: 9px 9px 0 var(--yellow); }
-.skill-toggle:active { transform: translate(3px, 3px); box-shadow: 0 0 0 var(--yellow); }
-.group-label {
-  display: inline-block;
-  border: 3px solid var(--ink);
-  background: var(--surface);
-  padding: 4px 10px;
-  font-size: 0.75rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  margin-bottom: 14px;
-  box-shadow: 3px 3px 0 var(--ink);
-}
-.skill-group { margin-bottom: 36px; }
-#skill-list { display: none; }
-#skill-list.show { display: block; }
-
 /* ---------- AI TOOLS ---------- */
 .tool-grid {
   display: grid;
@@ -342,15 +306,6 @@ footer .footer-tag { font-family: 'Archivo Black', sans-serif; font-size: 1.4rem
   </div>
 </section>
 
-<section id="skills">
-  <div class="container">
-    <h2 class="section-title">더 자세히 — 스킬 17개 미리보기</h2>
-    <p class="section-lead">상황 카드 말고 개별 스킬을 직접 보고 싶다면 펼쳐서 확인하세요. 클릭하면 그 스킬의 프롬프트가 열립니다.</p>
-    <button class="skill-toggle" id="skill-toggle">▼ 전체 스킬 17개 펼치기</button>
-    <div id="skill-list"></div>
-  </div>
-</section>
-
 <section id="ai-tools">
   <div class="container">
     <h2 class="section-title">AI 서비스 사용 팁</h2>
@@ -425,7 +380,7 @@ cd k-teacher-skills
 
 <footer>
   <div class="footer-tag">★ K-TEACHER PROMPTS ★</div>
-  <p>v2.4.1 · MIT License · <a href="https://github.com/pblsketch/k-teacher-skills" target="_blank" rel="noopener">GitHub 저장소</a></p>
+  <p>v2.5 · MIT License · <a href="https://github.com/pblsketch/k-teacher-skills" target="_blank" rel="noopener">GitHub 저장소</a></p>
   <p style="margin-top:10px;font-size:0.9rem;opacity:0.7;">학생 개인정보·민감정보를 AI에 입력하지 마세요. 익명화된 학급 수준 맥락만 사용하는 것이 원칙입니다.</p>
 </footer>
 
@@ -817,18 +772,12 @@ const SITUATIONS = [
   { id: 'differentiation', icon: '🛤️', title: '학생 편차가 커요', subtitle: '기초·표준·심화 경로 + 선택형 과제', color: 'green', skill: 'differentiate-lesson-pathways', chain: '공통 목표 → 장벽 진단 → 경로 설계' },
   { id: 'assessment-quality', icon: '🎯', title: '평가·루브릭 손보기', subtitle: '평가 증거·루브릭·힌지 질문 품질 점검', color: 'red', skill: 'assessment-first-design', chain: '평가 증거 → 루브릭 → 힌지 질문' },
   { id: 'pbl', icon: '🚀', title: 'PBL 프로젝트 수업', subtitle: '실제 문제·driving question·과정 평가', color: 'blue', skill: 'pbl-design-coach', chain: '상위 맥락 → 실제 문제 → 평가 → 루브릭' },
-  { id: 'udl', icon: '♿', title: 'UDL 접근성 개선', subtitle: '참여·표상·표현 장벽 낮추기', color: 'pink', skill: 'udl-barrier-remover', chain: '목표 유지 → 장벽 진단 → 대안 설계' }
+  { id: 'udl', icon: '♿', title: 'UDL 접근성 개선', subtitle: '참여·표상·표현 장벽 낮추기', color: 'pink', skill: 'udl-barrier-remover', chain: '목표 유지 → 장벽 진단 → 대안 설계' },
+  { id: 'router', icon: '🧭', title: '어디부터 시작할지 모르겠어요', subtitle: '내 상황을 한 줄로 말하면 자동 추천', color: 'yellow', skill: 'k-teacher-workflow-router', chain: '한 줄 입력 → 자동 분류 → 추천 스킬 + 첫 질문' },
+  { id: 'prototype-compare', icon: '🧪', title: '활동안을 2~3개 비교하고 싶어요', subtitle: '완성본 만들기 전 prototype 검증', color: 'green', skill: 'lesson-prototype', chain: '비교 기준 → prototype 3개 → 선택안 확장' },
+  { id: 'thinking-routine', icon: '💭', title: '사고 루틴이 필요해요', subtitle: 'See-Think-Wonder 등 발문·기록 루틴', color: 'purple', skill: 'thinking-routine-selector', chain: '사고 목적 → 루틴 매칭 → 발문·기록 설계' },
+  { id: 'brief', icon: '📝', title: '대화를 동료에게 넘기고 싶어요', subtitle: '지금까지 정리해 수업 설계 브리프 한 페이지', color: 'red', skill: 'to-lesson-brief', chain: '대화 입력 → 미확정·확정 분리 → 브리프' }
 ];
-
-const GROUPS = {
-  entry: { label: '진입점·인터뷰', skills: ['grill-me-for-k-teacher', 'grill-with-curriculum', 'k-teacher-workflow-router'] },
-  'lesson-design': { label: '수업 설계', skills: ['lesson-prototype', 'to-lesson-brief', 'improve-lesson-architecture', 'zoom-out-lesson', 'thinking-routine-selector'] },
-  'inquiry-pbl': { label: '탐구·프로젝트', skills: ['concept-based-inquiry-designer', 'pbl-design-coach'] },
-  assessment: { label: '평가·루브릭', skills: ['assessment-first-design', 'rubric-quality-guard', 'hinge-question-designer'] },
-  individualization: { label: '개별화·접근성', skills: ['differentiate-lesson-pathways', 'udl-barrier-remover'] },
-  diagnostics: { label: '진단', skills: ['diagnose-lesson-failure'] },
-  'ai-era': { label: 'AI 시대 과제', skills: ['ai-resilient-assignment-redesign'] }
-};
 
 // ---------- RENDER ----------
 function buildCard({ icon, title, subtitle, color, chain }, onClick) {
@@ -851,24 +800,6 @@ function renderSituations() {
     grid.appendChild(buildCard({
       icon: s.icon, title: s.title, subtitle: s.subtitle, color: s.color, chain: s.chain
     }, () => openModal(s.skill, s.title)));
-  });
-}
-
-function renderSkills() {
-  const list = document.getElementById('skill-list');
-  Object.entries(GROUPS).forEach(([key, group]) => {
-    const wrap = document.createElement('div');
-    wrap.className = 'skill-group';
-    wrap.innerHTML = `<span class="group-label">${group.label}</span><div class="grid skill-grid" id="g-${key}"></div>`;
-    list.appendChild(wrap);
-    const subGrid = wrap.querySelector('.skill-grid');
-    group.skills.forEach(sid => {
-      const s = SKILLS[sid];
-      if (!s) return;
-      subGrid.appendChild(buildCard({
-        icon: s.icon, title: s.title, subtitle: s.subtitle
-      }, () => openModal(sid, s.title)));
-    });
   });
 }
 
@@ -920,17 +851,8 @@ copyBtn.addEventListener('click', async () => {
   }
 });
 
-// ---------- SKILL TOGGLE ----------
-const skillToggle = document.getElementById('skill-toggle');
-const skillList = document.getElementById('skill-list');
-skillToggle.addEventListener('click', () => {
-  const open = skillList.classList.toggle('show');
-  skillToggle.textContent = open ? '▲ 전체 스킬 17개 접기' : '▼ 전체 스킬 17개 펼치기';
-});
-
 // ---------- INIT ----------
 renderSituations();
-renderSkills();
 </script>
 </body>
 </html>
