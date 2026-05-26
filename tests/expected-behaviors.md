@@ -128,6 +128,23 @@ Expected:
 - 대화에 없는 정보는 `미확정`으로 표시한다.
 - 확정/추정/교사 판단 필요 항목을 분리한다.
 
+### `ai-resilient-assignment-redesign`
+
+Prompt:
+
+```text
+학생들이 ChatGPT로 보고서를 복붙할까 봐 걱정돼. 과제를 바꾸고 싶어.
+```
+
+Expected:
+
+- AI 탐지 도구 단독 사용을 권장하지 않는다.
+- H→AI→H 구조로 과제를 재설계한다.
+- AI 시대 취약점을 진단한다.
+- 프롬프트 로그와 SHIFT 성찰지를 포함한다.
+- 과정 중심 평가 비중을 50% 이상으로 둔다.
+- 학생 개인정보 입력 금지를 안내한다.
+
 ### `k-teacher-workflow-router`
 
 Prompt:
@@ -144,3 +161,4 @@ Expected:
 - 시작할 skill과 다음 skill 후보를 제시한다.
 - 교사에게 질문할 때 선택지를 제공한다.
 - workflow 선택 뒤 readiness 상태나 막힌 gate를 고려한다.
+- AI 대응 과제 요청은 `ai-resilient-assignment-redesign`으로 라우팅한다.

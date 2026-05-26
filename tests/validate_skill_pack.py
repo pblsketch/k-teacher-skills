@@ -14,6 +14,7 @@ SKILLS = [
     "zoom-out-lesson",
     "lesson-prototype",
     "to-lesson-brief",
+    "ai-resilient-assignment-redesign",
     "k-teacher-workflow-router",
 ]
 
@@ -68,11 +69,15 @@ def main() -> None:
     assert (ROOT / "references" / "interview-readiness.md").exists(), (
         "interview-readiness.md missing"
     )
+    assert (ROOT / "references" / "ai-assignment-templates.md").exists(), (
+        "ai-assignment-templates.md missing"
+    )
     for workflow in [
         "new-lesson-design.md",
         "curriculum-grounded-redesign.md",
         "lesson-failure-recovery.md",
         "material-architecture-improvement.md",
+        "ai-resilient-assignment-redesign.md",
     ]:
         assert (ROOT / "workflows" / workflow).exists(), f"{workflow} missing"
 
@@ -148,11 +153,29 @@ def main() -> None:
         "to-lesson-brief: missing unknown/assumption handling"
     )
 
+    ai_assignment = (
+        ROOT / "skills" / "ai-resilient-assignment-redesign" / "SKILL.md"
+    ).read_text(encoding="utf-8")
+    for term in [
+        "H→AI→H",
+        "프롬프트 로그",
+        "SHIFT",
+        "50%",
+        "AI 탐지 도구 단독",
+        "ai-assignment-templates.md",
+    ]:
+        assert term in ai_assignment, (
+            f"ai-resilient-assignment-redesign: missing {term}"
+        )
+
     router = (
         ROOT / "skills" / "k-teacher-workflow-router" / "SKILL.md"
     ).read_text(encoding="utf-8")
     assert "New lesson design" in router and "Lesson failure recovery" in router, (
         "k-teacher-workflow-router: missing workflow routing recipes"
+    )
+    assert "AI-resilient assignment redesign" in router, (
+        "k-teacher-workflow-router: missing AI-resilient workflow"
     )
     assert "\uc120\ud0dd\uc9c0" in router and "\uae30\ud0c0" in router, (
         "k-teacher-workflow-router: missing choice-based questioning"

@@ -76,6 +76,10 @@ AI로 수업자료를 "딸깍" 생성하는 대신, 교사의 수업 의도·학
 
 지금까지의 대화와 설계 맥락을 동료 공유나 다음 AI 작업에 넘길 수 있는 수업 설계 브리프로 정리합니다.
 
+### `ai-resilient-assignment-redesign`
+
+AI로 쉽게 대체되는 보고서, 활동지, 수행평가를 H→AI→H 구조로 재설계합니다. 프롬프트 로그, SHIFT 성찰지, AI 오용 대응, 학생용 안내문까지 포함합니다.
+
 ### `k-teacher-workflow-router`
 
 교사의 요청을 분석해 단일 스킬이 아니라 적절한 workflow를 선택하고 첫 스킬로 연결합니다. 교사가 스킬 이름을 명시하지 않아도 자동 진입점을 제공합니다.
@@ -118,6 +122,14 @@ diagnose-lesson-failure
 improve-lesson-architecture
 → assessment-first-design
 → lesson-prototype
+→ to-lesson-brief
+```
+
+### AI-resilient assignment redesign
+
+```text
+ai-resilient-assignment-redesign
+→ assessment-first-design
 → to-lesson-brief
 ```
 
@@ -180,6 +192,9 @@ D. 기타: 직접 적기
 - **긴 대화를 동료 공유용 또는 다음 AI 작업용 수업 브리프로 정리하고 싶다**
   - `to-lesson-brief`
 
+- **ChatGPT 복붙, AI 대응 과제, 보고서/수행평가 재설계가 고민이다**
+  - `ai-resilient-assignment-redesign`
+
 - **어떤 스킬을 써야 할지 모르겠고, 요청에 맞는 흐름을 자동으로 고르고 싶다**
   - `k-teacher-workflow-router`
 
@@ -215,6 +230,14 @@ zoom-out-lesson
 → to-lesson-brief
 ```
 
+AI 대응 과제 재설계라면:
+
+```text
+ai-resilient-assignment-redesign
+→ assessment-first-design
+→ to-lesson-brief
+```
+
 ## Repository structure
 
 ```text
@@ -238,16 +261,20 @@ k-teacher-skills/
 │  │  └─ SKILL.md
 │  ├─ to-lesson-brief/
 │  │  └─ SKILL.md
+│  ├─ ai-resilient-assignment-redesign/
+│  │  └─ SKILL.md
 │  └─ k-teacher-workflow-router/
 │     └─ SKILL.md
 ├─ workflows/
 │  ├─ new-lesson-design.md
 │  ├─ curriculum-grounded-redesign.md
 │  ├─ lesson-failure-recovery.md
-│  └─ material-architecture-improvement.md
+│  ├─ material-architecture-improvement.md
+│  └─ ai-resilient-assignment-redesign.md
 ├─ references/
 │  ├─ questioning-style.md
-│  └─ interview-readiness.md
+│  ├─ interview-readiness.md
+│  └─ ai-assignment-templates.md
 └─ examples/
    ├─ classroom-context-template.md
    ├─ curriculum-context-template.md
@@ -272,6 +299,7 @@ cp -r skills/improve-lesson-architecture ~/.claude/skills/
 cp -r skills/zoom-out-lesson ~/.claude/skills/
 cp -r skills/lesson-prototype ~/.claude/skills/
 cp -r skills/to-lesson-brief ~/.claude/skills/
+cp -r skills/ai-resilient-assignment-redesign ~/.claude/skills/
 cp -r skills/k-teacher-workflow-router ~/.claude/skills/
 ```
 
@@ -303,6 +331,7 @@ cp -r skills/improve-lesson-architecture ~/.codex/skills/
 cp -r skills/zoom-out-lesson ~/.codex/skills/
 cp -r skills/lesson-prototype ~/.codex/skills/
 cp -r skills/to-lesson-brief ~/.codex/skills/
+cp -r skills/ai-resilient-assignment-redesign ~/.codex/skills/
 cp -r skills/k-teacher-workflow-router ~/.codex/skills/
 ```
 

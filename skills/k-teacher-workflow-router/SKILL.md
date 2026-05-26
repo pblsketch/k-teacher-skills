@@ -1,6 +1,6 @@
 ---
 name: k-teacher-workflow-router
-description: 교사의 수업 준비, 평가 설계, 자료 개선, 수업 실패 진단 요청을 분석해 적절한 K-Teacher Skills workflow를 선택하고 첫 스킬로 연결한다. 사용자가 명시적으로 스킬 이름을 부르지 않아도 교사 맥락의 요청이면 사용한다.
+description: 교사의 수업 준비, 평가 설계, 자료 개선, 수업 실패 진단, AI 대응 과제 재설계 요청을 분석해 적절한 K-Teacher Skills workflow를 선택하고 첫 스킬로 연결한다. 사용자가 명시적으로 스킬 이름을 부르지 않아도 교사 맥락의 요청이면 사용한다.
 ---
 
 # K-Teacher Workflow Router
@@ -65,6 +65,16 @@ diagnose-lesson-failure
 improve-lesson-architecture
 → assessment-first-design
 → lesson-prototype
+→ to-lesson-brief
+```
+
+### 5. AI-resilient assignment redesign
+
+보고서, 활동지, 수행평가가 AI로 쉽게 대체될 위험이 있을 때.
+
+```text
+ai-resilient-assignment-redesign
+→ assessment-first-design
 → to-lesson-brief
 ```
 
@@ -150,18 +160,39 @@ Start:
 improve-lesson-architecture
 ```
 
+### If the user is worried about AI-copyable assignments
+
+Example:
+
+```text
+학생들이 ChatGPT로 보고서를 복붙할까 봐 걱정돼.
+```
+
+Route:
+
+```text
+AI-resilient assignment redesign
+```
+
+Start:
+
+```text
+ai-resilient-assignment-redesign
+```
+
 ## Ambiguous request handling
 
 애매하면 선택지를 준다.
 
 ```text
-요청을 보니 네 가지 방향이 가능합니다.
+요청을 보니 다섯 가지 방향이 가능합니다.
 
 A. 새 수업을 처음부터 설계한다
 B. 성취기준/교육과정 기준으로 기존 수업을 점검한다
 C. 실패한 수업을 진단하고 다음 차시를 수정한다
 D. 흩어진 자료를 하나의 수업 모듈로 재구조화한다
-E. 기타: 직접 적기
+E. AI로 대체되기 쉬운 과제/수행평가를 재설계한다
+기타: 직접 적기
 
 추천은 A입니다. 지금 요청은 "자료 만들기"보다 수업 의도와 평가 증거를 먼저 정해야 하는 상황으로 보입니다.
 ```
@@ -193,6 +224,7 @@ E. 기타: 직접 적기
 - `../../workflows/curriculum-grounded-redesign.md`
 - `../../workflows/lesson-failure-recovery.md`
 - `../../workflows/material-architecture-improvement.md`
+- `../../workflows/ai-resilient-assignment-redesign.md`
 - `../../references/interview-readiness.md`
 
 ## Red flags
@@ -201,3 +233,4 @@ E. 기타: 직접 적기
 - workflow를 고르지 않고 아무 스킬이나 시작한다.
 - 애매한 요청에 자유서술 질문만 던진다.
 - 교사에게 왜 그 스킬을 쓰는지 설명하지 않는다.
+- AI 대응 과제 요청을 일반 활동지 생성으로 잘못 라우팅한다.
