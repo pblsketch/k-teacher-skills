@@ -1,7 +1,7 @@
 {
   "name": "k-teacher-skills",
   "displayName": "K-Teacher Skills",
-  "version": "2.4.1",
+  "version": "2.5.0",
   "language": "ko",
   "audience": "한국 현장 교사",
   "entrySkill": "k-teacher-workflow-router",
