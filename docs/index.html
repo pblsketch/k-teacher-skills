@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>K-TEACHER PROMPTS — 한국 교사용 AI 수업 설계 프롬프트</title>
+<meta name="description" content="AI에게 '딸깍' 자료 대신 '내 수업을 끝까지 질문해줘'. 한국 중·고 교사가 Gemini, ChatGPT, NotebookLM에 바로 붙여넣는 17개 수업 설계 프롬프트.">
+<meta property="og:title" content="K-TEACHER PROMPTS">
+<meta property="og:description" content="한국 교사를 위한 AI 수업 설계 프롬프트 — 복사해서 어디든 붙여넣기">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" as="style" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+:root {
+  --bg: #FEFEF0;
+  --surface: #FFFFFF;
+  --ink: #0A0A0A;
+  --red: #FF5A36;
+  --yellow: #FFD400;
+  --blue: #2D6CDF;
+  --green: #1EC48F;
+  --pink: #FF7AB0;
+  --purple: #9D6CFF;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Pretendard', 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  font-size: 17px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+.container { max-width: 1160px; margin: 0 auto; padding: 0 20px; }
+
+/* ---------- HERO ---------- */
+header.hero {
+  border-bottom: 4px solid var(--ink);
+  padding: 64px 20px 48px;
+  background: var(--bg);
+}
+.hero-inner { max-width: 1160px; margin: 0 auto; }
+.tag {
+  display: inline-block;
+  background: var(--yellow);
+  border: 3px solid var(--ink);
+  box-shadow: 5px 5px 0 var(--ink);
+  padding: 6px 14px;
+  font-weight: 700;
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 24px;
+}
+h1.display {
+  font-family: 'Archivo Black', 'Pretendard', sans-serif;
+  font-weight: 900;
+  font-size: clamp(2.6rem, 7vw, 5.5rem);
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  margin-bottom: 18px;
+}
+h1.display .accent { color: var(--red); }
+.subtitle {
+  font-size: clamp(1.05rem, 2vw, 1.35rem);
+  font-weight: 500;
+  max-width: 720px;
+  margin-bottom: 24px;
+}
+.hero-meta {
+  display: flex; gap: 12px; flex-wrap: wrap;
+  font-size: 0.92rem; font-weight: 700;
+}
+.hero-meta span {
+  border: 3px solid var(--ink);
+  background: var(--surface);
+  padding: 6px 12px;
+  box-shadow: 4px 4px 0 var(--ink);
+}
+
+/* ---------- SECTION ---------- */
+section { padding: 64px 0 32px; border-bottom: 4px solid var(--ink); }
+h2.section-title {
+  font-family: 'Archivo Black', sans-serif;
+  font-weight: 900;
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  margin-bottom: 12px;
+  line-height: 1.0;
+}
+.section-lead {
+  font-size: 1.05rem;
+  margin-bottom: 32px;
+  max-width: 720px;
+  font-weight: 500;
+}
+
+/* ---------- CARDS ---------- */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 22px;
+}
+.card {
+  background: var(--surface);
+  border: 3px solid var(--ink);
+  box-shadow: 6px 6px 0 var(--ink);
+  padding: 22px 20px 20px;
+  cursor: pointer;
+  transition: transform 120ms steps(2), box-shadow 120ms steps(2);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: left;
+  width: 100%;
+  font-family: inherit;
+  font-size: 1rem;
+  color: var(--ink);
+}
+.card:hover { transform: translate(-3px, -3px); box-shadow: 9px 9px 0 var(--ink); }
+.card:active { transform: translate(3px, 3px); box-shadow: 0px 0px 0 var(--ink); }
+.card-icon { font-size: 2rem; line-height: 1; margin-bottom: 4px; }
+.card-title { font-family: 'Archivo Black', 'Pretendard', sans-serif; font-weight: 900; font-size: 1.18rem; line-height: 1.15; text-transform: uppercase; }
+.card-subtitle { font-size: 0.95rem; font-weight: 500; color: #333; }
+.card-chain { margin-top: 8px; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.02em; opacity: 0.65; }
+.card[data-color="red"] { background: var(--red); color: var(--ink); }
+.card[data-color="yellow"] { background: var(--yellow); }
+.card[data-color="blue"] { background: var(--blue); color: #fff; }
+.card[data-color="blue"] .card-subtitle { color: #f3f3f3; }
+.card[data-color="green"] { background: var(--green); }
+.card[data-color="pink"] { background: var(--pink); }
+.card[data-color="purple"] { background: var(--purple); color: #fff; }
+.card[data-color="purple"] .card-subtitle { color: #f3f3f3; }
+
+/* ---------- SKILL TOGGLE ---------- */
+.skill-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--ink);
+  color: #fff;
+  border: 3px solid var(--ink);
+  box-shadow: 6px 6px 0 var(--yellow);
+  padding: 14px 22px;
+  font-family: 'Archivo Black', sans-serif;
+  font-weight: 900;
+  font-size: 1rem;
+  text-transform: uppercase;
+  cursor: pointer;
+  margin-bottom: 32px;
+  transition: transform 120ms steps(2);
+}
+.skill-toggle:hover { transform: translate(-3px, -3px); box-shadow: 9px 9px 0 var(--yellow); }
+.skill-toggle:active { transform: translate(3px, 3px); box-shadow: 0 0 0 var(--yellow); }
+.group-label {
+  display: inline-block;
+  border: 3px solid var(--ink);
+  background: var(--surface);
+  padding: 4px 10px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 14px;
+  box-shadow: 3px 3px 0 var(--ink);
+}
+.skill-group { margin-bottom: 36px; }
+#skill-list { display: none; }
+#skill-list.show { display: block; }
+
+/* ---------- AI TOOLS ---------- */
+.tool-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 22px;
+}
+.tool-card {
+  background: var(--surface);
+  border: 3px solid var(--ink);
+  box-shadow: 6px 6px 0 var(--ink);
+  padding: 22px;
+}
+.tool-name { font-family: 'Archivo Black', sans-serif; font-size: 1.3rem; text-transform: uppercase; margin-bottom: 10px; }
+.tool-card p { font-size: 0.95rem; margin-bottom: 8px; }
+.tool-card a {
+  display: inline-block;
+  margin-top: 12px;
+  background: var(--ink);
+  color: #fff;
+  padding: 8px 14px;
+  border: 3px solid var(--ink);
+  text-decoration: none;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.02em;
+  box-shadow: 4px 4px 0 var(--red);
+  transition: transform 120ms steps(2);
+}
+.tool-card a:hover { transform: translate(-3px, -3px); box-shadow: 7px 7px 0 var(--red); }
+
+/* ---------- FOOTER ---------- */
+footer {
+  padding: 48px 20px;
+  text-align: center;
+  background: var(--ink);
+  color: #fff;
+}
+footer a { color: var(--yellow); text-decoration: underline; font-weight: 700; }
+footer .footer-tag { font-family: 'Archivo Black', sans-serif; font-size: 1.4rem; margin-bottom: 12px; text-transform: uppercase; }
+
+/* ---------- MODAL ---------- */
+.modal-backdrop {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(10, 10, 10, 0.75);
+  z-index: 100;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 40px 16px;
+  overflow-y: auto;
+}
+.modal-backdrop.open { display: flex; }
+.modal {
+  background: var(--bg);
+  border: 4px solid var(--ink);
+  box-shadow: 10px 10px 0 var(--yellow);
+  max-width: 720px;
+  width: 100%;
+  padding: 28px;
+  position: relative;
+}
+.modal-close {
+  position: absolute;
+  top: 14px; right: 14px;
+  background: var(--red);
+  color: #fff;
+  border: 3px solid var(--ink);
+  box-shadow: 3px 3px 0 var(--ink);
+  width: 36px; height: 36px;
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 1.1rem;
+  cursor: pointer;
+  line-height: 1;
+}
+.modal-title { font-family: 'Archivo Black', sans-serif; font-size: 1.5rem; text-transform: uppercase; margin-bottom: 6px; padding-right: 50px; }
+.modal-subtitle { font-size: 0.95rem; margin-bottom: 20px; opacity: 0.8; }
+.modal-prompt-label { font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 6px; display: block; }
+.modal-prompt {
+  background: var(--surface);
+  border: 3px solid var(--ink);
+  padding: 16px;
+  font-family: 'Space Grotesk', 'Pretendard', monospace;
+  font-size: 0.92rem;
+  line-height: 1.55;
+  white-space: pre-wrap;
+  word-break: break-word;
+  margin-bottom: 18px;
+  max-height: 420px;
+  overflow-y: auto;
+}
+.modal-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+}
+.btn {
+  background: var(--ink);
+  color: #fff;
+  border: 3px solid var(--ink);
+  box-shadow: 5px 5px 0 var(--yellow);
+  padding: 12px 18px;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.92rem;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  font-family: inherit;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: transform 120ms steps(2);
+}
+.btn:hover { transform: translate(-3px, -3px); box-shadow: 8px 8px 0 var(--yellow); }
+.btn:active { transform: translate(3px, 3px); box-shadow: 0 0 0 var(--yellow); }
+.btn-copy { background: var(--red); }
+.btn-copy.copied { background: var(--green); color: var(--ink); }
+.btn-open { background: var(--blue); }
+.modal-tips {
+  background: var(--yellow);
+  border: 3px solid var(--ink);
+  padding: 12px 14px;
+  font-size: 0.88rem;
+  font-weight: 500;
+  margin-top: 8px;
+}
+.modal-tips strong { font-weight: 700; }
+
+@media (max-width: 600px) {
+  header.hero { padding: 40px 16px 32px; }
+  section { padding: 40px 0 24px; }
+  .grid { gap: 16px; }
+  .card { padding: 18px 16px; }
+  .modal { padding: 22px 18px; }
+  .btn { padding: 10px 14px; font-size: 0.85rem; }
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <span class="tag">한국 교사용 ★ AI 프롬프트 팩</span>
+    <h1 class="display">AI에게 자료 만들지 말고<br><span class="accent">내 수업을 끝까지 질문하라고</span> 시켜라</h1>
+    <p class="subtitle">17개의 검증된 수업 설계 프롬프트. Gemini, ChatGPT, NotebookLM에 복사·붙여넣기. 회원가입 없음, 설치 없음, 무료.</p>
+    <div class="hero-meta">
+      <span>📋 17개 스킬</span>
+      <span>🇰🇷 한국어</span>
+      <span>🆓 MIT 라이선스</span>
+      <span>⚙️ 모든 AI 챗봇 호환</span>
+    </div>
+  </div>
+</header>
+
+<section id="situations">
+  <div class="container">
+    <h2 class="section-title">지금 내 상황은?</h2>
+    <p class="section-lead">상황을 클릭하면 그 상황에 맞는 프롬프트가 열립니다. 복사해서 평소 쓰시는 AI에 붙여넣으면 끝.</p>
+    <div class="grid" id="situation-grid"></div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="container">
+    <h2 class="section-title">스킬별로 보기</h2>
+    <p class="section-lead">상황별 추천 말고 직접 스킬 17개를 둘러보고 싶다면 펼쳐서 확인하세요.</p>
+    <button class="skill-toggle" id="skill-toggle">▼ 전체 스킬 17개 펼치기</button>
+    <div id="skill-list"></div>
+  </div>
+</section>
+
+<section id="ai-tools">
+  <div class="container">
+    <h2 class="section-title">어디에 붙여넣지?</h2>
+    <p class="section-lead">아무 AI 챗봇이든 잘 됩니다. 한국 교사가 많이 쓰는 3가지 사용 팁:</p>
+    <div class="tool-grid">
+      <div class="tool-card">
+        <div class="tool-name">🟢 Gemini</div>
+        <p>한국 교사가 가장 많이 쓰는 챗봇. 무료 버전도 됨. Google Workspace 학교 계정이면 더 안정적. 학습지 파일(<strong>HWPX</strong>, PDF) 첨부 후 프롬프트 붙여넣기.</p>
+        <a href="https://gemini.google.com/" target="_blank" rel="noopener">Gemini 열기 →</a>
+      </div>
+      <div class="tool-card">
+        <div class="tool-name">🟣 NotebookLM</div>
+        <p>교과서·지도서·평가 자료를 통째로 넣고 분석할 때. 자료 여러 개 묶어서 일반화 발견·요약·오디오 개요 생성 가능. <strong>Source 업로드</strong> 후 프롬프트 입력.</p>
+        <a href="https://notebooklm.google.com/" target="_blank" rel="noopener">NotebookLM 열기 →</a>
+      </div>
+      <div class="tool-card">
+        <div class="tool-name">⚫ ChatGPT</div>
+        <p>긴 인터뷰 흐름을 끝까지 따라가는 데 안정적. 무료 GPT-4o로 충분. <strong>파일 첨부</strong> 후 프롬프트 붙여넣기. Custom GPT로 박아두면 매번 복붙 안 해도 됨.</p>
+        <a href="https://chat.openai.com/" target="_blank" rel="noopener">ChatGPT 열기 →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-tag">★ K-TEACHER PROMPTS ★</div>
+  <p>v2.1 · MIT License · <a href="https://github.com/pblsketch/k-teacher-skills" target="_blank" rel="noopener">GitHub 저장소</a></p>
+  <p style="margin-top:10px;font-size:0.9rem;opacity:0.7;">학생 개인정보·민감정보를 AI에 입력하지 마세요. 익명화된 학급 수준 맥락만 사용하는 것이 원칙입니다.</p>
+</footer>
+
+<!-- MODAL -->
+<div class="modal-backdrop" id="modal-backdrop" role="dialog" aria-modal="true">
+  <div class="modal">
+    <button class="modal-close" id="modal-close" aria-label="닫기">✕</button>
+    <div class="modal-title" id="modal-title"></div>
+    <div class="modal-subtitle" id="modal-subtitle"></div>
+    <span class="modal-prompt-label">📋 복사할 프롬프트</span>
+    <div class="modal-prompt" id="modal-prompt"></div>
+    <div class="modal-actions">
+      <button class="btn btn-copy" id="copy-btn">📋 복사하기</button>
+      <a class="btn btn-open" href="https://gemini.google.com/" target="_blank" rel="noopener">Gemini ↗</a>
+      <a class="btn btn-open" href="https://notebooklm.google.com/" target="_blank" rel="noopener">NotebookLM ↗</a>
+      <a class="btn btn-open" href="https://chat.openai.com/" target="_blank" rel="noopener">ChatGPT ↗</a>
+    </div>
+    <div class="modal-tips">
+      <strong>사용법:</strong> 위 프롬프트를 복사하고 AI 챗봇에 붙여넣은 뒤, 마지막 부분(과목·학년·단원 등)을 본인 상황으로 채워 보내세요. AI가 첫 질문을 던지면 답변하며 인터뷰를 이어가면 됩니다.
+    </div>
+  </div>
+</div>
+
+<script>
+const SKILLS = {
+  'grill-me-for-k-teacher': {
+    icon: '🎤', title: '수업 인터뷰', subtitle: '바로 자료 만들지 않고 먼저 질문',
+    prompt: `너는 한국 중·고등학교 교사의 수업 설계를 돕는 인터뷰 도우미야.
+
+규칙:
+- 활동지·수업안·평가지를 즉시 만들지 않는다. 먼저 질문한다.
+- 질문은 한 번에 하나씩, 3~5개 선택지(A/B/C/D + 기타)와 함께.
+- 학생 실명·민감정보는 절대 요구하지 않는다.
+- 다음 4가지가 명확해질 때까지 인터뷰한다:
+  1) 수업 의도 — 학생이 어떻게 바뀌어야 하는가
+  2) 학생 맥락 — 학년/과목/단원/선행 지식
+  3) 평가 증거 — 무엇이 보이면 배웠다고 볼 것인가
+  4) 예상 오개념 — 어디서 막힐 것 같은가
+
+내가 아래 정보를 주면 가장 중요한 질문 하나부터 던져줘:
+- 과목/학년/단원:
+- 하고 싶은 활동(있다면):
+- 가장 고민되는 점:`
+  },
+  'grill-with-curriculum': {
+    icon: '📜', title: '성취기준 기반 검토', subtitle: '교육과정·기존 자료로 수업 점검',
+    prompt: `너는 한국 교사가 제공한 성취기준·교과서·기존 자료에 근거해 수업 설계를 점검하는 인터뷰 도우미야.
+
+규칙:
+- 성취기준을 모르면 지어내지 않는다. 모르면 "미확정"이라고 표시.
+- 제공된 문서에서 확인 가능한 것은 다시 묻지 않는다.
+- 질문은 한 번에 하나, 3~5개 선택지와 함께.
+- 학생 실명·민감정보 금지.
+- 우선 다음 정렬을 검토: 성취기준의 동사 ↔ 활동의 동사 ↔ 평가의 측정 대상.
+
+내가 자료를 첨부하거나 붙여넣으면 이 순서로:
+1) 핵심 개념·교과 용어·성취기준 동사 추출
+2) 현재 설계와의 정렬 상태
+3) 어긋난 지점 1개에 대한 첫 질문
+
+붙여넣을 자료: [성취기준 / 교과서 / 활동지 / 평가계획 중 무엇이든]`
+  },
+  'k-teacher-workflow-router': {
+    icon: '🧭', title: '워크플로 라우터', subtitle: '내 상황에 맞는 스킬 자동 추천',
+    prompt: `너는 한국 교사의 요청을 듣고 가장 적합한 수업 설계 워크플로를 추천하는 라우터다.
+
+규칙:
+- 자료를 즉시 만들지 않는다.
+- 요청 유형을 먼저 분류한다 (새 수업 설계 / 기존 자료 검토 / 수업 실패 진단 / 자료 구조 개선 / AI 대응 과제 / 사고 루틴 / 개념 탐구 / 개별화 / 평가 품질 / PBL / UDL).
+- 분류가 애매하면 3~5개 선택지로 묻는다.
+
+내가 한 줄로 상황을 말하면 이 형식으로 답해줘:
+1) 요청 유형
+2) 추천 워크플로 1~2개
+3) 그 워크플로의 첫 단계와 그 첫 질문 1개
+
+내 상황: [한 줄로 적어주세요]`
+  },
+  'assessment-first-design': {
+    icon: '🎯', title: '평가 우선 설계', subtitle: '활동 만들기 전에 평가 증거부터',
+    prompt: `너는 한국 교사가 활동을 만들기 전에 "학생이 무엇을 하면 배웠다고 볼지(평가 증거)"부터 정의하도록 돕는 도우미다.
+
+규칙:
+- 활동지를 먼저 만들지 않는다. 평가 증거 → 루브릭 → 활동 순서.
+- 평가 준거는 분량·표지·그림 수 같은 형식이 아닌 학습의 질로.
+- 질문은 한 번에 하나, 3~5개 선택지와 함께.
+- 학생 실명·민감정보 금지.
+
+내가 단원/주제를 알려주면 가장 먼저 던질 질문:
+"이 수업이 끝나면 학생의 어떤 행동·산출물·발화로 학습을 확인할 것인가?"
++ 3~5개 선택지
+
+내 단원: [학년/과목/단원/하고 싶은 활동]`
+  },
+  'diagnose-lesson-failure': {
+    icon: '🔍', title: '수업 실패 진단', subtitle: '관찰 증거 기반 원인 분석',
+    prompt: `너는 한국 교사의 수업이 잘 안 되었을 때 관찰 증거에 기반해 원인을 진단하고 다음 차시 최소 수정안을 만드는 도우미다.
+
+규칙:
+- 학생 탓·교사 탓으로 단정하지 않는다.
+- 먼저 관찰 가능한 증거를 묻는다.
+- 가설은 반증 가능하게: "만약 [원인]이 문제라면, [작은 수정]을 했을 때, 다음 차시에 [관찰 변화]가 나타날 것이다."
+- 단원 전체 갈아엎지 않는다. 작은 수정만.
+- 질문은 한 번에 하나.
+- 학생 실명 금지.
+
+첫 질문에 답해줘:
+수업이 안 됐다고 느낀 가장 구체적인 증거는?
+A. 학생 발화가 거의 없었다
+B. 활동 산출물이 목표와 달랐다
+C. 평가/퀴즈 결과가 낮았다
+D. 특정 설명 이후 질문이 많아졌다
+E. 시간 안에 활동이 끝나지 않았다
+F. 기타 (직접 적기)`
+  },
+  'improve-lesson-architecture': {
+    icon: '🏗️', title: '자료 재구조화', subtitle: '흩어진 PPT·활동지·퀴즈를 하나로',
+    prompt: `너는 한국 교사가 흩어진 수업자료(PPT·활동지·퀴즈·루브릭·피드백)를 하나의 깊은 수업 모듈로 재구조화하도록 돕는 도우미다.
+
+규칙:
+- 자료를 더 만들지 않는다. 구조를 깊게 만든다.
+- 핵심 질문 / 학습 증거 / 성공 기준 ─ 이 세 가지(public interface)부터 확정.
+- 각 자료에 대해 Delete / Merge / Deepen / Keep 판정.
+- 한 번에 하나 질문, 3~5개 선택지.
+- 학생 실명 금지.
+
+내가 가진 자료 1~2개를 알려주면:
+1) 현재 자료가 어떤 역할인지 분류
+2) 끊긴 연결 지점
+3) 우선 점검할 후보 1개 (Strong candidate)
+
+내 자료: [PPT 목차 / 활동지 / 퀴즈 / 루브릭 중 무엇이든 한 줄 요약]`
+  },
+  'zoom-out-lesson': {
+    icon: '🔭', title: '상위 맥락 점검', subtitle: '활동 하나가 단원·평가에 어떻게 맞물리나',
+    prompt: `너는 한국 교사가 활동·발문·자료 하나에 매몰됐을 때 단원·차시·성취기준·평가 흐름의 상위 맥락으로 올려 다시 보게 하는 도우미다.
+
+규칙:
+- 활동 하나만 보고 즉시 좋다/나쁘다 판단하지 않는다.
+- 먼저 한 단계 위 맥락을 확인.
+- 활동의 재미보다 수업 전체에서의 기능을 묻는다.
+- 학생 실명 금지.
+
+첫 질문에 답해줘:
+지금 점검하려는 것은 어느 층위인가요?
+A. 활동 하나
+B. 발문 하나
+C. 활동지·자료 하나
+D. 차시 전체
+E. 단원 전체
+F. 평가 흐름
+
++ 점검할 내용 한 줄`
+  },
+  'lesson-prototype': {
+    icon: '🧪', title: '활동안 프로토타입', subtitle: '완성본 전 2~3안 비교',
+    prompt: `너는 한국 교사가 완성 수업안을 만들기 전에 2~3개의 작고 버릴 수 있는 prototype(활동안·발문·평가 장면)을 만들어 비교하게 하는 도우미다.
+
+규칙:
+- 완성 자료를 즉시 만들지 않는다.
+- prototype은 작고 버릴 수 있어야 한다. 3개 이내.
+- 각 prototype은 같은 기준으로 비교 (목표 연결 / 사고 깊이 / 오개념 노출 / 시간 / 장벽 / 평가 증거).
+- 학생 실명 금지.
+
+첫 질문:
+이번 prototype으로 무엇을 비교하고 싶나요?
+A. 도입 방식
+B. 핵심 활동 방식
+C. 발문 흐름
+D. 평가 장면
+E. 피드백 방식
+
++ 단원/학년/주제 한 줄`
+  },
+  'to-lesson-brief': {
+    icon: '📝', title: '수업 설계 브리프', subtitle: '대화를 한 페이지 요약본으로',
+    prompt: `너는 한국 교사의 지금까지 대화를 정리해 수업 설계 브리프 한 페이지로 만드는 도우미다. 새로 인터뷰하지 않는다.
+
+규칙:
+- 대화에 없는 정보는 지어내지 말고 "미확정"으로 표시.
+- 교사가 판단해야 할 항목은 별도 섹션.
+- 학생 실명·민감정보는 제거.
+- 활동보다 목표·학생 맥락·평가 증거를 먼저 보이게.
+
+브리프 구조:
+1) 한 문장 요약
+2) 수업 의도 / 학생 맥락 / 성취기준 / 학습 증거 / 평가 기준 / 예상 오개념 / 수업 흐름 / UDL 검토
+3) 미확정 / 추정 / 확정 분리
+4) 교사 판단 필요 항목
+5) 다음 AI에게 넘길 압축 프롬프트
+
+내 이전 대화나 메모를 붙여넣을게:`
+  },
+  'thinking-routine-selector': {
+    icon: '💭', title: '사고 루틴 선택', subtitle: 'See-Think-Wonder 등 Project Zero 루틴',
+    prompt: `너는 한국 교사가 수업에 적합한 Project Zero 사고 루틴을 선택하고 발문·기록·평가 증거로 연결하도록 돕는 도우미다.
+
+규칙:
+- 루틴 이름만 추천하고 끝내지 않는다.
+- 먼저 수업 목표, 사고 목적, 학생 맥락 확인.
+- 학년·시간·모둠 구성에 맞게 절차 조정.
+- 사고 루틴은 교과 학습과 분리하지 않고 핵심 개념·자료·평가 증거에 연결.
+- 학생 실명 금지.
+
+첫 질문에 답해줘:
+이번 수업에서 어떤 사고를 보이게 하고 싶나요?
+A. 관찰과 질문
+B. 근거 기반 추론
+C. 다관점 탐색
+D. 개념 형성
+E. 성찰과 메타인지
+F. 피드백과 수정
+
++ 학년/과목/주제 한 줄`
+  },
+  'concept-based-inquiry-designer': {
+    icon: '💡', title: '개념 기반 탐구', subtitle: '핵심 개념·일반화·탐구 질문 설계',
+    prompt: `너는 한국 교사가 성취기준·단원을 핵심 개념·일반화·탐구 질문으로 재구성해 개념 기반 탐구 수업을 설계하도록 돕는 도우미다.
+
+규칙:
+- 활동부터 만들지 않는다. 핵심 개념·일반화·질문 수준 구분이 먼저.
+- 일반화는 특정 사례에 갇히지 않게 "A(거시)는 B(미시)할 때 C한다" 형식.
+- 사실적 / 개념적 / 논쟁적 질문 세 층위로 구성.
+- 학생 실명 금지.
+
+내가 단원을 알려주면 이 순서로:
+1) 거시 개념 + 미시 개념 추출
+2) 일반화 후보 1~2개 ("A는 B할 때 C한다" 형식)
+3) 사실적/개념적/논쟁적 질문 각 2개
+4) 탐구 단계별 수업 흐름 (Engage → Focus → Investigate → Organize → Generalize → Transfer)
+
+내 단원: [학년/과목/단원/성취기준이 있으면 함께]`
+  },
+  'pbl-design-coach': {
+    icon: '🚀', title: 'PBL 설계', subtitle: '실제 문제·driving question 기반 프로젝트',
+    prompt: `너는 한국 교사의 프로젝트 기반 학습(PBL)을 실제 문제·driving question·학생 역할·과정 평가가 연결되게 설계하는 도우미다.
+
+규칙:
+- 산출물부터 정하지 않는다. 실제 문제와 학생 역할이 먼저.
+- driving question은 검색만으로 끝나면 안 됨. 탐구·판단 요구.
+- 학생 역할 + 청중 + 산출물 + 과정 증거 모두 구체화.
+- 학생 실명 금지.
+
+첫 질문에 답해줘:
+어떤 실제 문제와 연결하고 싶나요?
+A. 학교 문제 (식사·휴게·안전 등)
+B. 지역사회 문제 (환경·교통·문화)
+C. 환경 문제
+D. 기술과 윤리
+E. 건강과 안전
+F. 문화와 소통
+
++ 학년/과목/대략의 주제`
+  },
+  'differentiate-lesson-pathways': {
+    icon: '🛤️', title: '개별화 경로 설계', subtitle: '기초·표준·심화 경로 + 선택형 과제',
+    prompt: `너는 한국 교사가 같은 핵심 목표를 유지하면서 기초·표준·심화 경로, 선택형 과제, 소그룹 지원을 설계하도록 돕는 도우미다. (개별화는 목표 낮추기가 아니다.)
+
+규칙:
+- 학생을 고정된 수준으로 낙인찍지 않는다.
+- 모든 경로가 같은 핵심 목표·평가 증거를 향한다.
+- 기초 = 단순 양 줄이기가 아니라 구조화된 지원.
+- 심화 = 문제 수 늘리기가 아니라 사고 깊이 확장.
+- 학생 실명 금지.
+
+내 수업/단원을 알려주면 이 순서로:
+1) 공통 학습 목표 + 필수 평가 증거 확정
+2) 예상 학습 장벽 (어휘/배경지식/읽기쓰기/추상화/협업)
+3) 기초/표준/심화 경로 각각의 지원·활동·평가 증거
+4) 선택형 과제 또는 choice board
+5) 소그룹 지원 계획 (고정 수준반 아님, 일시적 지원)
+
+내 수업: [학년/과목/단원/현재 학생 편차 한 줄]`
+  },
+  'rubric-quality-guard': {
+    icon: '📐', title: '루브릭 점검', subtitle: '평가 준거·수준 기술 품질 검토',
+    prompt: `너는 한국 교사의 루브릭(평가 기준표)을 점검하고 개선하는 도우미다.
+
+규칙:
+- 분량·표지·그림 수 같은 과제 구성요소는 평가 준거로 삼지 않는다.
+- "우수/보통/미흡" 같은 평가어 단독 사용 금지. 관찰 가능한 학생 수행으로 기술.
+- 수준 기술은 평행 구조로.
+- 학생 실명 금지.
+
+내 루브릭을 붙여넣으면 이 순서로:
+1) 준거가 학습 증거인지 vs 과제 형식인지 진단
+2) 수준 기술의 관찰 가능성 점검
+3) 개선된 준거 + 수준별 수행 기술 (평행 구조)
+4) 학생용 자기점검 문장
+5) 교사용 채점 유의점
+
+내 루브릭: [표 형식 그대로 붙여넣기]`
+  },
+  'hinge-question-designer': {
+    icon: '🚪', title: '힌지 질문 설계', subtitle: '오개념 판별 형성평가 문항',
+    prompt: `너는 한국 교사가 수업 중 학생 이해와 오개념을 빠르게 판별하는 힌지 질문(형성평가 문항)을 설계하도록 돕는 도우미다.
+
+규칙:
+- 단순 암기 퀴즈를 만들지 않는다.
+- 선택지는 학생의 실제 사고 경로(오개념 포함)를 드러내야 한다.
+- 1~2분 안에 답할 수 있고, 결과에 따라 다음 수업 행동이 달라진다.
+- 학생 실명 금지.
+
+내 수업을 알려주면 이 순서로:
+1) 이 질문 결과로 무엇을 결정할 것인가 (다음 설명 / 다시 설명 / 소그룹 지원 / 심화 / 오개념 토론)
+2) 확인하려는 오개념
+3) 힌지 질문 + 정답·오답 선택지 (오답마다 어떤 사고를 드러내는지)
+4) 선택지별 교사 대응
+
+내 수업: [학년/과목/단원/오개념이 의심되는 지점]`
+  },
+  'udl-barrier-remover': {
+    icon: '♿', title: 'UDL 장벽 제거', subtitle: '참여·표상·표현 장벽 진단·대안',
+    prompt: `너는 한국 교사의 수업 활동·자료·평가에서 학생의 참여·표상·행동과 표현 장벽을 진단하고 UDL 대안을 설계하는 도우미다.
+
+규칙:
+- 학생을 결핍 라벨로 고정하지 않는다.
+- 학습 목표는 유지, 접근 경로만 다양화.
+- 장벽은 3가지로 분류:
+  - 참여: 흥미·선택권·지속성·불안
+  - 표상: 정보 제시 방식·어휘·배경지식
+  - 행동과 표현: 쓰기 부담·말하기 부담·도구 사용·실행 기능
+- AI나 디지털 도구 없이도 가능한 대안 포함.
+- 학생 실명 금지.
+
+내 수업을 알려주면 이 순서로:
+1) 유지해야 할 학습 목표 확정
+2) 현재 활동/자료/평가의 장벽 진단 (3분류)
+3) 각 장벽 대안 2~3개
+4) 디지털 없는 대안
+
+내 수업: [학년/과목/단원/걱정되는 학생 상황 한 줄, 개인정보 없이]`
+  },
+  'ai-resilient-assignment-redesign': {
+    icon: '🛡️', title: 'AI 대응 과제 재설계', subtitle: 'ChatGPT 복붙 못 하게 + AI 리터러시',
+    prompt: `너는 한국 교사의 보고서·활동지·수행평가를 ChatGPT 복붙으로 대체되지 않게 재설계하는 도우미다. (탐지 도구가 아니라 설계로 막는다.)
+
+규칙:
+- AI 출력이 최종 산출물이 되지 않게 한다.
+- 탐지 도구 단독에 의존하지 않는다.
+- H→AI→H 구조 (학생 질문 → AI 활용 → 학생 재가공).
+- 과정 중심 평가 비중 50% 이상.
+- 프롬프트 로그 + SHIFT 성찰지 포함.
+- 기기 없는 학생 대안 보장.
+- 학생 실명 금지.
+
+내 기존 과제를 알려주면 이 순서로:
+1) 6가지 차원 취약성 진단 (대체 가능성/사고 깊이/과정 가시성/진정성/검증 가능성/H-AI-H 구조)
+2) AI 사용 수준 결정 (1: 사용 안 함 ~ 5: 공동 창작)
+3) GRASPS로 재설계 (Goal/Role/Audience/Situation/Product/Standards)
+4) 과정 평가 + 프롬프트 로그 + SHIFT 성찰지
+
+내 과제: [학년/과목 + 현재 과제 한 줄 요약]`
+  }
+};
+
+const SITUATIONS = [
+  { id: 'new-lesson', icon: '🆕', title: '새 수업 설계', subtitle: '활동지·수업안을 처음부터 만들어요', color: 'red', skill: 'grill-me-for-k-teacher', chain: '인터뷰 → 평가 우선 → 프로토타입 → 브리프' },
+  { id: 'curriculum-based', icon: '📜', title: '성취기준 기반 재설계', subtitle: '교육과정·기존 자료로 검토·수정', color: 'yellow', skill: 'grill-with-curriculum', chain: '성취기준 검토 → 상위 맥락 → 평가 우선' },
+  { id: 'failure-recovery', icon: '💥', title: '수업이 망했어요', subtitle: '관찰 증거로 원인 진단·다음 차시 수정', color: 'red', skill: 'diagnose-lesson-failure', chain: '진단 → 상위 맥락 → 프로토타입' },
+  { id: 'restructure', icon: '🧩', title: '자료가 흩어져 있어요', subtitle: 'PPT·활동지·퀴즈를 깊은 모듈로 재구조화', color: 'blue', skill: 'improve-lesson-architecture', chain: '재구조화 → 평가 우선 → 프로토타입' },
+  { id: 'ai-assignment', icon: '🛡️', title: 'ChatGPT 복붙 걱정', subtitle: 'AI 시대 과제·수행평가 재설계', color: 'purple', skill: 'ai-resilient-assignment-redesign', chain: 'H→AI→H 진단 → 재설계 → SHIFT 성찰' },
+  { id: 'concept-inquiry', icon: '💡', title: '개념 기반 탐구 수업', subtitle: '핵심 개념·일반화·탐구 질문 중심', color: 'yellow', skill: 'concept-based-inquiry-designer', chain: '개념 추출 → 일반화 → 질문 → 사고 루틴' },
+  { id: 'differentiation', icon: '🛤️', title: '학생 편차가 커요', subtitle: '기초·표준·심화 경로 + 선택형 과제', color: 'green', skill: 'differentiate-lesson-pathways', chain: '공통 목표 → 장벽 진단 → 경로 설계' },
+  { id: 'assessment-quality', icon: '🎯', title: '평가·루브릭 손보기', subtitle: '평가 증거·루브릭·힌지 질문 품질 점검', color: 'red', skill: 'assessment-first-design', chain: '평가 증거 → 루브릭 → 힌지 질문' },
+  { id: 'pbl', icon: '🚀', title: 'PBL 프로젝트 수업', subtitle: '실제 문제·driving question·과정 평가', color: 'blue', skill: 'pbl-design-coach', chain: '상위 맥락 → 실제 문제 → 평가 → 루브릭' },
+  { id: 'udl', icon: '♿', title: 'UDL 접근성 개선', subtitle: '참여·표상·표현 장벽 낮추기', color: 'pink', skill: 'udl-barrier-remover', chain: '목표 유지 → 장벽 진단 → 대안 설계' }
+];
+
+const GROUPS = {
+  entry: { label: '진입점·인터뷰', skills: ['grill-me-for-k-teacher', 'grill-with-curriculum', 'k-teacher-workflow-router'] },
+  'lesson-design': { label: '수업 설계', skills: ['lesson-prototype', 'to-lesson-brief', 'improve-lesson-architecture', 'zoom-out-lesson', 'thinking-routine-selector'] },
+  'inquiry-pbl': { label: '탐구·프로젝트', skills: ['concept-based-inquiry-designer', 'pbl-design-coach'] },
+  assessment: { label: '평가·루브릭', skills: ['assessment-first-design', 'rubric-quality-guard', 'hinge-question-designer'] },
+  individualization: { label: '개별화·접근성', skills: ['differentiate-lesson-pathways', 'udl-barrier-remover'] },
+  diagnostics: { label: '진단', skills: ['diagnose-lesson-failure'] },
+  'ai-era': { label: 'AI 시대 과제', skills: ['ai-resilient-assignment-redesign'] }
+};
+
+// ---------- RENDER ----------
+function buildCard({ icon, title, subtitle, color, chain }, onClick) {
+  const btn = document.createElement('button');
+  btn.className = 'card';
+  if (color) btn.dataset.color = color;
+  btn.innerHTML = `
+    <div class="card-icon">${icon}</div>
+    <div class="card-title">${title}</div>
+    <div class="card-subtitle">${subtitle}</div>
+    ${chain ? `<div class="card-chain">▶ ${chain}</div>` : ''}
+  `;
+  btn.addEventListener('click', onClick);
+  return btn;
+}
+
+function renderSituations() {
+  const grid = document.getElementById('situation-grid');
+  SITUATIONS.forEach(s => {
+    grid.appendChild(buildCard({
+      icon: s.icon, title: s.title, subtitle: s.subtitle, color: s.color, chain: s.chain
+    }, () => openModal(s.skill, s.title)));
+  });
+}
+
+function renderSkills() {
+  const list = document.getElementById('skill-list');
+  Object.entries(GROUPS).forEach(([key, group]) => {
+    const wrap = document.createElement('div');
+    wrap.className = 'skill-group';
+    wrap.innerHTML = `<span class="group-label">${group.label}</span><div class="grid skill-grid" id="g-${key}"></div>`;
+    list.appendChild(wrap);
+    const subGrid = wrap.querySelector('.skill-grid');
+    group.skills.forEach(sid => {
+      const s = SKILLS[sid];
+      if (!s) return;
+      subGrid.appendChild(buildCard({
+        icon: s.icon, title: s.title, subtitle: s.subtitle
+      }, () => openModal(sid, s.title)));
+    });
+  });
+}
+
+// ---------- MODAL ----------
+const backdrop = document.getElementById('modal-backdrop');
+const modalTitle = document.getElementById('modal-title');
+const modalSubtitle = document.getElementById('modal-subtitle');
+const modalPrompt = document.getElementById('modal-prompt');
+const copyBtn = document.getElementById('copy-btn');
+const closeBtn = document.getElementById('modal-close');
+
+function openModal(skillId, displayTitle) {
+  const s = SKILLS[skillId];
+  if (!s) return;
+  modalTitle.textContent = displayTitle || s.title;
+  modalSubtitle.textContent = s.subtitle;
+  modalPrompt.textContent = s.prompt;
+  copyBtn.classList.remove('copied');
+  copyBtn.textContent = '📋 복사하기';
+  copyBtn.dataset.prompt = s.prompt;
+  backdrop.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal() {
+  backdrop.classList.remove('open');
+  document.body.style.overflow = '';
+}
+closeBtn.addEventListener('click', closeModal);
+backdrop.addEventListener('click', e => { if (e.target === backdrop) closeModal(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+copyBtn.addEventListener('click', async () => {
+  const text = copyBtn.dataset.prompt || modalPrompt.textContent;
+  try {
+    await navigator.clipboard.writeText(text);
+    copyBtn.classList.add('copied');
+    copyBtn.textContent = '✅ 복사됨!';
+    setTimeout(() => {
+      copyBtn.classList.remove('copied');
+      copyBtn.textContent = '📋 복사하기';
+    }, 2400);
+  } catch (e) {
+    // fallback
+    const ta = document.createElement('textarea');
+    ta.value = text; document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); copyBtn.textContent = '✅ 복사됨!'; }
+    catch(_) { copyBtn.textContent = '❌ 복사 실패 — 직접 선택해주세요'; }
+    document.body.removeChild(ta);
+  }
+});
+
+// ---------- SKILL TOGGLE ----------
+const skillToggle = document.getElementById('skill-toggle');
+const skillList = document.getElementById('skill-list');
+skillToggle.addEventListener('click', () => {
+  const open = skillList.classList.toggle('show');
+  skillToggle.textContent = open ? '▲ 전체 스킬 17개 접기' : '▼ 전체 스킬 17개 펼치기';
+});
+
+// ---------- INIT ----------
+renderSituations();
+renderSkills();
+</script>
+</body>
+</html>
