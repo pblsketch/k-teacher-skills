@@ -38,6 +38,10 @@ AI로 수업자료를 "딸깍" 생성하는 대신, 교사의 수업 의도·학
    - AI는 질문하고, 정리하고, 대안을 제안합니다.
    - 최종 판단은 교사가 합니다.
 
+5. **질문에도 종료 기준이 있음**
+   - 질문을 많이 던지는 것이 목적이 아닙니다.
+   - `references/interview-readiness.md`의 readiness gate로 더 물을지, 요약할지, 산출물로 넘어갈지 판단합니다.
+
 ## Included skills
 
 ### `grill-me-for-k-teacher`
@@ -129,6 +133,24 @@ D. 기타: 직접 적기
 ```
 
 가능하면 추천 선택지도 함께 제시합니다. 자세한 규칙은 `references/questioning-style.md`를 참고하세요.
+
+## Interview readiness
+
+질문은 무한히 이어지지 않습니다.
+
+`references/interview-readiness.md`는 다음을 정합니다.
+
+- Quick / Standard / Deep readiness profile
+- ambiguity score와 threshold
+- 최대 질문 라운드
+- 산출물 생성 전 mandatory stop gates
+- 답변 후 재평가 방식
+
+핵심 기준은 간단합니다.
+
+- 수업 의도, 학생 맥락, 평가 증거, 오개념/장벽, 제약, 교사 판단 경계가 충분히 명확해야 합니다.
+- mandatory gate가 비어 있으면 평균 점수가 낮아도 ready가 아닙니다.
+- 최대 라운드에 도달하면 질문을 계속 늘리지 않고 `미확정`과 `교사 판단 필요`를 표시합니다.
 
 ## Which skill should I use?
 
@@ -224,7 +246,8 @@ k-teacher-skills/
 │  ├─ lesson-failure-recovery.md
 │  └─ material-architecture-improvement.md
 ├─ references/
-│  └─ questioning-style.md
+│  ├─ questioning-style.md
+│  └─ interview-readiness.md
 └─ examples/
    ├─ classroom-context-template.md
    ├─ curriculum-context-template.md

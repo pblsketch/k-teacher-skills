@@ -65,6 +65,9 @@ def main() -> None:
     assert (ROOT / "references" / "questioning-style.md").exists(), (
         "questioning-style.md missing"
     )
+    assert (ROOT / "references" / "interview-readiness.md").exists(), (
+        "interview-readiness.md missing"
+    )
     for workflow in [
         "new-lesson-design.md",
         "curriculum-grounded-redesign.md",
@@ -75,6 +78,7 @@ def main() -> None:
 
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
     assert "Which skill should I use?" in readme, "README missing skill-selection guide"
+    assert "interview-readiness.md" in readme, "README missing interview readiness guide"
     assert "Claude" in readme and "Codex" in readme, (
         "README missing Claude/Codex guidance"
     )
@@ -90,6 +94,9 @@ def main() -> None:
 
         text = skill_md.read_text(encoding="utf-8")
         assert_frontmatter(skill, text)
+        assert "interview-readiness.md" in text, (
+            f"{skill}: missing interview readiness reference"
+        )
         for label, terms in REQUIRED_TERMS.items():
             assert_contains_any(skill, text, label, terms)
 
@@ -149,6 +156,9 @@ def main() -> None:
     )
     assert "\uc120\ud0dd\uc9c0" in router and "\uae30\ud0c0" in router, (
         "k-teacher-workflow-router: missing choice-based questioning"
+    )
+    assert "readiness gate" in router, (
+        "k-teacher-workflow-router: missing readiness gate reference"
     )
 
     for skill in SKILLS:

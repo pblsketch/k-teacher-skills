@@ -15,6 +15,7 @@ description: 교사의 수업 준비, 평가 설계, 자료 개선, 수업 실�
 - 먼저 요청이 어느 workflow에 속하는지 판단한다.
 - 애매하면 선택지를 제공한다.
 - 질문할 때는 `../../references/questioning-style.md`의 선택지 기반 질문 규칙을 따른다.
+- workflow를 바로 실행할지, 첫 질문을 던질지, 다음 스킬로 넘길지는 `../../references/interview-readiness.md`의 readiness gate로 판단한다.
 - 학생 개인정보를 요구하지 않는다.
 - 외부 서비스 연동을 제안하지 않는다.
 - workflow 선택 시 학생의 참여/표상/표현 장벽을 낮출 수 있는 흐름인지 확인한다.
@@ -174,6 +175,7 @@ E. 기타: 직접 적기
 5. 다음 skill 후보
 6. 참여/표상/표현 장벽에 대한 주의점
 7. 교사에게 던질 첫 질문
+8. readiness 상태 또는 막힌 gate
 
 ## Review checklist
 
@@ -183,6 +185,7 @@ E. 기타: 직접 적기
 - 참여/표상/표현 장벽을 낮추는 workflow인지 확인했는가?
 - 개인정보를 요구하지 않았는가?
 - 바로 자료 생성으로 뛰어들지 않았는가?
+- readiness gate를 고려했는가?
 
 ## Related recipes
 
@@ -190,6 +193,7 @@ E. 기타: 직접 적기
 - `../../workflows/curriculum-grounded-redesign.md`
 - `../../workflows/lesson-failure-recovery.md`
 - `../../workflows/material-architecture-improvement.md`
+- `../../references/interview-readiness.md`
 
 ## Red flags
 

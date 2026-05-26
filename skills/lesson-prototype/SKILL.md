@@ -18,6 +18,7 @@ description: 완성 수업안이나 자료를 만들기 전에 2~3개의 작고 
 - 참여/표상/표현 장벽을 비교한다.
 - 3개를 넘는 후보를 기본으로 만들지 않는다.
 - 질문할 때는 가능한 한 3~5개의 선택지와 `기타: 직접 적기`를 제공한다.
+- 질문을 더 할지, prototype 비교로 넘어갈지는 `../../references/interview-readiness.md`의 readiness gate로 판단한다.
 
 ## Workflow
 

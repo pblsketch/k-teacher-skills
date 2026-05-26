@@ -18,6 +18,7 @@ description: 수업이 잘 안 되었거나 학생 반응이 기대와 달랐을
 - 한 번에 전체 수업을 갈아엎지 않는다.
 - 다음 차시에서 확인 가능한 최소 수정안을 만든다.
 - 질문할 때는 가능한 한 3~5개의 선택지와 `기타: 직접 적기`를 제공한다.
+- 질문을 더 할지, 진단 가설로 넘어갈지는 `../../references/interview-readiness.md`의 readiness gate로 판단한다.
 
 ## Diagnosis loop
 
