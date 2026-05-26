@@ -94,7 +94,15 @@ Claude Code에 설치:
 .\scripts\install-claude.ps1
 ```
 
-둘 다 설치:
+Google Antigravity에 설치 (글로벌):
+
+```powershell
+.\scripts\install-antigravity.ps1
+```
+
+(Antigravity는 워크스페이스 로컬 설치도 가능 — 임의 스킬 폴더를 `<workspace>/.agents/skills/`로 복사)
+
+셋 다 설치:
 
 ```powershell
 .\scripts\install-all.ps1

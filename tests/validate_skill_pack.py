@@ -81,6 +81,7 @@ def main() -> None:
     for script in [
         "install-codex.ps1",
         "install-claude.ps1",
+        "install-antigravity.ps1",
         "install-all.ps1",
     ]:
         assert (ROOT / "scripts" / script).exists(), f"{script} missing"
