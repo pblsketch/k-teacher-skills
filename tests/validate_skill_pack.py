@@ -11,13 +11,31 @@ SKILLS = [
     "assessment-first-design",
     "diagnose-lesson-failure",
     "improve-lesson-architecture",
+    "zoom-out-lesson",
+    "lesson-prototype",
+    "to-lesson-brief",
 ]
 
 
 REQUIRED_TERMS = {
-    "privacy": ["개인정보", "민감정보", "실명"],
-    "anti_click": ["바로 만들지", "먼저", "즉시 만들지", "새 자료를 만들기 전에"],
-    "udl": ["참여", "표현", "장벽"],
+    "privacy": [
+        "\uac1c\uc778\uc815\ubcf4",
+        "\ubbfc\uac10\uc815\ubcf4",
+        "\uc2e4\uba85",
+    ],
+    "anti_click": [
+        "\ubc14\ub85c \ub9cc\ub4e4\uc9c0",
+        "\uba3c\uc800",
+        "\uc989\uc2dc \ub9cc\ub4e4\uc9c0",
+        "\uc0c8 \uc790\ub8cc\ub97c \ub9cc\ub4e4\uae30 \uc804\uc5d0",
+        "\uc644\uc131",
+        "\uc0c8 \uc9c8\ubb38\uc744 \uba3c\uc800 \ub358\uc9c0\uc9c0",
+    ],
+    "udl": [
+        "\ucc38\uc5ec",
+        "\ud45c\ud604",
+        "\uc7a5\ubcbd",
+    ],
 }
 
 
@@ -49,6 +67,8 @@ def main() -> None:
     assert "Claude" in readme and "Codex" in readme, (
         "README missing Claude/Codex guidance"
     )
+    for skill in SKILLS:
+        assert skill in readme, f"README missing {skill}"
 
     for skill in SKILLS:
         skill_dir = ROOT / "skills" / skill
@@ -65,14 +85,14 @@ def main() -> None:
     diagnose = (ROOT / "skills" / "diagnose-lesson-failure" / "SKILL.md").read_text(
         encoding="utf-8"
     )
-    assert "만약 [원인]이 문제라면" in diagnose, (
+    assert "\ub9cc\uc57d [\uc6d0\uc778]\uc774 \ubb38\uc81c\ub77c\uba74" in diagnose, (
         "diagnose-lesson-failure: missing falsifiable hypothesis format"
     )
 
     architecture = (
         ROOT / "skills" / "improve-lesson-architecture" / "SKILL.md"
     ).read_text(encoding="utf-8")
-    assert "deletion test" in architecture.lower() or "삭제 테스트" in architecture, (
+    assert "deletion test" in architecture.lower() or "\uc0ad\uc81c \ud14c\uc2a4\ud2b8" in architecture, (
         "improve-lesson-architecture: missing deletion test"
     )
     assert "Strong candidate" in architecture, (
@@ -87,6 +107,27 @@ def main() -> None:
     )
     assert "LESSON-ADR.md" in curriculum, (
         "grill-with-curriculum: missing lesson decision record rules"
+    )
+
+    zoom_out = (ROOT / "skills" / "zoom-out-lesson" / "SKILL.md").read_text(
+        encoding="utf-8"
+    )
+    assert "\ud55c \ub2e8\uacc4 \uc704" in zoom_out, (
+        "zoom-out-lesson: missing one-layer-up rule"
+    )
+
+    prototype = (ROOT / "skills" / "lesson-prototype" / "SKILL.md").read_text(
+        encoding="utf-8"
+    )
+    assert "Prototype A" in prototype and "\ube44\uad50" in prototype, (
+        "lesson-prototype: missing prototype comparison structure"
+    )
+
+    brief = (ROOT / "skills" / "to-lesson-brief" / "SKILL.md").read_text(
+        encoding="utf-8"
+    )
+    assert "\ubbf8\ud655\uc815" in brief and "\ucd94\uc815" in brief, (
+        "to-lesson-brief: missing unknown/assumption handling"
     )
 
     print("VALIDATION_OK")

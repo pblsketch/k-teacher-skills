@@ -60,6 +60,18 @@ AI로 수업자료를 "딸깍" 생성하는 대신, 교사의 수업 의도·학
 
 흩어진 PPT, 활동지, 퀴즈, 루브릭, 피드백 문장을 하나의 깊은 수업 모듈로 재구조화합니다.
 
+### `zoom-out-lesson`
+
+활동·자료·발문 하나에 매몰됐을 때, 단원·차시·성취기준·평가 흐름의 상위 맥락에서 다시 보게 합니다.
+
+### `lesson-prototype`
+
+완성 수업안 전에 2~3개의 작고 버릴 수 있는 활동안·발문·평가 장면을 만들어 비교합니다.
+
+### `to-lesson-brief`
+
+지금까지의 대화와 설계 맥락을 동료 공유나 다음 AI 작업에 넘길 수 있는 수업 설계 브리프로 정리합니다.
+
 ## Which skill should I use?
 
 처음에는 아래 기준으로 고르세요.
@@ -78,6 +90,15 @@ AI로 수업자료를 "딸깍" 생성하는 대신, 교사의 수업 의도·학
 
 - **PPT, 활동지, 퀴즈, 루브릭이 흩어져 있고 수업 흐름을 깊게 재구조화하고 싶다**
   - `improve-lesson-architecture`
+
+- **활동 하나가 좋아 보이지만 전체 수업 흐름에서 맞는지 모르겠다**
+  - `zoom-out-lesson`
+
+- **바로 완성안을 만들기보다 활동/발문/평가 후보를 비교해보고 싶다**
+  - `lesson-prototype`
+
+- **긴 대화를 동료 공유용 또는 다음 AI 작업용 수업 브리프로 정리하고 싶다**
+  - `to-lesson-brief`
 
 추천 흐름:
 
@@ -103,6 +124,14 @@ diagnose-lesson-failure
 → assessment-first-design
 ```
 
+아이디어 비교와 정리가 필요하다면:
+
+```text
+zoom-out-lesson
+→ lesson-prototype
+→ to-lesson-brief
+```
+
 ## Repository structure
 
 ```text
@@ -118,7 +147,13 @@ k-teacher-skills/
 │  │  └─ SKILL.md
 │  ├─ diagnose-lesson-failure/
 │  │  └─ SKILL.md
-│  └─ improve-lesson-architecture/
+│  ├─ improve-lesson-architecture/
+│  │  └─ SKILL.md
+│  ├─ zoom-out-lesson/
+│  │  └─ SKILL.md
+│  ├─ lesson-prototype/
+│  │  └─ SKILL.md
+│  └─ to-lesson-brief/
 │     └─ SKILL.md
 └─ examples/
    ├─ classroom-context-template.md
@@ -141,6 +176,9 @@ cp -r skills/grill-with-curriculum ~/.claude/skills/
 cp -r skills/assessment-first-design ~/.claude/skills/
 cp -r skills/diagnose-lesson-failure ~/.claude/skills/
 cp -r skills/improve-lesson-architecture ~/.claude/skills/
+cp -r skills/zoom-out-lesson ~/.claude/skills/
+cp -r skills/lesson-prototype ~/.claude/skills/
+cp -r skills/to-lesson-brief ~/.claude/skills/
 ```
 
 Option B — Claude.ai Skills:
@@ -168,6 +206,9 @@ cp -r skills/grill-with-curriculum ~/.codex/skills/
 cp -r skills/assessment-first-design ~/.codex/skills/
 cp -r skills/diagnose-lesson-failure ~/.codex/skills/
 cp -r skills/improve-lesson-architecture ~/.codex/skills/
+cp -r skills/zoom-out-lesson ~/.codex/skills/
+cp -r skills/lesson-prototype ~/.codex/skills/
+cp -r skills/to-lesson-brief ~/.codex/skills/
 ```
 
 Project-local usage:
