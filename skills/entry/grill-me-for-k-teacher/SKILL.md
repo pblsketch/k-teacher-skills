@@ -26,6 +26,14 @@ description: 수업안, 활동지, 평가지, 루브릭, 피드백 자료를 만
 - 정보가 부족하면 "지금 만들면 딸깍식 산출물이 될 위험이 있습니다"라고 말한다.
 - 사용자가 충분한 맥락을 제공하거나 "이제 설계해줘"라고 명시하기 전까지 완성 자료를 만들지 않는다.
 
+## Readiness gate v2 (v2.5.1+)
+- Default profile: Standard
+- Active stage: Stage 1 · Intent-first
+- Fact routing in this skill: from-curriculum, from-textbook, from-class-context, from-teacher-judgment
+- Tier 3 (Topology/Ontology/Challenge): enabled
+- Full spec: `../../../references/interview-readiness.md`
+- Canonical mapping: `../../../tests/readiness_gate_v2_mapping.json`
+
 ## Workflow
 
 ### 1. Stop immediate generation

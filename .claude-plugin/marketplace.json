@@ -1,0 +1,21 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "k-teacher",
+  "description": "한국 교사용 Skill Pack marketplace — Readiness Gate v2 + provenance grading. 17 skills + 10 workflow chains + 11 slash commands.",
+  "owner": {
+    "name": "pblsketch"
+  },
+  "plugins": [
+    {
+      "name": "k-teacher-skills",
+      "version": "2.5.3",
+      "description": "한국 교사용 Skill Pack. 수업안·활동지·평가지·루브릭을 바로 만들지 않고 수업 의도·학생 맥락·평가 증거·학습 장벽을 먼저 묻는다. Backward Design + UDL + AI-resilient assignment 통합.",
+      "author": {"name": "pblsketch"},
+      "source": "./",
+      "category": "education",
+      "homepage": "https://github.com/pblsketch/k-teacher-skills",
+      "tags": ["korean", "teacher", "lesson-design", "assessment", "backward-design", "udl", "pbl", "readiness-gate-v2"]
+    }
+  ],
+  "version": "2.5.3"
+}

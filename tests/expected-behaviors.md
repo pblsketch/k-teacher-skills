@@ -14,6 +14,32 @@
 - 교사의 최종 판단 지점을 남긴다.
 - UDL 또는 접근성 관점에서 참여/표상/표현 장벽을 검토한다.
 
+## Global checks v2 (v2.5.1+)
+
+모든 스킬은 v2.5.0 Global checks에 더해 다음을 지킨다 (Readiness Gate v2 운영 규칙):
+
+- **세션 첫 줄 threshold 공개** — 인사말 1줄 선행 허용. 정확한 형식:
+  ```
+  Readiness profile: {Quick|Standard|Deep} | threshold: {0.30|0.20|0.15} | source: {explicit|router-inferred|skill-default}
+  ```
+- **Stage priority 글로벌** — Stage 1의 어떤 차원이라도 weak(≥0.6)이면 Stage 2 질문 금지. `interview-readiness.md` §3 참조.
+- **Mandatory gates 분리 hard-stop** — 비목표·결정경계·평가증거·개인정보비요구·압박패스 1회 중 어느 하나라도 비어 있으면 weighted ambiguity와 무관하게 인터뷰 계속. §4 참조.
+- **Fact routing 라벨 명시** — 매 질문과 답변에 `[from-curriculum]`/`[from-textbook]`/`[from-class-context]`/`[from-teacher-judgment]` 중 하나를 transcript에 부착. 사실 항목은 AI가 진술, judgment 항목만 인터뷰 대상. §7 참조.
+- **Weighted score dimension별 표시** — 매 라운드 종료 시 단일 평균이 아닌 dimension별 score · weight · weighted contribution 표 출력. §2 가중치 공식 적용. Quick profile에서는 short-form 변형 허용.
+- **Pressure pass before crystallize** — 산출물 생성 전 최소 1회 Pressure Ladder 4단계 중 한 단계 적용. §5 참조.
+- **Topology lock acknowledgement** — Tier 3 enabled 스킬은 Round 0 topology 결과를 `to-lesson-brief` 핸드오프 named context block에 포함. Tier 3 disabled-for-quick-profile 스킬 (router/zoom-out/lesson-prototype/to-lesson-brief)은 해당 안 됨. §8 참조.
+- **Stateless transparency** — "이전 세션 상태를 기억한다"고 주장 금지. 사용자 resume 요청 시 transcript 기반 인계임을 명시. §11 참조.
+
+## Global checks v2.1 (v2.5.2+)
+
+v2.5.1 Global checks v2에 더해, 사실 라벨의 출처 등급 운영을 추가한다:
+
+- **Provenance grade suffix 부착** — `[from-curriculum]`·`[from-textbook]` 인용은 매번 `:provided` / `:web` / `:inferred` 중 하나의 suffix를 붙인다. 등급 표시 없는 사실 라벨은 §7 위반.
+- **`:inferred` 3요소 prompt 강제** — AI 추정 진술은 반드시 (1) "추정" 표시, (2) "신뢰도 낮음" 경고, (3) "원문/출처 확인 요청" 세 요소를 한 묶음으로 제시. 확인 요청 없는 `:inferred`는 §4 mandatory gate 위반.
+- **Escalation 표시** — 교사가 확인·정정해 `:inferred → :provided`로 격상되면 transcript에 갱신을 명시한다 (예: "성취기준이 갱신되었습니다. `[from-curriculum:provided]`").
+- **산출물 직접 인용 금지 (`:inferred`)** — `:inferred` 상태로는 활동지·평가지·루브릭 등 산출물에 해당 사실을 직접 인용하지 않는다. 산출물에 등장할 때는 격상 후이거나 "(추정)" 표시를 유지한다.
+- **선택지 질문 금지 (`:inferred`)** — `:inferred` 사실은 객관식 선택지 형태로 묻지 않는다 (사용자가 무비판적으로 추정안을 택할 위험 차단). 자유 서술 형태로 원문 확인 요청만 허용.
+
 ## Skill-specific checks
 
 ### `grill-me-for-k-teacher`

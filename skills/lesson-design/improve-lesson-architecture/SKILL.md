@@ -36,6 +36,14 @@ description: 흩어진 수업자료, 활동지, PPT, 퀴즈, 루브릭, 피드�
 - 질문할 때는 가능한 한 3~5개의 선택지와 `기타: 직접 적기`를 제공한다.
 - 질문을 더 할지, 구조 개선안으로 넘어갈지는 `../../../references/interview-readiness.md`의 readiness gate로 판단한다.
 
+## Readiness gate v2 (v2.5.1+)
+- Default profile: Standard
+- Active stage: Stage 1+3 · Curriculum-grounded (brownfield)
+- Fact routing in this skill: from-curriculum, from-textbook, from-class-context, from-teacher-judgment
+- Tier 3 (Topology/Ontology/Challenge): enabled
+- Full spec: `../../../references/interview-readiness.md`
+- Canonical mapping: `../../../tests/readiness_gate_v2_mapping.json`
+
 ## Workflow
 
 ### 1. Inventory existing materials

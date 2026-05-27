@@ -1,0 +1,42 @@
+{
+  "name": "k-teacher-skills",
+  "version": "2.5.3",
+  "description": "한국 교사용 Skill Pack — AI로 수업자료를 바로 생성하지 않고 수업 의도·학생 맥락·평가 증거·학습 장벽을 먼저 질문하고 검증한다. Readiness Gate v2 + provenance grading 메커니즘 포함. Claude Cowork·Claude Code 호환.",
+  "author": {
+    "name": "pblsketch"
+  },
+  "homepage": "https://github.com/pblsketch/k-teacher-skills",
+  "repository": "https://github.com/pblsketch/k-teacher-skills",
+  "license": "MIT",
+  "keywords": [
+    "education",
+    "korean",
+    "teacher",
+    "lesson-design",
+    "assessment",
+    "backward-design",
+    "udl",
+    "pbl",
+    "readiness-gate-v2"
+  ],
+  "skills": [
+    "./skills/entry/grill-me-for-k-teacher/",
+    "./skills/entry/grill-with-curriculum/",
+    "./skills/entry/k-teacher-workflow-router/",
+    "./skills/lesson-design/lesson-prototype/",
+    "./skills/lesson-design/to-lesson-brief/",
+    "./skills/lesson-design/improve-lesson-architecture/",
+    "./skills/lesson-design/zoom-out-lesson/",
+    "./skills/lesson-design/thinking-routine-selector/",
+    "./skills/inquiry-pbl/concept-based-inquiry-designer/",
+    "./skills/inquiry-pbl/pbl-design-coach/",
+    "./skills/assessment/assessment-first-design/",
+    "./skills/assessment/rubric-quality-guard/",
+    "./skills/assessment/hinge-question-designer/",
+    "./skills/individualization/differentiate-lesson-pathways/",
+    "./skills/individualization/udl-barrier-remover/",
+    "./skills/diagnostics/diagnose-lesson-failure/",
+    "./skills/ai-era/ai-resilient-assignment-redesign/"
+  ],
+  "commands": "./commands/"
+}

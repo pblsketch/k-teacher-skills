@@ -17,6 +17,14 @@ description: Project Zero 사고 루틴을 한국 교실 맥락에 맞게 선택
 - 학생의 참여/표상/표현 장벽을 낮추는 운영 변형을 포함한다.
 - 사고 루틴은 교과 학습과 분리하지 않고 핵심 개념·자료·평가 증거에 연결한다.
 
+## Readiness gate v2 (v2.5.1+)
+- Default profile: Standard
+- Active stage: Stage 1 · Intent-first
+- Fact routing in this skill: from-teacher-judgment, from-curriculum
+- Tier 3 (Topology/Ontology/Challenge): enabled
+- Full spec: `../../../references/interview-readiness.md`
+- Canonical mapping: `../../../tests/readiness_gate_v2_mapping.json`
+
 ## Workflow
 
 ### 1. Clarify thinking purpose

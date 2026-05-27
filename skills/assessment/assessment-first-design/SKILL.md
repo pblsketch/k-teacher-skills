@@ -23,6 +23,14 @@ description: 수업 활동이나 자료를 만들기 전에 학습 증거, 성�
 - 질문할 때는 가능한 한 3~5개의 선택지와 `기타: 직접 적기`를 제공한다.
 - 질문을 더 할지, 평가 설계로 넘어갈지는 `../../../references/interview-readiness.md`의 readiness gate로 판단한다.
 
+## Readiness gate v2 (v2.5.1+)
+- Default profile: Deep
+- Active stage: Stage 2 · Evidence-first
+- Fact routing in this skill: from-teacher-judgment, from-curriculum
+- Tier 3 (Topology/Ontology/Challenge): enabled
+- Full spec: `../../../references/interview-readiness.md`
+- Canonical mapping: `../../../tests/readiness_gate_v2_mapping.json`
+
 ## Workflow
 
 ### 1. Define learning evidence

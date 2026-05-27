@@ -78,6 +78,45 @@ v2.0부터 `skills/` 폴더는 7개 그룹(`entry/`, `lesson-design/`, `inquiry-
 | `skills/diagnose-lesson-failure/` | `skills/diagnostics/diagnose-lesson-failure/` |
 | `skills/ai-resilient-assignment-redesign/` | `skills/ai-era/ai-resilient-assignment-redesign/` |
 
+## Install as Claude Cowork / Claude Code plugin (v2.5.3+)
+
+v2.5.3부터 K-Teacher Skills는 **Claude Cowork**와 **Claude Code** 양쪽 공식 plugin marketplace protocol을 지원합니다. Plugin으로 설치하면 자동 업데이트·namespace 격리·marketplace 배포가 가능합니다.
+
+### Option 1 — Self-hosted GitHub marketplace (권장)
+
+Claude Cowork 또는 Claude Code에서:
+
+```text
+/plugin marketplace add pblsketch/k-teacher-skills
+/plugin install k-teacher-skills@k-teacher
+```
+
+설치 후 namespaced 호출:
+
+```text
+/k-teacher-skills:k-teacher 내일 중2 국어 활동지 만들어줘
+/k-teacher-skills:new-lesson 단원 전체 처음부터 설계
+/k-teacher-skills:assessment 수행평가 루브릭 개선
+```
+
+11개 workflow 명령 + 17개 skill 사용 가능 (`commands/` 폴더 + `skills/` 폴더).
+
+### Option 2 — Local plugin (개발용)
+
+저장소를 clone한 뒤:
+
+```bash
+claude --plugin-dir ./k-teacher-skills
+```
+
+설치 없이 한 세션에서만 로딩.
+
+### Option 3 — Manual copy (Quick install 아래 참조)
+
+Plugin marketplace를 안 쓰고 `~/.claude/skills/`에 직접 복사. 기존 사용자 호환.
+
+---
+
 ## Quick install
 
 Windows PowerShell에서 저장소 루트에서 실행합니다.
@@ -322,6 +361,30 @@ D. 기타: 직접 적기
 - 수업 의도, 학생 맥락, 평가 증거, 오개념/장벽, 제약, 교사 판단 경계가 충분히 명확해야 합니다.
 - mandatory gate가 비어 있으면 평균 점수가 낮아도 ready가 아닙니다.
 - 최대 라운드에 도달하면 질문을 계속 늘리지 않고 `미확정`과 `교사 판단 필요`를 표시합니다.
+
+### Readiness Gate v2 (v2.5.1+)
+
+v2.5.1부터 readiness gate가 OMC/OMX `deep-interview` 메커니즘을 한국 교사 맥락에 맞춰 통합한 **Gate v2**로 확장되었습니다.
+
+- **가중치 공식** — 단순 평균 대신 차원별 가중치 합산 (Greenfield: intent·0.30 + learner·0.20 + evidence·0.25 + misconception·0.10 + constraints·0.10 + boundaries·0.05)
+- **Stage priority (Intent-first)** — Stage 1(Intent·Learner·Non-goals·Boundaries) → Stage 2(Evidence·Misconception·Success) → Stage 3(Brownfield curriculum grounding). 약한 stage가 있으면 다음 stage 질문 금지.
+- **Mandatory gates 분리** — 비목표·결정경계·평가증거·개인정보·압박패스 5개를 weighted ambiguity와 별개 hard-gate로 운영
+- **Pressure Ladder 4단계** — Evidence → Assumption → Boundary → Essence; 같은 thread에서 깊이 들어가지 차원 회전 금지
+- **Fact routing 4 라벨 + 출처 등급(v2.5.2+)** — `[from-curriculum]` / `[from-textbook]` / `[from-class-context]` / `[from-teacher-judgment]`; 인터뷰는 마지막 라벨에만 사용. 사실 라벨은 `:provided` / `:web` / `:inferred` 3등급 suffix로 출처 명시; `:inferred`(AI 추정)에는 신뢰도 경고와 교사 확인 요청 prompt 강제
+- **Round 0 토폴로지** — 1차시 / 단원 / 평가체계 / 학기흐름 / 다중 중 하나로 수업 단위 잠금
+- **Ontology convergence** — 핵심 개념·평가 증거·학생 행동·자료 종류의 안정성 추적
+- **Challenge modes** — Round 3+ Contrarian / Round 5+ Simplifier / Round 7+ Ontologist (각 1회)
+- **Stateless transparency** — 영구 메모리 없음을 명시; resume은 transcript 기반
+
+세션 첫 줄에 다음을 출력해 운영 상태를 투명하게 공개합니다.
+
+```
+Readiness profile: {Quick|Standard|Deep} | threshold: {0.30|0.20|0.15} | source: {explicit|router-inferred|skill-default}
+```
+
+자세한 사양은 `references/interview-readiness.md`를 참고하세요. v2.5.0의 모든 안전 가드(개인정보 비요구, 평가 증거 우선, mandatory gates)는 그대로 유지됩니다.
+
+Tier 3 면제: `k-teacher-workflow-router`·`zoom-out-lesson`·`lesson-prototype`·`to-lesson-brief` 4개 Quick-profile 스킬은 Topology·Ontology·Challenge modes를 발동하지 않습니다.
 
 ## Which skill should I use?
 

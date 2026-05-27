@@ -1,0 +1,105 @@
+{
+  "_comment": "Canonical SSOT for the Readiness Gate v2 per-skill mapping (v2.5.1+). Each row defines the (profile, stage, labels, tier3) tuple for one skill. Validator Loop δ in validate_skill_pack.py parses the `## Readiness gate v2` block from each SKILL.md and asserts equality with the matching row here. Editing a SKILL.md block without updating this JSON fails validation. Order: same as SKILL_PATHS in validate_skill_pack.py.",
+  "grill-me-for-k-teacher": {
+    "profile": "Standard",
+    "stage": "Stage 1 · Intent-first",
+    "labels": "from-curriculum, from-textbook, from-class-context, from-teacher-judgment",
+    "tier3": "enabled"
+  },
+  "grill-with-curriculum": {
+    "profile": "Deep",
+    "stage": "Stage 1+3 · Curriculum-grounded",
+    "labels": "from-curriculum, from-textbook, from-teacher-judgment",
+    "tier3": "enabled"
+  },
+  "k-teacher-workflow-router": {
+    "profile": "Quick",
+    "stage": "Stage 1 · Intent-first (routing)",
+    "labels": "from-teacher-judgment",
+    "tier3": "disabled-for-quick-profile"
+  },
+  "lesson-prototype": {
+    "profile": "Quick",
+    "stage": "Stage 1 · Intent-first",
+    "labels": "from-teacher-judgment",
+    "tier3": "disabled-for-quick-profile"
+  },
+  "to-lesson-brief": {
+    "profile": "Quick",
+    "stage": "Stage 1 · Intent-first (output-only)",
+    "labels": "from-curriculum, from-textbook, from-class-context, from-teacher-judgment",
+    "tier3": "disabled-for-quick-profile"
+  },
+  "improve-lesson-architecture": {
+    "profile": "Standard",
+    "stage": "Stage 1+3 · Curriculum-grounded (brownfield)",
+    "labels": "from-curriculum, from-textbook, from-class-context, from-teacher-judgment",
+    "tier3": "enabled"
+  },
+  "zoom-out-lesson": {
+    "profile": "Quick",
+    "stage": "Stage 1 · Intent-first",
+    "labels": "from-teacher-judgment",
+    "tier3": "disabled-for-quick-profile"
+  },
+  "thinking-routine-selector": {
+    "profile": "Standard",
+    "stage": "Stage 1 · Intent-first",
+    "labels": "from-teacher-judgment, from-curriculum",
+    "tier3": "enabled"
+  },
+  "concept-based-inquiry-designer": {
+    "profile": "Deep",
+    "stage": "Stage 1+3 · Curriculum-grounded",
+    "labels": "from-curriculum, from-textbook, from-teacher-judgment",
+    "tier3": "enabled"
+  },
+  "pbl-design-coach": {
+    "profile": "Deep",
+    "stage": "Stage 1 · Intent-first",
+    "labels": "from-teacher-judgment, from-class-context",
+    "tier3": "enabled"
+  },
+  "assessment-first-design": {
+    "profile": "Deep",
+    "stage": "Stage 2 · Evidence-first",
+    "labels": "from-teacher-judgment, from-curriculum",
+    "tier3": "enabled"
+  },
+  "rubric-quality-guard": {
+    "profile": "Standard",
+    "stage": "Stage 2 · Evidence-first",
+    "labels": "from-curriculum, from-teacher-judgment",
+    "tier3": "enabled"
+  },
+  "hinge-question-designer": {
+    "profile": "Standard",
+    "stage": "Stage 2 · Evidence-first",
+    "labels": "from-teacher-judgment",
+    "tier3": "enabled"
+  },
+  "differentiate-lesson-pathways": {
+    "profile": "Standard",
+    "stage": "Stage 1+2 · Mixed",
+    "labels": "from-class-context, from-teacher-judgment",
+    "tier3": "enabled"
+  },
+  "udl-barrier-remover": {
+    "profile": "Standard",
+    "stage": "Stage 1+2 · Mixed",
+    "labels": "from-class-context, from-teacher-judgment",
+    "tier3": "enabled"
+  },
+  "diagnose-lesson-failure": {
+    "profile": "Standard",
+    "stage": "Stage 2 · Evidence-first",
+    "labels": "from-class-context, from-teacher-judgment",
+    "tier3": "enabled"
+  },
+  "ai-resilient-assignment-redesign": {
+    "profile": "Deep",
+    "stage": "Stage 1+2 · Mixed",
+    "labels": "from-teacher-judgment, from-curriculum",
+    "tier3": "enabled"
+  }
+}

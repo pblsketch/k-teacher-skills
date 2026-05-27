@@ -31,6 +31,14 @@ AI를 금지하거나 탐지하는 데 머무르지 않는다. 과제 자체를 
 - 질문을 더 할지, 재설계로 넘어갈지는 `../../../references/interview-readiness.md`의 readiness gate로 판단한다.
 - 학생의 참여/표상/표현 장벽을 낮추는 선택지를 포함한다.
 
+## Readiness gate v2 (v2.5.1+)
+- Default profile: Deep
+- Active stage: Stage 1+2 · Mixed
+- Fact routing in this skill: from-teacher-judgment, from-curriculum
+- Tier 3 (Topology/Ontology/Challenge): enabled
+- Full spec: `../../../references/interview-readiness.md`
+- Canonical mapping: `../../../tests/readiness_gate_v2_mapping.json`
+
 ## Source grounding
 
 스킬이 OSPI를 근거로 말할 때는 다음 범위로 제한한다.

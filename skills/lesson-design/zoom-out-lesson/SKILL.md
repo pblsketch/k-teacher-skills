@@ -20,6 +20,14 @@ description: 교사가 활동, 자료, 발문, 평가 일부에 매몰됐을 때
 - 질문할 때는 가능한 한 3~5개의 선택지와 `기타: 직접 적기`를 제공한다.
 - 질문을 더 할지, 한 단계 위 맥락 판단으로 넘어갈지는 `../../../references/interview-readiness.md`의 readiness gate로 판단한다.
 
+## Readiness gate v2 (v2.5.1+)
+- Default profile: Quick
+- Active stage: Stage 1 · Intent-first
+- Fact routing in this skill: from-teacher-judgment
+- Tier 3 (Topology/Ontology/Challenge): disabled-for-quick-profile
+- Full spec: `../../../references/interview-readiness.md`
+- Canonical mapping: `../../../tests/readiness_gate_v2_mapping.json`
+
 ## Workflow
 
 ### 1. Identify the current layer

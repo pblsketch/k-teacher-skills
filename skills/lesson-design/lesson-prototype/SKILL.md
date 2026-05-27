@@ -20,6 +20,14 @@ description: 완성 수업안이나 자료를 만들기 전에 2~3개의 작고 
 - 질문할 때는 가능한 한 3~5개의 선택지와 `기타: 직접 적기`를 제공한다.
 - 질문을 더 할지, prototype 비교로 넘어갈지는 `../../../references/interview-readiness.md`의 readiness gate로 판단한다.
 
+## Readiness gate v2 (v2.5.1+)
+- Default profile: Quick
+- Active stage: Stage 1 · Intent-first
+- Fact routing in this skill: from-teacher-judgment
+- Tier 3 (Topology/Ontology/Challenge): disabled-for-quick-profile
+- Full spec: `../../../references/interview-readiness.md`
+- Canonical mapping: `../../../tests/readiness_gate_v2_mapping.json`
+
 ## Workflow
 
 ### 1. Define the design question

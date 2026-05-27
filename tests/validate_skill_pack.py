@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import re
+import sys
 from pathlib import Path
 
 
@@ -287,6 +288,177 @@ def main() -> None:
         assert "선택지" in text or "A." in text, (
             f"{skill}: missing choice-based questioning signal"
         )
+
+    # ========================================================================
+    # Readiness Gate v2 (v2.5.1+) validation — 4 new loops
+    # ========================================================================
+
+    readiness = (ROOT / "references" / "interview-readiness.md").read_text(
+        encoding="utf-8"
+    )
+
+    # Loop α — gate-vocabulary (17 markers; +3 provenance grades from v2.5.2)
+    for marker in [
+        "Readiness Gate v2",
+        "intent·0.30",
+        "Stage 1",
+        "Stage 2",
+        "Stage 3",
+        "Pressure Ladder",
+        "from-curriculum",
+        "from-textbook",
+        "from-class-context",
+        "from-teacher-judgment",
+        "Round 0",
+        "Contrarian",
+        "Simplifier",
+        "Ontologist",
+        ":provided",
+        ":web",
+        ":inferred",
+    ]:
+        assert marker in readiness, (
+            f"interview-readiness.md missing v2 marker: {marker}"
+        )
+
+    # Loop β — per-skill block presence
+    for skill in SKILLS:
+        text = (skill_dir(skill) / "SKILL.md").read_text(encoding="utf-8")
+        assert "## Readiness gate v2" in text, (
+            f"{skill}: missing v2 readiness-gate block"
+        )
+
+    # Loop γ — section order (must be [1..12] in document order)
+    section_nums = [
+        int(m.group(1)) for m in re.finditer(r"^##\s*§(\d+)", readiness, re.M)
+    ]
+    assert section_nums == list(range(1, 13)), (
+        f"interview-readiness.md section order mismatch: "
+        f"{section_nums} != [1..12]"
+    )
+
+    # Loop δ — per-skill mapping match against JSON SSOT
+    mapping_path = ROOT / "tests" / "readiness_gate_v2_mapping.json"
+    assert mapping_path.exists(), (
+        "tests/readiness_gate_v2_mapping.json missing"
+    )
+    mapping_raw = json.loads(mapping_path.read_text(encoding="utf-8"))
+    mapping = {k: v for k, v in mapping_raw.items() if not k.startswith("_")}
+    assert set(mapping.keys()) == set(SKILLS), (
+        f"mapping JSON skill set mismatch: "
+        f"missing {set(SKILLS) - set(mapping.keys())}, "
+        f"extra {set(mapping.keys()) - set(SKILLS)}"
+    )
+
+    block_re = re.compile(
+        r"##\s*Readiness gate v2[^\n]*\n"
+        r"-\s*Default profile:\s*(?P<profile>[^\n]+)\n"
+        r"-\s*Active stage:\s*(?P<stage>[^\n]+)\n"
+        r"-\s*Fact routing in this skill:\s*(?P<labels>[^\n]+)\n"
+        r"-\s*Tier 3[^:]*:\s*(?P<tier3>[^\n]+)\n",
+        re.M,
+    )
+    for skill in SKILLS:
+        text = (skill_dir(skill) / "SKILL.md").read_text(encoding="utf-8")
+        m = block_re.search(text)
+        assert m, f"{skill}: v2 block missing canonical 4 fields"
+        actual = {
+            "profile": m.group("profile").strip(),
+            "stage": m.group("stage").strip(),
+            "labels": m.group("labels").strip(),
+            "tier3": m.group("tier3").strip(),
+        }
+        expected = mapping[skill]
+        assert actual == expected, (
+            f"{skill}: v2 block does not match mapping JSON\n"
+            f"  expected: {expected}\n"
+            f"  actual:   {actual}"
+        )
+
+    # Skill-pack version check
+    manifest_v = json.loads(
+        (ROOT / "skill-pack.json").read_text(encoding="utf-8")
+    )["version"]
+    assert manifest_v == "2.5.3", (
+        f"skill-pack.json version must be 2.5.3, got {manifest_v}"
+    )
+
+    # ========================================================================
+    # Claude Cowork / Claude Code plugin manifest (v2.5.3+)
+    # ========================================================================
+
+    plugin_path = ROOT / ".claude-plugin" / "plugin.json"
+    assert plugin_path.exists(), ".claude-plugin/plugin.json missing"
+    plugin = json.loads(plugin_path.read_text(encoding="utf-8"))
+
+    assert plugin.get("name") == "k-teacher-skills", (
+        f"plugin.json name must be 'k-teacher-skills', got {plugin.get('name')}"
+    )
+    assert plugin.get("version") == "2.5.3", (
+        f"plugin.json version must be 2.5.3, got {plugin.get('version')}"
+    )
+    plugin_skills = plugin.get("skills", [])
+    assert len(plugin_skills) == 17, (
+        f"plugin.json skills array must have 17 entries, got {len(plugin_skills)}"
+    )
+    for skill_path in plugin_skills:
+        rel = skill_path.lstrip("./")
+        full = ROOT / rel
+        assert full.exists(), (
+            f"plugin.json skill path does not exist: {skill_path}"
+        )
+
+    market_path = ROOT / ".claude-plugin" / "marketplace.json"
+    assert market_path.exists(), ".claude-plugin/marketplace.json missing"
+    market = json.loads(market_path.read_text(encoding="utf-8"))
+    assert market.get("version") == "2.5.3", (
+        f"marketplace.json version must be 2.5.3, got {market.get('version')}"
+    )
+    market_plugins = market.get("plugins", [])
+    assert len(market_plugins) == 1, (
+        f"marketplace.json plugins array must have 1 entry, got {len(market_plugins)}"
+    )
+    assert market_plugins[0].get("name") == "k-teacher-skills", (
+        "marketplace.json plugin[0].name mismatch"
+    )
+    assert market_plugins[0].get("version") == "2.5.3", (
+        "marketplace.json plugin[0].version must be 2.5.3"
+    )
+
+    # Commands directory: 11 slash commands
+    commands_dir = ROOT / "commands"
+    assert commands_dir.is_dir(), "commands/ directory missing"
+    expected_commands = {
+        "k-teacher",
+        "new-lesson",
+        "redesign",
+        "failure",
+        "architecture",
+        "ai-assignment",
+        "inquiry",
+        "differentiate",
+        "assessment",
+        "pbl",
+        "udl",
+    }
+    actual_commands = {p.stem for p in commands_dir.glob("*.md")}
+    assert expected_commands == actual_commands, (
+        f"commands/ mismatch.\n"
+        f"  expected: {sorted(expected_commands)}\n"
+        f"  actual:   {sorted(actual_commands)}\n"
+        f"  missing:  {sorted(expected_commands - actual_commands)}\n"
+        f"  extra:    {sorted(actual_commands - expected_commands)}"
+    )
+
+    # Each command file has YAML frontmatter with description
+    for cmd in expected_commands:
+        cmd_path = commands_dir / f"{cmd}.md"
+        cmd_text = cmd_path.read_text(encoding="utf-8")
+        assert re.match(r"^---\n(.*?)\n---\n", cmd_text, re.S), (
+            f"commands/{cmd}.md: missing YAML frontmatter"
+        )
+        m = re.search(r"^description:\s*\S+", cmd_text[: cmd_text.index("---", 3) + 3], re.M)
+        assert m, f"commands/{cmd}.md: missing description in frontmatter"
 
     print("VALIDATION_OK")
 

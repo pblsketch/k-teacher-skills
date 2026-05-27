@@ -21,6 +21,14 @@ description: 교사의 수업 준비, 평가 설계, 자료 개선, 수업 실�
 - workflow 선택 시 학생의 참여/표상/표현 장벽을 낮출 수 있는 흐름인지 확인한다.
 - workflow를 선택한 이유를 짧게 설명한다.
 
+## Readiness gate v2 (v2.5.1+)
+- Default profile: Quick
+- Active stage: Stage 1 · Intent-first (routing)
+- Fact routing in this skill: from-teacher-judgment
+- Tier 3 (Topology/Ontology/Challenge): disabled-for-quick-profile
+- Full spec: `../../../references/interview-readiness.md`
+- Canonical mapping: `../../../tests/readiness_gate_v2_mapping.json`
+
 ## Available workflows
 
 ### 1. New lesson design

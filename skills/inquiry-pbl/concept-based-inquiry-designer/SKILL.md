@@ -17,6 +17,14 @@ description: 성취기준과 단원 내용을 핵심 개념, 일반화, 사실�
 - 학생 개인정보, 실명, 민감정보를 요구하지 않는다.
 - 참여/표상/표현 장벽을 낮추는 탐구 경로를 포함한다.
 
+## Readiness gate v2 (v2.5.1+)
+- Default profile: Deep
+- Active stage: Stage 1+3 · Curriculum-grounded
+- Fact routing in this skill: from-curriculum, from-textbook, from-teacher-judgment
+- Tier 3 (Topology/Ontology/Challenge): enabled
+- Full spec: `../../../references/interview-readiness.md`
+- Canonical mapping: `../../../tests/readiness_gate_v2_mapping.json`
+
 ## Workflow
 
 ### 1. Extract curriculum signal

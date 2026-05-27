@@ -17,6 +17,14 @@ description: 프로젝트 기반 학습(PBL)의 실제 문제, driving question,
 - 학생 개인정보, 실명, 민감정보를 요구하지 않는다.
 - 참여/표상/표현 장벽을 낮추는 협업 구조를 포함한다.
 
+## Readiness gate v2 (v2.5.1+)
+- Default profile: Deep
+- Active stage: Stage 1 · Intent-first
+- Fact routing in this skill: from-teacher-judgment, from-class-context
+- Tier 3 (Topology/Ontology/Challenge): enabled
+- Full spec: `../../../references/interview-readiness.md`
+- Canonical mapping: `../../../tests/readiness_gate_v2_mapping.json`
+
 ## Workflow
 
 ### 1. Anchor in a real problem

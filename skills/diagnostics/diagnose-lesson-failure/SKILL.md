@@ -20,6 +20,14 @@ description: 수업이 잘 안 되었거나 학생 반응이 기대와 달랐을
 - 질문할 때는 가능한 한 3~5개의 선택지와 `기타: 직접 적기`를 제공한다.
 - 질문을 더 할지, 진단 가설로 넘어갈지는 `../../../references/interview-readiness.md`의 readiness gate로 판단한다.
 
+## Readiness gate v2 (v2.5.1+)
+- Default profile: Standard
+- Active stage: Stage 2 · Evidence-first
+- Fact routing in this skill: from-class-context, from-teacher-judgment
+- Tier 3 (Topology/Ontology/Challenge): enabled
+- Full spec: `../../../references/interview-readiness.md`
+- Canonical mapping: `../../../tests/readiness_gate_v2_mapping.json`
+
 ## Diagnosis loop
 
 개발자의 디버깅 루프를 수업에 맞게 바꾼다.

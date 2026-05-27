@@ -17,6 +17,14 @@ description: 같은 학습 목표를 유지하면서 기초·표준·심화 경�
 - 학생 개인정보, 실명, 민감정보를 요구하지 않는다.
 - 참여/표상/표현 장벽을 낮추는 선택지를 포함한다.
 
+## Readiness gate v2 (v2.5.1+)
+- Default profile: Standard
+- Active stage: Stage 1+2 · Mixed
+- Fact routing in this skill: from-class-context, from-teacher-judgment
+- Tier 3 (Topology/Ontology/Challenge): enabled
+- Full spec: `../../../references/interview-readiness.md`
+- Canonical mapping: `../../../tests/readiness_gate_v2_mapping.json`
+
 ## Workflow
 
 ### 1. Fix the common target

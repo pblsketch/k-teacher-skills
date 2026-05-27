@@ -20,6 +20,14 @@ description: 지금까지의 대화, 수업 아이디어, 성취기준, 학생 �
 - 다음 질문이 필요하다고 판단될 때는 가능한 한 3~5개의 선택지와 `기타: 직접 적기`를 제공한다.
 - 새 질문이 필요한지 판단할 때는 `../../../references/interview-readiness.md`의 readiness gate를 사용한다.
 
+## Readiness gate v2 (v2.5.1+)
+- Default profile: Quick
+- Active stage: Stage 1 · Intent-first (output-only)
+- Fact routing in this skill: from-curriculum, from-textbook, from-class-context, from-teacher-judgment
+- Tier 3 (Topology/Ontology/Challenge): disabled-for-quick-profile
+- Full spec: `../../../references/interview-readiness.md`
+- Canonical mapping: `../../../tests/readiness_gate_v2_mapping.json`
+
 ## Use when
 
 - `grill-me-for-k-teacher` 이후 정리가 필요하다.

@@ -26,6 +26,14 @@ description: 성취기준, 교육과정, 학급 맥락, 기존 수업자료를 �
 - 질문할 때는 가능한 한 3~5개의 선택지와 `기타: 직접 적기`를 제공한다.
 - 질문을 더 할지, 요약할지, 수정 제안으로 넘어갈지는 `../../../references/interview-readiness.md`의 readiness gate로 판단한다.
 
+## Readiness gate v2 (v2.5.1+)
+- Default profile: Deep
+- Active stage: Stage 1+3 · Curriculum-grounded
+- Fact routing in this skill: from-curriculum, from-textbook, from-teacher-judgment
+- Tier 3 (Topology/Ontology/Challenge): enabled
+- Full spec: `../../../references/interview-readiness.md`
+- Canonical mapping: `../../../tests/readiness_gate_v2_mapping.json`
+
 ## Inputs to look for
 
 먼저 사용자가 제공한 자료를 확인한다.

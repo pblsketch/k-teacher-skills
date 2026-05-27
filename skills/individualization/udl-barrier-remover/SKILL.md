@@ -17,6 +17,14 @@ description: 수업 활동, 자료, 평가에서 학생의 참여·표상·행�
 - 학생 개인정보, 실명, 민감정보를 요구하지 않는다.
 - AI나 디지털 도구가 없어도 가능한 대안을 포함한다.
 
+## Readiness gate v2 (v2.5.1+)
+- Default profile: Standard
+- Active stage: Stage 1+2 · Mixed
+- Fact routing in this skill: from-class-context, from-teacher-judgment
+- Tier 3 (Topology/Ontology/Challenge): enabled
+- Full spec: `../../../references/interview-readiness.md`
+- Canonical mapping: `../../../tests/readiness_gate_v2_mapping.json`
+
 ## Workflow
 
 ### 1. Fix the learning goal
