@@ -1,4 +1,4 @@
-# K-Teacher Skills
+# K-Teacher Skills(딸깍 레지스탕스 교사 스킬)
 
 AI로 수업자료를 "딸깍" 생성하는 대신, 교사의 수업 의도·학생 맥락·평가 기준을 먼저 묻고 검증하게 만드는 한국 교사용 Skill Pack입니다.
 
