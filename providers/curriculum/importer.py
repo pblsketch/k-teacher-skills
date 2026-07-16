@@ -165,32 +165,38 @@ def _detect_mixed_revision_set(rows: list[dict]) -> set[str]:
     }
 
 
-def import_dataset(
-    source_path: str | Path = DEFAULT_GEPAI_SOURCE,
-    out_dir: str | Path | None = None,
-    *,
-    collision_csv: str | Path | None = DEFAULT_COLLISION_CSV,
-) -> dict:
-    """Read the external GEPAI JSONL, normalize, and write a local (gitignored)
-    normalized index + release manifest. Returns the manifest dict."""
-    source_path = Path(source_path)
-    out_dir = Path(out_dir) if out_dir else Path(__file__).resolve().parents[1] / "_local" / "curriculum-2022"
-    out_dir.mkdir(parents=True, exist_ok=True)
+_NATURAL_KEY = ["curriculum_revision", "school_level", "grade_band", "subject", "canonical_code"]
 
+# Owner-authorized-MIT public bundle (OI-1). Redistribution of the normalized dataset
+# is a copyright fact; it is NOT official-source curricular verification. Every record
+# stays provenance-unverified and downstream fail-closed.
+DEFAULT_SOURCE_SHA256 = "3e27351e78b76a01520f9dfb9b46dd6cc845ac7bab5dccbc0c7eeeff848aa91d"
+DEFAULT_BUNDLE_DIR = Path(__file__).resolve().parent / "bundle" / "2022"
+BUNDLE_LICENSE_ID = "MIT"
+BUNDLE_LICENSE_AUTHORITY = "owner-authorized-mit"
+BUNDLE_COPYRIGHT_HOLDER = "wnsdl (Park Jun-il)"
+
+
+def _read_rows(source_path: Path) -> list[dict]:
     rows: list[dict] = []
     with source_path.open(encoding="utf-8") as fh:
         for line in fh:
             line = line.strip()
             if line:
                 rows.append(json.loads(line))
+    return rows
 
+
+def _normalize_all(rows: list[dict]) -> tuple[list[dict], "ImportStats"]:
+    """Deterministic normalization of every raw row: repairs audited defects, quarantines
+    mixed-revision + natural-key collisions, and tallies stats. No time-dependent state."""
     mixed = _detect_mixed_revision_set(rows)
     stats = ImportStats(total=len(rows))
     normalized: list[dict] = []
     seen_keys: set[tuple] = set()
     for raw in rows:
         rec = normalize_record(raw, mixed_revision_codes=mixed)
-        key = (rec["curriculum_revision"], rec["school_level"], rec["grade_band"], rec["subject"], rec["canonical_code"])
+        key = tuple(rec[k] for k in _NATURAL_KEY)
         # Natural key uniqueness (audit 5.2): duplicates would be collisions.
         if key in seen_keys:
             rec["status"] = "quarantined"
@@ -204,6 +210,29 @@ def import_dataset(
         for f in rec["quality_flags"]:
             stats.flags[f] = stats.flags.get(f, 0) + 1
         normalized.append(rec)
+    return normalized, stats
+
+
+def _write_jsonl(path: Path, records: list[dict]) -> str:
+    with path.open("w", encoding="utf-8") as fh:
+        for rec in records:
+            fh.write(json.dumps(rec, ensure_ascii=False) + "\n")
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+def import_dataset(
+    source_path: str | Path = DEFAULT_GEPAI_SOURCE,
+    out_dir: str | Path | None = None,
+    *,
+    collision_csv: str | Path | None = DEFAULT_COLLISION_CSV,
+) -> dict:
+    """Read the external GEPAI JSONL, normalize, and write a local (gitignored)
+    normalized index + release manifest. Returns the manifest dict."""
+    source_path = Path(source_path)
+    out_dir = Path(out_dir) if out_dir else Path(__file__).resolve().parents[1] / "_local" / "curriculum-2022"
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    rows = _read_rows(source_path)
+    normalized, stats = _normalize_all(rows)
 
     # Collision restore (audit 5.2): only possible from the original CSV (3,285 rows).
     collision_note = "not_attempted"
@@ -214,10 +243,7 @@ def import_dataset(
 
     # Write normalized index (non-distributed).
     index_path = out_dir / "normalized.jsonl"
-    with index_path.open("w", encoding="utf-8") as fh:
-        for rec in normalized:
-            fh.write(json.dumps(rec, ensure_ascii=False) + "\n")
-    content_sha = hashlib.sha256(index_path.read_bytes()).hexdigest()
+    content_sha = _write_jsonl(index_path, normalized)
 
     manifest = {
         "release_id": f"gepai-curriculum-2022-local@{time.strftime('%Y-%m-%d')}",
@@ -238,4 +264,63 @@ def import_dataset(
         ),
     }
     (out_dir / "manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
+    return manifest
+
+
+def write_public_bundle(
+    source_path: str | Path = DEFAULT_GEPAI_SOURCE,
+    out_dir: str | Path = DEFAULT_BUNDLE_DIR,
+    *,
+    expected_source_sha256: str = DEFAULT_SOURCE_SHA256,
+    license_id: str = BUNDLE_LICENSE_ID,
+    license_authority: str = BUNDLE_LICENSE_AUTHORITY,
+    copyright_holder: str = BUNDLE_COPYRIGHT_HOLDER,
+) -> dict:
+    """Generate the committed owner-authorized-MIT public bundle deterministically.
+
+    The exact external source is hash-verified BEFORE generation; the normalized bundle
+    is byte-deterministic (no time-dependent release ids); counts are recomputed
+    hermetically from the written file. Distribution is a copyright fact only:
+    official_source is False and every record stays provenance-unverified/fail-closed.
+    """
+    source_path = Path(source_path)
+    out_dir = Path(out_dir)
+    source_sha = hashlib.sha256(source_path.read_bytes()).hexdigest()
+    if source_sha != expected_source_sha256:
+        raise ValueError(
+            f"source hash mismatch: {source_sha} != expected {expected_source_sha256}; refusing to generate bundle"
+        )
+
+    rows = _read_rows(source_path)
+    normalized, stats = _normalize_all(rows)
+
+    out_dir.mkdir(parents=True, exist_ok=True)
+    index_path = out_dir / "normalized.jsonl"
+    content_sha = _write_jsonl(index_path, normalized)
+
+    manifest = {
+        "bundle_schema_version": "1",
+        "dataset": "gepai-curriculum-2022",
+        "curriculum_revision": "2022",
+        "record_count": stats.total,
+        "ok_count": stats.ok,
+        "quarantined_count": stats.quarantined,
+        "content_sha256": content_sha,
+        "source_sha256": source_sha,
+        "natural_key": list(_NATURAL_KEY),
+        "defects_handled": stats.flags,
+        "distribution": "owner-authorized-mit",
+        "official_source": False,
+        "license_id": license_id,
+        "license_authority": license_authority,
+        "copyright_holder": copyright_holder,
+        "record_license_status": "unverified",
+        "source_note": (
+            "Owner-authorized MIT redistribution of the normalized GEPAI 2022 achievement-standard dataset "
+            "(copyright holder: repository owner). This is NOT an official Ministry (교육부/NCIC) source: every "
+            "record ships provenance-unverified (source.license_status=unverified, source.verified=false, "
+            "source.url=null) and stays downstream fail-closed until independently verified via verify_standard()."
+        ),
+    }
+    (out_dir / "manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     return manifest

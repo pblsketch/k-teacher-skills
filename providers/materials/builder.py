@@ -3,6 +3,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
+from . import worksheet
+
 # Teacher-only language that must NEVER appear in a student-facing document.
 STUDENT_FORBIDDEN_TERMS = ["루브릭", "배점", "오개념", "misconception", "scaffold", "tier", "교사용", "관찰 기록", "미제출", "채점"]
 
@@ -108,15 +110,35 @@ def build_material_ir(shared: SharedRegistry, base_ir: dict, *, include_parent: 
 
 
 def check_facet_separation(ir: dict) -> tuple[bool, list]:
-    """No teacher-only language in any student-facet document."""
+    """No teacher-only language in any student-facet document.
+
+    Scans BOTH `content.sections[].text` (existing) AND every string leaf of
+    `content.blocks` (RC2), applies the leak-class regexes, bans forbidden structural
+    keys, and enforces neutral `^Group [ABC]$` group labels."""
     violations = []
     for doc in ir["lesson_package"]["documents"]:
-        if doc["content"].get("facet") != "student":
+        content = doc["content"]
+        if content.get("facet") != "student":
             continue
-        blob = " ".join(s["text"] for s in doc["content"]["sections"])
-        for term in STUDENT_FORBIDDEN_TERMS:
-            if term in blob:
-                violations.append(f"{doc['document_id']}: forbidden teacher term '{term}'")
+        did = doc["document_id"]
+        section_leaves = [s["text"] for s in content.get("sections", [])]
+        block_leaves = list(worksheet.iter_block_string_leaves(content.get("blocks", [])))
+        for leaf in section_leaves + block_leaves:
+            for term in STUDENT_FORBIDDEN_TERMS:
+                if worksheet.contains_forbidden_term(leaf, term):
+                    violations.append(f"{did}: forbidden teacher term '{term}'")
+            for leak_class, pattern in worksheet.FACET_LEAK_PATTERNS.items():
+                m = pattern.search(leaf)
+                if m:
+                    violations.append(f"{did}: forbidden {leak_class} leak '{m.group(0)}'")
+        for bid, key in worksheet.iter_block_forbidden_keys(content.get("blocks", [])):
+            violations.append(f"{did}: forbidden structural key '{key}' on block {bid}")
+        for block in content.get("blocks", []):
+            if block.get("block_type") != "group_cohesion":
+                continue
+            for label in [block.get("group_label", ""), *block.get("members", [])]:
+                if not worksheet.GROUP_LABEL_RE.match(label):
+                    violations.append(f"{did}: non-neutral group label '{label}' on block {block['block_id']}")
     return (len(violations) == 0, violations)
 
 

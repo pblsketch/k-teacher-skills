@@ -1,0 +1,143 @@
+{
+  "standard_code": "[9과17-01]",
+  "school_level": "중학교",
+  "subject": "과학",
+  "document_class": "worksheet",
+  "block_count": 12,
+  "blocks": [
+    {
+      "block_id": "b1",
+      "block_type": "student_note",
+      "text": "오늘은 대기권의 층 구조를 자료로 확인하고, 온실효과를 복사 평형으로 설명해 봅니다."
+    },
+    {
+      "block_id": "b2",
+      "block_type": "source_card",
+      "title": "대기권 자료",
+      "body": "대기권은 높이에 따라 온도 변화가 다른 네 개의 층으로 나뉩니다. 각 층의 특징을 자료에서 찾아봅니다.",
+      "source": "학급 제공 읽기 자료"
+    },
+    {
+      "block_id": "b3",
+      "block_type": "data_table",
+      "caption": "높이별 평균 기온 변화 (막대는 빨간색 막대와 빗금 무늬로 함께 구분)",
+      "headers": [
+        "구간",
+        "높이(km)",
+        "기온 경향"
+      ],
+      "cells": [
+        [
+          "A",
+          "0~11",
+          "감소"
+        ],
+        [
+          "B",
+          "11~50",
+          "증가"
+        ],
+        [
+          "C",
+          "50~80",
+          "감소"
+        ],
+        [
+          "D",
+          "80 이상",
+          "증가"
+        ]
+      ],
+      "pattern": "빗금/점선 무늬로 색과 무관하게 구분"
+    },
+    {
+      "block_id": "b4",
+      "block_type": "student_task",
+      "task_ref": "t-atmos",
+      "prompt": "자료를 읽고 대기권을 네 개 층으로 구분하여 표시하시오.",
+      "cognitive_demand": "analyze"
+    },
+    {
+      "block_id": "b6",
+      "block_type": "fill_table",
+      "headers": [
+        "층 이름",
+        "높이 범위",
+        "온도 특징"
+      ],
+      "rows": [
+        [
+          "",
+          "",
+          ""
+        ],
+        [
+          "",
+          "",
+          ""
+        ],
+        [
+          "",
+          "",
+          ""
+        ]
+      ],
+      "row_height_mm": 26,
+      "caption": "층 이름과 특징 채우기"
+    },
+    {
+      "block_id": "b7",
+      "block_type": "page_break"
+    },
+    {
+      "block_id": "b8",
+      "block_type": "sentence_support",
+      "stems": [
+        "나는 ___ 자료를 근거로 ___라고 생각한다.",
+        "왜냐하면 ___ 때문이다."
+      ]
+    },
+    {
+      "block_id": "b9",
+      "block_type": "student_task",
+      "task_ref": "t-green",
+      "prompt": "온실효과가 커질 때 대기 온도 변화를 복사 평형으로 설명하시오.",
+      "cognitive_demand": "evaluate"
+    },
+    {
+      "block_id": "b10",
+      "block_type": "answer_box",
+      "response_demand": "extended",
+      "min_lines": 6,
+      "min_height_mm": 48,
+      "label": "설명 쓰기 칸"
+    },
+    {
+      "block_id": "b11",
+      "block_type": "answer_box",
+      "response_demand": "paragraph",
+      "min_lines": 4,
+      "min_height_mm": 32,
+      "label": "근거 쓰기 칸"
+    },
+    {
+      "block_id": "b12",
+      "block_type": "group_cohesion",
+      "group_label": "Group A",
+      "members": [
+        "Group B",
+        "Group C"
+      ],
+      "shared_task_refs": [
+        "t-green"
+      ]
+    },
+    {
+      "block_id": "b13",
+      "block_type": "exit_ticket",
+      "prompt": "온실효과가 계속 커지면 지표면 온도는 어떻게 될지 근거와 함께 쓰시오.",
+      "cognitive_demand": "evaluate",
+      "targets_hardest_case": true
+    }
+  ]
+}

@@ -45,12 +45,13 @@ def canonical_content(document: dict) -> dict:
             for m in content.get("provenance_markers", [])
         ],
         "unresolved_boundary_markers": list(content.get("unresolved_boundary_markers", [])),
+        "blocks": list(content.get("blocks", [])),
     }
 
 
 def content_fingerprint(canonical: dict) -> str:
     payload = json.dumps(
-        {k: canonical[k] for k in ("required_content", "provenance_markers", "unresolved_boundary_markers")},
+        {k: canonical[k] for k in ("required_content", "provenance_markers", "unresolved_boundary_markers", "blocks")},
         ensure_ascii=False, sort_keys=True,
     )
     return "sha256:" + hashlib.sha256(payload.encode("utf-8")).hexdigest()
@@ -87,11 +88,111 @@ def _content_paras(canonical: dict, ptag: str, ttag: str | None) -> str:
         )
     return "\n".join(out)
 
+# --- block encoding (real tables + answer-space, round-trippable) --------------
+
+_BLOCK_TAGS = {
+    "html": {"para": "p", "table": "table", "row": "tr", "cell": "td"},
+    "hwpx": {"para": "hp:p", "table": "hp:tbl", "row": "hp:tr", "cell": "hp:tc"},
+    "docx": {"para": "w:p", "table": "w:tbl", "row": "w:tr", "cell": "w:tc"},
+}
+
+
+def _block_attrs(block: dict) -> str:
+    payload = json.dumps(block, ensure_ascii=False, sort_keys=True)
+    return (
+        f'data-block-id="{_xesc(block["block_id"])}" '
+        f'data-block-type="{_xesc(block["block_type"])}" '
+        f'data-block-json="{_xesc(payload)}"'
+    )
+
+
+def _cell_xml(value, tags: dict, fmt: str) -> str:
+    """Emit a table cell with the paragraph/run/text nesting required by the
+    target office format. Empty cells still receive a text node container."""
+    c = tags["cell"]
+    text = _xesc(str(value))
+    if fmt == "docx":
+        return f'<{c}><w:p><w:r><w:t xml:space="preserve">{text}</w:t></w:r></w:p></{c}>'
+    if fmt == "hwpx":
+        return f'<{c}><hp:subList><hp:p><hp:run><hp:t>{text}</hp:t></hp:run></hp:p></hp:subList></{c}>'
+    return f"<{c}>{text}</{c}>"
+
+
+def _row_xml(values: list, tags: dict, fmt: str, row_height_mm: float | None = None) -> str:
+    r = tags["row"]
+    cells = "".join(_cell_xml(v, tags, fmt) for v in values)
+    if row_height_mm is None:
+        return f"<{r}>{cells}</{r}>"
+    if fmt == "docx":
+        twips = max(1, round(row_height_mm * 56.6929))
+        return f'<{r}><w:trPr><w:trHeight w:val="{twips}" w:hRule="atLeast"/></w:trPr>{cells}</{r}>'
+    if fmt == "hwpx":
+        return f'<{r} data-row-height-mm="{row_height_mm:g}">{cells}</{r}>'
+    return f'<{r} style="height:{row_height_mm:g}mm" data-row-height-mm="{row_height_mm:g}">{cells}</{r}>'
+
+
+def _table_block(block: dict, header: list, rows: list, tags: dict, fmt: str,
+                 row_height_mm: float | None = None) -> str:
+    t = tags["table"]
+    parts = [f"<{t} {_block_attrs(block)}>"]
+    if header:
+        parts.append(_row_xml(header, tags, fmt))
+    for row in rows:
+        parts.append(_row_xml(row, tags, fmt, row_height_mm))
+    parts.append(f"</{t}>")
+    return "".join(parts)
+
+
+def _block_visible_text(block: dict) -> str:
+    bt = block["block_type"]
+    if bt in ("student_task", "exit_ticket"):
+        return block["prompt"]
+    if bt == "student_note":
+        return block["text"]
+    if bt == "source_card":
+        citation = f' ({block["citation"]})' if block.get("citation") else ""
+        return f'{block["title"]}: {block["body"]} — {block["source"]}{citation}'
+    if bt == "sentence_support":
+        return " / ".join(block["stems"])
+    if bt == "number_line":
+        return f'{block.get("label", "수직선")}: {block["min"]}~{block["max"]} (step {block["step"]})'
+    if bt == "group_cohesion":
+        return f'{block["group_label"]}: ' + ", ".join(block["members"])
+    if bt == "page_break":
+        return "[page-break]"
+    return ""
+
+
+def _content_blocks(canonical: dict, fmt: str) -> str:
+    """Encode content.blocks into real per-format tables + answer-space nodes, each
+    carrying data-block-id/data-block-type and a round-trippable data-block-json."""
+    tags = _BLOCK_TAGS[fmt]
+    para = tags["para"]
+    out = []
+    for block in canonical.get("blocks", []):
+        bt = block["block_type"]
+        if bt == "fill_table":
+            out.append(_table_block(block, block["headers"], block["rows"], tags, fmt,
+                                    row_height_mm=block["row_height_mm"]))
+        elif bt == "data_table":
+            out.append(_table_block(block, block["headers"], block["cells"], tags, fmt))
+        elif bt == "answer_box":
+            # Real ruled answer-space: one empty ruled row per required line.
+            line_height_mm = block["min_height_mm"] / max(1, block["min_lines"])
+            out.append(_table_block(block, [], [[""] for _ in range(block["min_lines"])], tags, fmt,
+                                    row_height_mm=line_height_mm))
+        else:
+            out.append(f'<{para} {_block_attrs(block)}>{_xesc(_block_visible_text(block))}</{para}>')
+    return "\n".join(out)
+
 
 # --- renderers -----------------------------------------------------------------
 
 def render_html(canonical: dict, marker: dict, path: Path) -> None:
     body = _content_paras(canonical, "p", None)
+    blocks_body = _content_blocks(canonical, "html")
+    if blocks_body:
+        body = f"{body}\n{blocks_body}"
     doc = (
         "<!doctype html>\n<html lang=\"ko\"><head><meta charset=\"utf-8\">"
         f"<title>{_xesc(canonical['title'])}</title>"
@@ -116,6 +217,9 @@ def _write_zip(path: Path, members: dict[str, str], mimetype: str | None = None)
 
 def render_hwpx(canonical: dict, marker: dict, path: Path) -> None:
     body = _content_paras(canonical, "hp:p", "hp:t")
+    blocks_body = _content_blocks(canonical, "hwpx")
+    if blocks_body:
+        body = f"{body}\n{blocks_body}"
     section = (
         '<?xml version="1.0" encoding="UTF-8"?>\n'
         '<hs:sec xmlns:hs="http://www.hancom.co.kr/hwpml/2011/section" '
@@ -135,6 +239,9 @@ def render_hwpx(canonical: dict, marker: dict, path: Path) -> None:
 
 def render_docx(canonical: dict, marker: dict, path: Path) -> None:
     body = _content_paras(canonical, "w:p", "w:t")
+    blocks_body = _content_blocks(canonical, "docx")
+    if blocks_body:
+        body = f"{body}\n{blocks_body}"
     document = (
         '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n'
         '<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" '
@@ -183,6 +290,33 @@ def _parse_paras(xml: str) -> tuple[list, list]:
             prov.append({"record_id": attrs["data-provenance-record-id"], "label": htmllib.unescape(attrs.get("data-label", "")), "evidence_text": text})
     return content, prov
 
+_BLOCK_RE = re.compile(r'<(table|hp:tbl|w:tbl|p|hp:p|w:p)\b([^>]*\bdata-block-id="[^"]*"[^>]*)>(.*?)</\1>', re.DOTALL)
+_ROW_RE = re.compile(r"<(?:tr|hp:tr|w:tr)\b")
+_CELL_RE = re.compile(r"<(?:td|hp:tc|w:tc)\b")
+_FIRST_ROW_RE = re.compile(r"<(?:tr|hp:tr|w:tr)\b[^>]*>(.*?)</(?:tr|hp:tr|w:tr)>", re.DOTALL)
+
+
+def _parse_blocks(xml: str) -> list:
+    """Round-trip content.blocks from a rendered file: recover exact semantic fields
+    from data-block-json and recompute the real rendered table/answer-space shape."""
+    blocks = []
+    for tag, attrs_s, inner in _BLOCK_RE.findall(xml):
+        attrs = dict(_ATTR_RE.findall(attrs_s))
+        payload = json.loads(htmllib.unescape(attrs["data-block-json"]))
+        shape = None
+        if tag in ("table", "hp:tbl", "w:tbl"):
+            nrows = len(_ROW_RE.findall(inner))
+            first = _FIRST_ROW_RE.search(inner)
+            ncols = len(_CELL_RE.findall(first.group(1))) if first else 0
+            shape = {"rows": nrows, "cols": ncols}
+        blocks.append({
+            "block_id": attrs["data-block-id"],
+            "block_type": attrs["data-block-type"],
+            "block": payload,
+            "rendered_shape": shape,
+        })
+    return blocks
+
 
 def _extract_zip(path: Path, marker_member: str, content_member: str) -> dict:
     with zipfile.ZipFile(path) as z:
@@ -198,6 +332,7 @@ def _extract_zip(path: Path, marker_member: str, content_member: str) -> dict:
         "required_content": content,
         "provenance_markers": prov,
         "unresolved_boundary_markers": [],
+        "blocks": _parse_blocks(xml),
         "embedded_backport_marker_locator": marker_member,
         "embedded_backport_marker": marker,
     }
@@ -226,6 +361,7 @@ def extract_html(path: str | Path) -> dict:
         "required_content": content,
         "provenance_markers": prov,
         "unresolved_boundary_markers": [],
+        "blocks": _parse_blocks(text),
         "embedded_backport_marker_locator": "script#kteacher-backport-marker",
         "embedded_backport_marker": marker,
     }
@@ -257,4 +393,6 @@ def verify_parity(extracted: dict) -> tuple[bool, list]:
             reasons.append(f"{f}: content_fingerprint drift (content not from same IR)")
         if e["embedded_backport_marker"]["renderer_format"] != f:
             reasons.append(f"{f}: marker renderer_format mismatch")
+        if e.get("blocks", []) != ref.get("blocks", []):
+            reasons.append(f"{f}: blocks drift")
     return (len(reasons) == 0, reasons)

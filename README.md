@@ -161,7 +161,7 @@ k-teacher-workflow-router로 내 요청을 분석하고 적절한 K-Teacher Skil
 
 이 저장소는 provider/provenance/license/fail-closed **계약과 fixture**를 갖추고 있으며, `providers/`에 실제 조회 provider가 연결됩니다.
 
-- **국가 2022 성취기준 provider** (`providers/curriculum`): GEPAI 백업을 **비배포(local-only, gitignored `providers/_local/`)**로 정규화(대괄호·학년군 오기·혼합개정 격리)해 read-only 조회(`lookup_standard_by_code`/`search_standards`/`list_standards`/`verify_standard`)를 제공합니다. 국가 원문은 공식 NCIC/교육부 웹 검증(`:web`)으로만 downstream-ready가 되며 미검증은 fail-closed입니다.
+- **국가 2022 성취기준 provider** (`providers/curriculum`): GEPAI 백업을 정규화(대괄호·학년군 오기·혼합개정 격리)해 read-only 조회(`lookup_standard_by_code`/`search_standards`/`list_standards`/`verify_standard`)를 제공합니다. 정규화 공개 번들 `providers/curriculum/bundle/2022/{normalized.jsonl,manifest.json}`은 소스 SHA 검증 후 결정론적으로 생성한 **owner-authorized-MIT 재배포**(저작권 사실일 뿐 공식 출처 아님, `official_source:false`)이며, 원본 GEPAI 소스는 커밋하지 않습니다(gitignored `providers/_local/` 로컬 임포트만). 모든 레코드는 `source.license_status:unverified`·`verified:false`·`url:null`로 fail-closed이고, 국가 원문은 공식 NCIC/교육부 웹 검증(`:web`)으로만 downstream-ready가 됩니다.
 - **학교 공시 평가계획 adapter** (`providers/school_evaluation`): [schoolinfo-mcp](https://github.com/chrisryugj/schoolinfo-mcp)(MIT) 계약(`find_school`/`get_evaluation_plan`/local `parse_evaluation_file`)을 독자 구현으로 미러링합니다. 학교·연도·학년·교과 pin, current→previous fallback은 **교사 승인 후에만**, PII는 mask-or-block(불가 시 차단), 원문은 anchor(URL·파일명·hash·조회시점·section/page/table)로만 참조합니다.
 - **정렬/승격/격리** (`providers/alignment`): 평가계획 코드는 국가 성취기준과 정확 대조된 경우에만 **별도** 국가 `curriculum-record`로 additive 승격되고, 불일치·혼합개정은 격리됩니다.
 
@@ -175,7 +175,7 @@ k-teacher-workflow-router로 내 요청을 분석하고 적절한 K-Teacher Skil
 
 ### Provider-orchestration skills (별도 클래스, `skills/school-materials/`)
 
-17개 Gate-v2 인터뷰/설계 스킬과 **분리된 provider-orchestration 클래스**입니다. `registry.provider_skills` + `skill-pack.json`의 `providerSkills`로 정식 등록되며(closed-world 검증 `tests/validate_provider_skills.py` + negative mutation regression), 17개 인터뷰 스킬의 registry·plugin projection은 불변입니다.
+17개 Gate-v2 인터뷰/설계 스킬과 **분리된 provider-orchestration 클래스**(2개의 direct-entry 오케스트레이터 포함, 총 7개)입니다. `registry.provider_skills` + `skill-pack.json`의 `providerSkills`로 정식 등록되며(closed-world 검증 `tests/validate_provider_skills.py` + negative mutation regression), 17개 인터뷰 스킬의 registry·plugin projection은 불변입니다. 각 오케스트레이터는 자신의 의존 서브셋만 선언합니다.
 
 - `school-evaluation-plan-to-materials` (오케스트레이터) — 학교 평가계획+국가 성취기준 → 학생·교사 2차 자료
 - `school-plan-grounding` — 학교 공시 평가계획 pin·교사승인 fallback·PII mask-or-block
@@ -183,10 +183,11 @@ k-teacher-workflow-router로 내 요청을 분석하고 적절한 K-Teacher Skil
 - `assessment-evidence-builder` — 관찰 가능한 평가 증거·성공 기준·최난 출구표
 - `secondary-material-builder` — single IR → 학생·교사·학부모 문서, HWPX/DOCX/HTML parity
 - `material-rubric-qa` — 루브릭·양방향 정합성·rigor·PII 최종 QA
+- `student-worksheet-builder` (오케스트레이터, direct-entry) — 단일 IR `content.blocks` 기반 학생 활동지: 물리성 게이트(분량·쓰기공간·페이지밀도·출구표·흑백안전·모둠중립), facet 블록 재귀, standalone quick-draft fail-closed. 의존: `standard-alignment-verify`·`secondary-material-builder`·`material-rubric-qa`.
 
 ### Constraints / license / provenance
 
-- GEPAI 원본·정규화 데이터는 재배포 라이선스 미검증이므로 repo에 커밋하지 않습니다(비배포 로컬 인덱스만). 학교 평가계획 원문·PII·인증키도 커밋하지 않습니다.
+- GEPAI **원본** 소스는 커밋하지 않습니다. **정규화 공개 번들**(`providers/curriculum/bundle/2022/`)만 owner-authorized-MIT로 커밋하며(소스 SHA 검증·결정론적 생성·hermetic 재집계 3274=2952 ok+322 quarantine), 이는 저작권 사실일 뿐 공식 출처가 아니고 레코드는 fail-closed로 유지됩니다. 학교 평가계획 원문·PII·인증키는 커밋하지 않습니다.
 - 차용 출처·경계는 `THIRD_PARTY_NOTICES.md`에 기록합니다(anthropics Apache-2.0 아이디어 차용·비복사, schoolinfo MIT). 미국 표준 프레임워크는 사용하지 않습니다.
 - provider/provenance/license 중 하나라도 비면 fail-closed. AR-1 `license_authority`로 공개 라이선스와 교사 승인 공시를 구분합니다.
 

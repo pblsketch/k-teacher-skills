@@ -4,6 +4,7 @@ import contextlib
 import copy
 import json
 import os
+import subprocess
 import sys
 from pathlib import Path
 
@@ -119,6 +120,38 @@ def run_m1_registry_gate_drift() -> None:
         expect_validation_failure("registry_gate_projection_drift")
 
 
+ARTIFACTS_IGNORE_PROBES = [
+    "artifacts/",
+    "artifacts/qa/redteam-report.json",
+    "artifacts/worksheet-9과17-01/worksheet-9과17-01.html",
+]
+
+
+def _git_check_ignore(path: str) -> bool:
+    """True when git treats `path` as ignored. Read-only; never mutates the repo."""
+    completed = subprocess.run(
+        ["git", "check-ignore", "-q", "--", path],
+        cwd=ROOT, capture_output=True, text=True,
+    )
+    if completed.returncode not in (0, 1):
+        raise AssertionError(f"git check-ignore failed for {path!r}: {completed.stderr.strip()}")
+    return completed.returncode == 0
+
+
+def run_artifacts_ignored_regression() -> None:
+    """M3 commit hygiene: the untracked artifacts/ tree (local QA + worksheet outputs)
+    must be gitignored so a blanket `git add -A`/`git commit -a` cannot sweep it into a
+    commit, while a genuinely tracked file (README.md) stays NOT ignored (scoped, not
+    global). This keeps local artifacts out of the semantic commit set."""
+    gitignore = (ROOT / ".gitignore").read_text(encoding="utf-8")
+    assert any(
+        line.strip() in ("artifacts/", "/artifacts/", "artifacts") for line in gitignore.splitlines()
+    ), "artifacts/ must be present as a .gitignore rule"
+    for probe in ARTIFACTS_IGNORE_PROBES:
+        assert _git_check_ignore(probe), f"artifacts path must be gitignored: {probe}"
+    assert not _git_check_ignore("README.md"), "artifacts/ ignore rule must not ignore tracked README.md"
+
+
 CASES = [
     run_h1_plugin_path_drift,
     run_h1_plugin_scalar_drift,
@@ -140,6 +173,8 @@ def main() -> None:
 
     for case in CASES:
         case()
+
+    run_artifacts_ignored_regression()
 
     # Exact restoration proof: every mutated file is byte-identical afterward.
     assert PLUGIN_PATH.read_bytes() == plugin_before, "plugin.json not restored exactly"

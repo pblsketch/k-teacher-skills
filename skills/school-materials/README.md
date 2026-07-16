@@ -25,3 +25,4 @@ Skills:
 - `assessment-evidence-builder`
 - `secondary-material-builder`
 - `material-rubric-qa`
+- `student-worksheet-builder` (orchestrator, direct-entry) — 단일 IR `content.blocks` 학생 활동지: 물리성 게이트·facet 블록 재귀·quick-draft fail-closed

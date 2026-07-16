@@ -1,0 +1,30 @@
+{
+  "bundle_schema_version": "1",
+  "dataset": "gepai-curriculum-2022",
+  "curriculum_revision": "2022",
+  "record_count": 3274,
+  "ok_count": 2952,
+  "quarantined_count": 322,
+  "content_sha256": "856cb40585a9b81e40358f7145b30f430b2cd5437f05d570d3e14b989266ffd1",
+  "source_sha256": "3e27351e78b76a01520f9dfb9b46dd6cc845ac7bab5dccbc0c7eeeff848aa91d",
+  "natural_key": [
+    "curriculum_revision",
+    "school_level",
+    "grade_band",
+    "subject",
+    "canonical_code"
+  ],
+  "defects_handled": {
+    "keywords_absent": 3274,
+    "bracket_normalized": 322,
+    "mixed_revision": 322,
+    "grade_corrected": 3
+  },
+  "distribution": "owner-authorized-mit",
+  "official_source": false,
+  "license_id": "MIT",
+  "license_authority": "owner-authorized-mit",
+  "copyright_holder": "wnsdl (Park Jun-il)",
+  "record_license_status": "unverified",
+  "source_note": "Owner-authorized MIT redistribution of the normalized GEPAI 2022 achievement-standard dataset (copyright holder: repository owner). This is NOT an official Ministry (교육부/NCIC) source: every record ships provenance-unverified (source.license_status=unverified, source.verified=false, source.url=null) and stays downstream fail-closed until independently verified via verify_standard()."
+}

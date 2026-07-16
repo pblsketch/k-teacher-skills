@@ -146,15 +146,50 @@ def test_web_overlay_offline() -> None:
     assert_true(not dead["content_verified"] and "unreachable" in dead["reason"], "unreachable source -> honest fail")
 
 
+def test_quarantine_exclusion_surfaces() -> None:  # RC5
+    """A quarantined record is excluded at every read surface (list/search/verify)."""
+    provider = CurriculumProvider(SYNTH_INDEX)
+    qcode = "[6과88-02]"  # elementary 5~6 no-bracket -> mixed_revision quarantined
+
+    # (a) absent from every page of list_standards; sum(pages) == ok_count.
+    seen: set = set()
+    total_ok = None
+    page = 0
+    while True:
+        result = provider.list_standards(page=page, page_size=2)
+        total_ok = result["total_ok"]
+        for row in result["records"]:
+            assert_true(row["status"] == "ok", "list_standards may only return ok rows")
+            seen.add(row["canonical_code"])
+        if not result["records"]:
+            break
+        page += 1
+    assert_true(qcode not in seen, "quarantined code must be absent from list_standards")
+    assert_true(len(seen) == total_ok, f"paged list must cover exactly total_ok rows ({len(seen)} != {total_ok})")
+
+    # (b) neither the code nor its content keyword surfaces the quarantined record.
+    assert_true(all(c["canonical_code"] != qcode for c in provider.search_standards(keyword=qcode)["candidates"]),
+                "search by code must not surface the quarantined record")
+    assert_true(all(c["canonical_code"] != qcode for c in provider.search_standards(keyword="비교")["candidates"]),
+                "search by content keyword must not surface the quarantined record")
+
+    # (c) verify_standard fail-closed on the quarantined code.
+    report = provider.verify_standard(qcode)
+    assert_true(report["downstream_ready"] is False and report["status"] == "quarantined",
+                "verify_standard must be fail-closed + quarantined for a quarantined code")
+
+
 def main() -> None:
     test_normalization()
     test_provider_fail_closed()
     test_web_overlay_offline()
+    test_quarantine_exclusion_surfaces()
     print("PASS validate_curriculum_provider")
     print("- normalization repairs bracket/grade-typo/mixed-revision; provenance fail-closed by default")
     print("- read-only provider: ok/quarantined/not_found, content-substring search, quarantine excluded from list")
     print("- verify_standard fail-closed until provenance+license verified")
     print("- offline :web overlay verifies-or-fails-honestly and preserves source anchor")
+    print("- quarantine excluded at list/search/verify surfaces (paged list covers exactly total_ok)")
 
 
 if __name__ == "__main__":

@@ -65,6 +65,16 @@
         "outputs": ["qa-report"],
         "fail_closed_boundaries": ["rubric-not-observable", "pii-residual", "rigor-drop"],
         "workflow_membership": "school-evaluation-plan-to-materials"
+      },
+      "student-worksheet-builder": {
+        "skill_id": "student-worksheet-builder",
+        "skill_path": "skills/school-materials/student-worksheet-builder",
+        "type": "orchestrator",
+        "direct_entry": true,
+        "dependencies": ["standard-alignment-verify", "secondary-material-builder", "material-rubric-qa"],
+        "outputs": ["student-worksheet", "hwpx-docx-html-parity", "physical-workload-gated"],
+        "fail_closed_boundaries": ["facet-leak", "physical-workload-violation", "unverified-provider-quick-draft", "teacher-approval-missing"],
+        "workflow_membership": "student-worksheet-builder"
       }
     }
   },

@@ -917,6 +917,156 @@
           "additionalProperties": true
         }
       }
+    },
+    "worksheetBlock": {
+      "type": "object",
+      "required": [
+        "block_id",
+        "block_type"
+      ],
+      "properties": {
+        "block_id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "block_type": {
+          "type": "string",
+          "enum": [
+            "student_task",
+            "answer_box",
+            "fill_table",
+            "data_table",
+            "number_line",
+            "source_card",
+            "group_cohesion",
+            "page_break",
+            "student_note",
+            "sentence_support",
+            "exit_ticket"
+          ]
+        }
+      },
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "required": ["block_id", "block_type", "task_ref", "prompt", "cognitive_demand"],
+          "properties": {
+            "block_id": {"$ref": "#/$defs/nonEmptyString"},
+            "block_type": {"const": "student_task"},
+            "task_ref": {"$ref": "#/$defs/nonEmptyString"},
+            "prompt": {"$ref": "#/$defs/nonEmptyString"},
+            "cognitive_demand": {"type": "string", "enum": ["recall", "apply", "analyze", "evaluate", "create"]}
+          }
+        },
+        {
+          "additionalProperties": false,
+          "required": ["block_id", "block_type", "response_demand", "min_lines", "min_height_mm"],
+          "properties": {
+            "block_id": {"$ref": "#/$defs/nonEmptyString"},
+            "block_type": {"const": "answer_box"},
+            "response_demand": {"type": "string", "enum": ["short", "sentence", "paragraph", "extended"]},
+            "min_lines": {"type": "integer", "minimum": 0},
+            "min_height_mm": {"type": "number", "minimum": 0},
+            "label": {"$ref": "#/$defs/nonEmptyString"}
+          }
+        },
+        {
+          "additionalProperties": false,
+          "required": ["block_id", "block_type", "headers", "rows", "row_height_mm"],
+          "properties": {
+            "block_id": {"$ref": "#/$defs/nonEmptyString"},
+            "block_type": {"const": "fill_table"},
+            "headers": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/nonEmptyString"}},
+            "rows": {"type": "array", "items": {"type": "array", "items": {"type": "string"}}},
+            "row_height_mm": {"type": "number", "minimum": 8},
+            "caption": {"$ref": "#/$defs/nonEmptyString"}
+          }
+        },
+        {
+          "additionalProperties": false,
+          "required": ["block_id", "block_type", "caption", "headers", "cells"],
+          "properties": {
+            "block_id": {"$ref": "#/$defs/nonEmptyString"},
+            "block_type": {"const": "data_table"},
+            "caption": {"$ref": "#/$defs/nonEmptyString"},
+            "headers": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/nonEmptyString"}},
+            "cells": {"type": "array", "items": {"type": "array", "items": {"type": "string"}}},
+            "pattern": {"$ref": "#/$defs/nonEmptyString"}
+          }
+        },
+        {
+          "additionalProperties": false,
+          "required": ["block_id", "block_type", "min", "max", "step", "ticks"],
+          "properties": {
+            "block_id": {"$ref": "#/$defs/nonEmptyString"},
+            "block_type": {"const": "number_line"},
+            "min": {"type": "number"},
+            "max": {"type": "number"},
+            "step": {"type": "number"},
+            "ticks": {"type": "array", "items": {"type": "number"}},
+            "label": {"$ref": "#/$defs/nonEmptyString"}
+          }
+        },
+        {
+          "additionalProperties": false,
+          "required": ["block_id", "block_type", "title", "body", "source"],
+          "properties": {
+            "block_id": {"$ref": "#/$defs/nonEmptyString"},
+            "block_type": {"const": "source_card"},
+            "title": {"$ref": "#/$defs/nonEmptyString"},
+            "body": {"$ref": "#/$defs/nonEmptyString"},
+            "source": {"$ref": "#/$defs/nonEmptyString"},
+            "citation": {"$ref": "#/$defs/nonEmptyString"}
+          }
+        },
+        {
+          "additionalProperties": false,
+          "required": ["block_id", "block_type", "group_label", "members", "shared_task_refs"],
+          "properties": {
+            "block_id": {"$ref": "#/$defs/nonEmptyString"},
+            "block_type": {"const": "group_cohesion"},
+            "group_label": {"type": "string", "pattern": "^Group [ABC]$"},
+            "members": {"type": "array", "items": {"type": "string", "pattern": "^Group [ABC]$"}},
+            "shared_task_refs": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/nonEmptyString"}}
+          }
+        },
+        {
+          "additionalProperties": false,
+          "required": ["block_id", "block_type"],
+          "properties": {
+            "block_id": {"$ref": "#/$defs/nonEmptyString"},
+            "block_type": {"const": "page_break"}
+          }
+        },
+        {
+          "additionalProperties": false,
+          "required": ["block_id", "block_type", "text"],
+          "properties": {
+            "block_id": {"$ref": "#/$defs/nonEmptyString"},
+            "block_type": {"const": "student_note"},
+            "text": {"$ref": "#/$defs/nonEmptyString"}
+          }
+        },
+        {
+          "additionalProperties": false,
+          "required": ["block_id", "block_type", "stems"],
+          "properties": {
+            "block_id": {"$ref": "#/$defs/nonEmptyString"},
+            "block_type": {"const": "sentence_support"},
+            "stems": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/nonEmptyString"}}
+          }
+        },
+        {
+          "additionalProperties": false,
+          "required": ["block_id", "block_type", "prompt", "cognitive_demand", "targets_hardest_case"],
+          "properties": {
+            "block_id": {"$ref": "#/$defs/nonEmptyString"},
+            "block_type": {"const": "exit_ticket"},
+            "prompt": {"$ref": "#/$defs/nonEmptyString"},
+            "cognitive_demand": {"type": "string", "enum": ["recall", "apply", "analyze", "evaluate", "create"]},
+            "targets_hardest_case": {"const": true}
+          }
+        }
+      ]
     }
   },
   "properties": {

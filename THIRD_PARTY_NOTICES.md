@@ -55,10 +55,25 @@ MIT License text: https://opensource.org/license/mit
 
 ---
 
-## 3. National curriculum data (GEPAI backup) — NON-DISTRIBUTED
+## 3. National curriculum data (GEPAI backup) — owner-authorized MIT redistribution (dataset), provenance-unverified
 
-The 2022-revision achievement-standard search index is built by a **local, non-distributed**
-import of the GEPAI Supabase backup. Its redistribution license is unverified, so the raw
-and normalized data live only under gitignored `providers/_local/` and are **never committed**
-or shipped. National-standard text is only surfaced downstream after `:web` verification
-against an official public source (NCIC / 교육부 고시) whose public terms are determinable.
+The 2022-revision achievement-standard search index is a **local normalization** of the GEPAI
+Supabase backup. The **raw** source is never committed. The **normalized public bundle** at
+`providers/curriculum/bundle/2022/{normalized.jsonl,manifest.json}` is committed under an
+**owner-authorized MIT** redistribution: the repository owner (`wnsdl` / Park Jun-il) is the
+copyright holder and has authorized MIT redistribution of the normalized dataset.
+
+- Bundle manifest: `license_id: "MIT"`, `license_authority: "owner-authorized-mit"`,
+  `distribution: "owner-authorized-mit"`, `official_source: false`.
+- Deterministic generation: the exact external source (`source_sha256:
+  3e27351e78b76a01520f9dfb9b46dd6cc845ac7bab5dccbc0c7eeeff848aa91d`) is hash-verified BEFORE
+  generation; the bundle carries no time-dependent release id and recounts hermetically to
+  **3,274 records = 2,952 usable + 322 quarantined** (elementary 5~6 no-bracket set flagged as
+  2015 mixed-revision).
+
+**Distribution ≠ authority.** Owner-authorized MIT redistribution is a *copyright* fact only.
+This is **owner-provided data, NOT an official Ministry (교육부 / NCIC) source**. Every record
+ships provenance-unverified (`source.license_status: "unverified"`, `source.verified: false`,
+`source.url: null`) and stays downstream **fail-closed** until independently verified via
+`verify_standard()`. National-standard text becomes downstream-ready only after `:web`
+verification against an official public source whose public terms are determinable.

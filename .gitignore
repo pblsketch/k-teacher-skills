@@ -13,5 +13,8 @@ node_modules/
 __pycache__/
 *.py[cod]
 
-# Non-distributed provider working data (license unverified) — never committed
+# Non-distributed provider working data — never committed
 providers/_local/
+
+# Generated worksheet and QA artifacts — keep local, never commit
+artifacts/

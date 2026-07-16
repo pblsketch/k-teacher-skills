@@ -13,6 +13,21 @@ from .builder import (
     TeacherApprovalGate,
     STUDENT_FORBIDDEN_TERMS,
 )
+from . import worksheet
+from .worksheet import (
+    BLOCK_TYPES,
+    build_worksheet_ir,
+    worksheet_document,
+    build_quick_draft_worksheet_ir,
+    check_physical_workload,
+    estimated_minutes,
+    iter_block_string_leaves,
+    iter_block_forbidden_keys,
+    demo_worksheet_blocks,
+    STANDALONE_QUICK_DRAFT_MARKER,
+    STUDENT_FACET_FORBIDDEN_KEYS,
+    FACET_LEAK_PATTERNS,
+)
 
 __all__ = [
     "SharedRegistry",
@@ -21,4 +36,17 @@ __all__ = [
     "check_bidirectional_alignment",
     "TeacherApprovalGate",
     "STUDENT_FORBIDDEN_TERMS",
+    "worksheet",
+    "BLOCK_TYPES",
+    "build_worksheet_ir",
+    "worksheet_document",
+    "build_quick_draft_worksheet_ir",
+    "check_physical_workload",
+    "estimated_minutes",
+    "iter_block_string_leaves",
+    "iter_block_forbidden_keys",
+    "demo_worksheet_blocks",
+    "STANDALONE_QUICK_DRAFT_MARKER",
+    "STUDENT_FACET_FORBIDDEN_KEYS",
+    "FACET_LEAK_PATTERNS",
 ]

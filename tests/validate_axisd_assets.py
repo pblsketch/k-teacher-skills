@@ -20,7 +20,7 @@ SKILLS = [
     "secondary-material-builder",
     "material-rubric-qa",
 ]
-SUBJECT_REFS = ["science.md", "korean-language.md", "social-studies.md"]
+SUBJECT_REFS = ["science.md", "korean-language.md", "social-studies.md", "math.md"]
 US_STANDARD_TERMS = ["Common Core", "NGSS", "C3 Framework", "WIDA", "state standards"]
 
 
@@ -37,9 +37,15 @@ def test_third_party_notices() -> None:
     assert_true("MIT" in t, "MIT attribution present")
     assert_true("no" in t.lower() and "copied" in t.lower(), "explicit no-code-copied notice")
     assert_true("Change notice" in t, "Apache change-notice clause present")
-    assert_true("NON-DISTRIBUTED" in t or "non-distributed" in t, "GEPAI non-distribution recorded")
+    assert_true("owner-authorized MIT" in t or "owner-authorized-mit" in t, "GEPAI owner-authorized-MIT distribution recorded")
+    assert_true("NOT an official Ministry" in t, "GEPAI not-official-source (distribution != authority) recorded")
+    assert_true("provenance-unverified" in t and "fail-closed" in t, "GEPAI records provenance-unverified / fail-closed recorded")
     # US standards mentioned only in the 'NOT taken' context.
     assert_true("no United States standards" in t or "NOT ... standards" in t or "no ... standards" in t.replace("**", "") or "no **United States standards" in t or "not take" in t.lower(), "US standards explicitly excluded")
+    # L2: the notices file must end with exactly one trailing newline (no missing/duplicate EOL).
+    raw = p.read_bytes()
+    assert_true(raw.endswith(b"\n") and not raw.endswith(b"\n\n"),
+                "THIRD_PARTY_NOTICES.md must end with exactly one trailing newline")
 
 
 def test_skill_docs() -> None:
@@ -82,9 +88,9 @@ def main() -> None:
     test_skill_docs()
     test_subject_references()
     print("PASS validate_axisd_assets")
-    print("- THIRD_PARTY_NOTICES: Apache-2.0 (ideas-only) + MIT + change-notice + GEPAI non-distribution")
+    print("- THIRD_PARTY_NOTICES: Apache-2.0 (ideas-only) + MIT + change-notice + GEPAI owner-authorized-MIT (NOT official, fail-closed)")
     print("- 6 school-materials skills authored (independent, observable failures, fail-closed authority)")
-    print("- 3 subject references: observable failures, misconception what+why+response, rigor, exit ticket, no US standards")
+    print("- 4 subject references: observable failures, misconception what+why+response, rigor, exit ticket, no US standards")
 
 
 if __name__ == "__main__":
