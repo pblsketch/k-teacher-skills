@@ -1,0 +1,8 @@
+{
+  "approval_id": "apr-teacher-2026-pilot-science",
+  "decision": "approved",
+  "approver_role": "teacher",
+  "scope": {"school_level": "중학교", "grade": 2, "subject": "과학", "school_year": 2026},
+  "granted_at": "2026-07-16T00:00:00Z",
+  "note": "합성 승인 레코드 (실제 개인정보 없음). 교사가 국가 성취기준 대조와 2차 자료 사용을 승인함."
+}

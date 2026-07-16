@@ -78,7 +78,7 @@ def require_schema_contract(schema: dict) -> None:
 
     provider_identity = defs.get("providerIdentity", {})
     assert_true(
-        provider_identity.get("properties", {}).get("provider_kind", {}).get("enum") == ["curriculum-provider", "textbook-provider", "web-source"],
+        provider_identity.get("properties", {}).get("provider_kind", {}).get("enum") == ["curriculum-provider", "textbook-provider", "web-source", "school-evaluation-plan-provider"],
         "providerIdentity.provider_kind enum mismatch",
     )
 
@@ -90,6 +90,15 @@ def require_schema_contract(schema: dict) -> None:
     assert_true(
         source_license.get("properties", {}).get("status", {}).get("enum") == ["verified-compatible", "verified-restricted", "prohibited", "unknown"],
         "sourceLicenseState.status enum mismatch",
+    )
+
+    assert_true(
+        source_license.get("properties", {}).get("license_authority", {}).get("enum") == ["public-license", "teacher-authorized-public-disclosure"],
+        "sourceLicenseState.license_authority (AR-1) must be an optional public-license vs teacher-authorized-public-disclosure enum",
+    )
+    assert_true(
+        "license_authority" not in source_license.get("required", []),
+        "sourceLicenseState.license_authority must stay optional (non-breaking)",
     )
 
     verification_anchor = provenance_record.get("properties", {}).get("verification_anchor", {})

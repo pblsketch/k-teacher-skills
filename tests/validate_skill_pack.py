@@ -245,7 +245,7 @@ def validate_manifest_entry_skill_exact(text: str) -> None:
 
 def validate_manifest_validation_lane_exact(text: str) -> None:
     assert (
-        '"validationCommand": "python tests/validate_skill_pack.py && python tests/validate_workflow_envelope.py && python tests/validate_lesson_package_ir.py && python tests/validate_backport_marker.py && python tests/validate_renderer_parity.py && python tests/validate_release_gate_assets.py"'
+        '"validationCommand": "python tests/validate_skill_pack.py && python tests/validate_workflow_envelope.py && python tests/validate_lesson_package_ir.py && python tests/validate_backport_marker.py && python tests/validate_renderer_parity.py && python tests/validate_release_gate_assets.py && python tests/validate_public_surface_regressions.py && python tests/validate_provider_skills.py"'
         in text
     ), "skill-pack.json validation lane drift"
 
@@ -657,7 +657,7 @@ def main() -> None:
     )
     assert (
         manifest["validationCommand"]
-        == "python tests/validate_skill_pack.py && python tests/validate_workflow_envelope.py && python tests/validate_lesson_package_ir.py && python tests/validate_backport_marker.py && python tests/validate_renderer_parity.py && python tests/validate_release_gate_assets.py"
+        == "python tests/validate_skill_pack.py && python tests/validate_workflow_envelope.py && python tests/validate_lesson_package_ir.py && python tests/validate_backport_marker.py && python tests/validate_renderer_parity.py && python tests/validate_release_gate_assets.py && python tests/validate_public_surface_regressions.py && python tests/validate_provider_skills.py"
     ), "manifest validation command drift"
     release_gate_assets = manifest["releaseGateAssets"]
     assert release_gate_assets["semanticEvalFixture"] == "tests/golden/semantic-eval/valid.json", (

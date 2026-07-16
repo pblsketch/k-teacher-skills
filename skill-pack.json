@@ -181,6 +181,15 @@
       "chain": ["improve-lesson-architecture", "udl-barrier-remover", "lesson-prototype", "to-lesson-brief"]
     }
   ],
+  "providerSkills": [
+    {"name": "school-evaluation-plan-to-materials", "path": "skills/school-materials/school-evaluation-plan-to-materials", "class": "provider-orchestration", "role": "학교 평가계획+국가 성취기준 → 학생·교사 2차 자료 오케스트레이터"},
+    {"name": "school-plan-grounding", "path": "skills/school-materials/school-plan-grounding", "class": "provider-orchestration", "role": "학교 공시 평가계획 grounding: pin·교사승인 fallback·PII mask-or-block"},
+    {"name": "standard-alignment-verify", "path": "skills/school-materials/standard-alignment-verify", "class": "provider-orchestration", "role": "평가계획 코드 ↔ 국가 성취기준 대조/additive 승격/격리"},
+    {"name": "assessment-evidence-builder", "path": "skills/school-materials/assessment-evidence-builder", "class": "provider-orchestration", "role": "평가계획 → 관찰 가능한 평가 증거·성공 기준·최난 출구표"},
+    {"name": "secondary-material-builder", "path": "skills/school-materials/secondary-material-builder", "class": "provider-orchestration", "role": "single IR → 학생·교사·학부모 문서 파생, 교사 승인 gate"},
+    {"name": "material-rubric-qa", "path": "skills/school-materials/material-rubric-qa", "class": "provider-orchestration", "role": "루브릭·양방향 정합성·rigor·PII 최종 QA"}
+  ],
+  "providerSkillsNote": "provider-orchestration 스킬은 17개 Gate-v2 인터뷰/설계 스킬과 다른 클래스입니다. routing-gate-registry(closed-world, 17 Claude-plugin 스킬)·.claude-plugin/plugin.json·marketplace.json은 인터뷰 스킬 projection으로 유지되며 provider 스킬을 포함하지 않습니다.",
   "routerFirstPrompt": "k-teacher-workflow-router로 내 요청을 분석하고 적절한 K-Teacher Skills workflow를 시작해줘.",
-  "validationCommand": "python tests/validate_skill_pack.py && python tests/validate_workflow_envelope.py && python tests/validate_lesson_package_ir.py && python tests/validate_backport_marker.py && python tests/validate_renderer_parity.py && python tests/validate_release_gate_assets.py"
+  "validationCommand": "python tests/validate_skill_pack.py && python tests/validate_workflow_envelope.py && python tests/validate_lesson_package_ir.py && python tests/validate_backport_marker.py && python tests/validate_renderer_parity.py && python tests/validate_release_gate_assets.py && python tests/validate_public_surface_regressions.py && python tests/validate_provider_skills.py"
 }

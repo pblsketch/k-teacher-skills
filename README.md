@@ -149,13 +149,50 @@ k-teacher-workflow-router로 내 요청을 분석하고 적절한 K-Teacher Skil
 - workflows: 10개
 - canonical new-lesson workflow: `new-lesson-package` → `workflows/new-lesson-design.md`
 - install targets: Codex, Claude Code, Google Antigravity
-- validation lane: `python tests/validate_skill_pack.py && python tests/validate_workflow_envelope.py && python tests/validate_lesson_package_ir.py && python tests/validate_backport_marker.py && python tests/validate_renderer_parity.py && python tests/validate_release_gate_assets.py`
+- validation lane (8 validators): `python tests/validate_skill_pack.py && python tests/validate_workflow_envelope.py && python tests/validate_lesson_package_ir.py && python tests/validate_backport_marker.py && python tests/validate_renderer_parity.py && python tests/validate_release_gate_assets.py && python tests/validate_public_surface_regressions.py && python tests/validate_provider_skills.py`
 - release-gate fixtures: `tests/golden/semantic-eval/valid.json`, `tests/golden/release-observability/valid.json`
 - semantic eval은 `workflow-envelope`, `lesson-package-ir`, `kteacher-backport-marker`, `renderer-parity` deterministic validator가 모두 통과된 뒤에만 실행되며, deterministic 실패를 override하지 않습니다.
 - semantic eval dimensions: `workflow-selection-quality`, `pedagogy-quality`, `rigor-preservation`, `usability-accessibility`, `post-verification-curriculum-alignment-quality`
 - observability counters: `entry_mode_counts`, `resume_mode_counts`, `open_boundary_counts_by_category_output_class`, `blocked_output_reasons_by_class`, `backport_enforcement_failures_by_format`, `udl_vs_differentiated_workflow_entry_counts`, `public_surface_drift_failures` (README / `skill-pack.json` / `.claude-plugin/plugin.json` / `.claude-plugin/marketplace.json` 포함)
 
 자세한 workflow 연결은 `WORKFLOWS.md`를 참고하세요.
+
+## Curriculum & school-plan providers (grounding)
+
+이 저장소는 provider/provenance/license/fail-closed **계약과 fixture**를 갖추고 있으며, `providers/`에 실제 조회 provider가 연결됩니다.
+
+- **국가 2022 성취기준 provider** (`providers/curriculum`): GEPAI 백업을 **비배포(local-only, gitignored `providers/_local/`)**로 정규화(대괄호·학년군 오기·혼합개정 격리)해 read-only 조회(`lookup_standard_by_code`/`search_standards`/`list_standards`/`verify_standard`)를 제공합니다. 국가 원문은 공식 NCIC/교육부 웹 검증(`:web`)으로만 downstream-ready가 되며 미검증은 fail-closed입니다.
+- **학교 공시 평가계획 adapter** (`providers/school_evaluation`): [schoolinfo-mcp](https://github.com/chrisryugj/schoolinfo-mcp)(MIT) 계약(`find_school`/`get_evaluation_plan`/local `parse_evaluation_file`)을 독자 구현으로 미러링합니다. 학교·연도·학년·교과 pin, current→previous fallback은 **교사 승인 후에만**, PII는 mask-or-block(불가 시 차단), 원문은 anchor(URL·파일명·hash·조회시점·section/page/table)로만 참조합니다.
+- **정렬/승격/격리** (`providers/alignment`): 평가계획 코드는 국가 성취기준과 정확 대조된 경우에만 **별도** 국가 `curriculum-record`로 additive 승격되고, 불일치·혼합개정은 격리됩니다.
+
+### Authority hierarchy (권위 계층)
+
+```
+국가 2022 성취기준 provider  >  학교 공시 평가계획  >  교사 제공 자료/판단  >  inferred
+```
+
+학교 운영계획은 국가 성취기준을 override할 수 없습니다. **최종 적용 판단은 항상 교사**입니다. 자세한 QA·안전장치 설명은 설명 문서 <https://pblsketch.github.io/k-teacher-skills/qa-remediation-explained.html> 를 참고하세요.
+
+### Provider-orchestration skills (별도 클래스, `skills/school-materials/`)
+
+17개 Gate-v2 인터뷰/설계 스킬과 **분리된 provider-orchestration 클래스**입니다. `registry.provider_skills` + `skill-pack.json`의 `providerSkills`로 정식 등록되며(closed-world 검증 `tests/validate_provider_skills.py` + negative mutation regression), 17개 인터뷰 스킬의 registry·plugin projection은 불변입니다.
+
+- `school-evaluation-plan-to-materials` (오케스트레이터) — 학교 평가계획+국가 성취기준 → 학생·교사 2차 자료
+- `school-plan-grounding` — 학교 공시 평가계획 pin·교사승인 fallback·PII mask-or-block
+- `standard-alignment-verify` — 평가계획 코드 ↔ 국가 성취기준 대조/additive 승격/격리
+- `assessment-evidence-builder` — 관찰 가능한 평가 증거·성공 기준·최난 출구표
+- `secondary-material-builder` — single IR → 학생·교사·학부모 문서, HWPX/DOCX/HTML parity
+- `material-rubric-qa` — 루브릭·양방향 정합성·rigor·PII 최종 QA
+
+### Constraints / license / provenance
+
+- GEPAI 원본·정규화 데이터는 재배포 라이선스 미검증이므로 repo에 커밋하지 않습니다(비배포 로컬 인덱스만). 학교 평가계획 원문·PII·인증키도 커밋하지 않습니다.
+- 차용 출처·경계는 `THIRD_PARTY_NOTICES.md`에 기록합니다(anthropics Apache-2.0 아이디어 차용·비복사, schoolinfo MIT). 미국 표준 프레임워크는 사용하지 않습니다.
+- provider/provenance/license 중 하나라도 비면 fail-closed. AR-1 `license_authority`로 공개 라이선스와 교사 승인 공시를 구분합니다.
+
+### Roadmap
+
+- 국가 성취기준 `:web` 라이브 검증 확대(현재 공식 소스 자동 매칭은 환경 의존), 학교 평가계획 라이브 조회(유효 인증키 필요).
 
 ## Included skills
 

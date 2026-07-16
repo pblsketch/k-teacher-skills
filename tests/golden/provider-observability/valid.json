@@ -1,0 +1,16 @@
+{
+  "fixture_version": "1",
+  "scope": "provider-and-materials",
+  "note": "Additive provider observability. Does NOT replace the locked release-gate observability contract (7 counters); it adds provider/quarantine/pii/school-plan/alignment counters for the new grounding layer. Values reflect the real GEPAI import + adapter/masking behavior.",
+  "counters": {
+    "provider_lookup_outcomes": {"ok": 1, "quarantined": 0, "not_found": 0, "disambiguation": 0},
+    "curriculum_import_quarantine_counts": {"mixed_revision": 322, "unparseable_code": 0, "grade_corrected": 3, "bracket_normalized": 322, "natural_key_collision": 0},
+    "curriculum_import_totals": {"records": 3274, "ok": 2952, "quarantined": 322},
+    "web_verification_outcomes": {"verified": 0, "unreachable_or_unmatched": 1},
+    "pii_masking_events": {"masked": 3, "blocked": 1, "clean": 0},
+    "school_plan_fallback_counts": {"current": 1, "approved_previous": 1, "auto_denied_without_approval": 1},
+    "school_plan_live_fetch_outcomes": {"ok": 0, "invalid_api_key_blocked": 1, "needs_ocr_or_manual": 0},
+    "alignment_outcomes": {"aligned": 1, "quarantined": 2},
+    "teacher_approval_gate": {"approved": 1, "blocked_no_approval": 1, "blocked_facet_or_alignment": 1}
+  }
+}

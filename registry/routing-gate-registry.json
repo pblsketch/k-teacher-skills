@@ -1,6 +1,73 @@
 {
   "$schema": "../schemas/routing-gate-registry.schema.json",
   "registry_version": "1",
+  "provider_skills": {
+    "ownership": "canonical",
+    "skill_class": "provider-orchestration",
+    "authority_note": "국가 2022 성취기준 provider > 학교 공시 평가계획 > 교사 자료/판단 > inferred. 이 클래스는 17개 Gate-v2 인터뷰/설계 스킬과 분리된 provider-orchestration 클래스이며 Gate-v2 인터뷰 계약을 따르지 않는다. registry.skills(17)와 plugin projection은 불변.",
+    "skills": {
+      "school-evaluation-plan-to-materials": {
+        "skill_id": "school-evaluation-plan-to-materials",
+        "skill_path": "skills/school-materials/school-evaluation-plan-to-materials",
+        "type": "orchestrator",
+        "direct_entry": true,
+        "dependencies": ["school-plan-grounding", "standard-alignment-verify", "assessment-evidence-builder", "secondary-material-builder", "material-rubric-qa"],
+        "outputs": ["student-materials", "teacher-materials", "parent-notice"],
+        "fail_closed_boundaries": ["provider-unavailable", "quarantine", "pii-unmasked", "teacher-approval-missing"],
+        "workflow_membership": "school-evaluation-plan-to-materials"
+      },
+      "school-plan-grounding": {
+        "skill_id": "school-plan-grounding",
+        "skill_path": "skills/school-materials/school-plan-grounding",
+        "type": "specialist",
+        "direct_entry": false,
+        "dependencies": ["providers/school_evaluation"],
+        "outputs": ["pinned-masked-plan", "source-anchors"],
+        "fail_closed_boundaries": ["pii-unmaskable-block", "unapproved-previous-year-fallback"],
+        "workflow_membership": "school-evaluation-plan-to-materials"
+      },
+      "standard-alignment-verify": {
+        "skill_id": "standard-alignment-verify",
+        "skill_path": "skills/school-materials/standard-alignment-verify",
+        "type": "specialist",
+        "direct_entry": false,
+        "dependencies": ["providers/curriculum", "providers/alignment"],
+        "outputs": ["national-curriculum-record", "quarantine-entries"],
+        "fail_closed_boundaries": ["natural-key-mismatch-quarantine", "unverified-national-fail-closed", "no-school-to-curriculum-record-promotion"],
+        "workflow_membership": "school-evaluation-plan-to-materials"
+      },
+      "assessment-evidence-builder": {
+        "skill_id": "assessment-evidence-builder",
+        "skill_path": "skills/school-materials/assessment-evidence-builder",
+        "type": "specialist",
+        "direct_entry": false,
+        "dependencies": ["standard-alignment-verify"],
+        "outputs": ["learning-evidence", "success-criteria", "hardest-case-exit-ticket"],
+        "fail_closed_boundaries": ["activity-before-evidence", "rigor-drop"],
+        "workflow_membership": "school-evaluation-plan-to-materials"
+      },
+      "secondary-material-builder": {
+        "skill_id": "secondary-material-builder",
+        "skill_path": "skills/school-materials/secondary-material-builder",
+        "type": "specialist",
+        "direct_entry": false,
+        "dependencies": ["providers/materials", "renderers"],
+        "outputs": ["student-documents", "teacher-documents", "hwpx-docx-html-parity"],
+        "fail_closed_boundaries": ["facet-leak", "teacher-approval-missing", "bidirectional-alignment-broken"],
+        "workflow_membership": "school-evaluation-plan-to-materials"
+      },
+      "material-rubric-qa": {
+        "skill_id": "material-rubric-qa",
+        "skill_path": "skills/school-materials/material-rubric-qa",
+        "type": "specialist",
+        "direct_entry": false,
+        "dependencies": ["secondary-material-builder"],
+        "outputs": ["qa-report"],
+        "fail_closed_boundaries": ["rubric-not-observable", "pii-residual", "rigor-drop"],
+        "workflow_membership": "school-evaluation-plan-to-materials"
+      }
+    }
+  },
   "canonical_owner": {
     "registry_path": "registry/routing-gate-registry.json",
     "schema_path": "schemas/routing-gate-registry.schema.json",

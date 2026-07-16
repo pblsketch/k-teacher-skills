@@ -12,3 +12,6 @@ node_modules/
 # Python generated files
 __pycache__/
 *.py[cod]
+
+# Non-distributed provider working data (license unverified) — never committed
+providers/_local/

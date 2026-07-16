@@ -280,7 +280,8 @@
           "enum": [
             "curriculum-provider",
             "textbook-provider",
-            "web-source"
+            "web-source",
+            "school-evaluation-plan-provider"
           ]
         },
         "release_id": {
@@ -645,6 +646,14 @@
         "evidence_anchor"
       ],
       "properties": {
+        "license_authority": {
+          "type": "string",
+          "description": "AR-1 separation field. Distinguishes an intrinsically public license from a teacher-authorized use of public school disclosure. Optional and non-breaking; when present it must not weaken the fail-closed status gate.",
+          "enum": [
+            "public-license",
+            "teacher-authorized-public-disclosure"
+          ]
+        },
         "status": {
           "type": "string",
           "enum": [
@@ -806,6 +815,27 @@
             "properties": {
               "verification_evidence_type": {
                 "const": "provided-document"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "record_scope": {
+                "const": "curriculum-record"
+              }
+            },
+            "required": ["record_scope"]
+          },
+          "then": {
+            "properties": {
+              "provider": {
+                "properties": {
+                  "provider_kind": {
+                    "const": "curriculum-provider"
+                  }
+                }
               }
             }
           }

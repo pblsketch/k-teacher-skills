@@ -1,0 +1,33 @@
+{
+  "fixture_version": "1",
+  "scope": "school-evaluation-plan-to-materials",
+  "note": "Additive provider-workflow semantic eval across the canonical 5 dimensions. Runs only AFTER deterministic provider/alignment/renderer validators pass; never overrides them.",
+  "deterministic_precedence": ["provider_authority", "curriculum_provider", "alignment", "renderer_spike", "materials"],
+  "dimensions": {
+    "workflow-selection-quality": {
+      "criterion": "실제 학교 평가계획 + 국가 성취기준이 있을 때 school-evaluation-plan-to-materials 오케스트레이터로 라우팅되는가",
+      "pass_requires": "provider grounding 존재 시 provider 워크플로 선택",
+      "conditional": false
+    },
+    "pedagogy-quality": {
+      "criterion": "평가 증거가 활동보다 먼저 도출되고 성취기준 동사와 연결되는가",
+      "pass_requires": "assessment-evidence-builder가 성취기준 동사 -> 관찰 가능한 증거를 산출",
+      "conditional": false
+    },
+    "rigor-preservation": {
+      "criterion": "차별화/학생 경로에서 성취기준 최난 요구가 삭제되지 않는가",
+      "pass_requires": "hardest-case exit ticket 존재 + 기초 경로가 인지 요구 유지",
+      "conditional": false
+    },
+    "usability-accessibility": {
+      "criterion": "학생/교사 문서가 facet 분리되고 쓰기 공간 물리성이 있으며 PII가 없는가",
+      "pass_requires": "학생 문서에 교사용 언어 없음 + 쓰기 공간 + 마스킹 완료",
+      "conditional": false
+    },
+    "post-verification-curriculum-alignment-quality": {
+      "criterion": "학교 평가계획 코드가 국가 성취기준과 대조 검증된 뒤에만 curriculum-record로 인용되는가",
+      "pass_requires": "정렬 성공만 additive 국가 record; 불일치/혼합개정은 quarantine; 미검증은 fail-closed",
+      "conditional": false
+    }
+  }
+}
