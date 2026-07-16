@@ -162,6 +162,12 @@ ambiguity = 1 - (intent·0.25 + learner·0.15 + evidence·0.25 + misconception·
 - 교사가 확인·정정하면 → `:provided`로 격상되어 transcript에 갱신 표시.
 - 인터넷 검색으로 출처 확인되면 → `:web`으로 격상.
 - `:inferred` 상태로는 산출물(활동지·평가지·루브릭)에 해당 사실 항목을 *직접 인용 금지*. 산출물에 등장할 때는 "(추정)" 표시 유지하거나 격상된 등급에서만 인용.
+- unresolved `:inferred` 사실이 하나라도 남아 있으면 provenance가 아직 풀리지 않은 상태로 본다. 이 상태에서는 `to-lesson-brief` downstream-ready handoff, `author-ir`, `render`를 unblock하지 않는다. handoff에는 해당 항목을 blocking fact로 남긴다.
+- provider가 제공한 원문·응답은 read-only input으로만 취급한다. downstream 단계는 이를 `provider` record로만 들고 가며 `read_only_input: true`를 유지한 채 provenance를 우회해 ready 상태를 만들면 안 된다.
+- downstream-ready 결론은 summary 문구만으로 만들지 않는다. provider / provenance / license evidence를 각 record 단위로 보존하고, 각 record의 `provider` · `provenance_grade` · `source_reference` · `verification_evidence_type` · `verification_anchor` · `source_license.status` · `source_license.license_id` · `source_license.evidence_anchor` · `read_only_input`이 모두 맞아야 clearance 근거가 된다.
+- provider / provenance / license 중 하나라도 비어 있거나 unresolved면 fail-closed로 유지한다. 특히 `source_license.status`가 `verified-compatible`이 아니면 downstream-ready를 열지 않는다.
+- `:provided`/`:web`로 provenance가 풀려도 downstream-ready 출력에는 별도의 `provider` · `source_license.status` · `source_license.license_id` · `source_license.evidence_anchor` · `read_only_input` evidence가 계속 필요하다. provenance 해결만으로는 unblock되지 않는다.
+- mixed-revision 또는 source/version/raw→normalized trace가 정리되지 않은 provider record는 `quarantined`로 격리한다. 이 상태에서는 downstream-ready handoff, `author-ir`, `render`를 unblock하지 않는다.
 
 **Stateless dialectic rhythm heuristic (자기 검사, 매 라운드):**
 - 직전 transcript의 *가장 최근 두 항목 라벨*을 점검한다.

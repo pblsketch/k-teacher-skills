@@ -1,0 +1,1293 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pblsketch.github.io/k-teacher-skills/schemas/lesson-package-ir.schema.json",
+  "title": "K-Teacher Lesson Package IR",
+  "description": "Canonical stage-1 JSON authoring IR for workflow-approved lesson packages. Rendered HWPX/DOCX/HTML artifacts are derivative outputs and may not add authoritative semantics.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "ir_schema_version",
+    "ir_id",
+    "ir_revision_id",
+    "workflow_id",
+    "workflow_envelope_revision_id",
+    "authoritative_source",
+    "approval_state",
+    "handoff_mode",
+    "authoring_status",
+    "teacher_judgment_boundaries",
+    "provider_contract",
+    "provenance_ledger",
+    "lesson_package"
+  ],
+  "$defs": {
+    "revisionId": {
+      "type": "string",
+      "pattern": "^rev-[0-9]{4,}$"
+    },
+    "envelopeRevisionId": {
+      "type": "string",
+      "pattern": "^env-[0-9]{4,}$"
+    },
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1
+    },
+    "outputClass": {
+      "type": "string",
+      "enum": [
+        "handoff",
+        "author-ir",
+        "render"
+      ]
+    },
+    "anchorRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "anchor_type",
+        "anchor_value"
+      ],
+      "properties": {
+        "anchor_type": {
+          "type": "string",
+          "enum": [
+            "transcript",
+            "handoff-artifact",
+            "provider-record",
+            "provider-release-manifest",
+            "url"
+          ]
+        },
+        "anchor_value": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "approvalRecordRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "approval_id",
+        "decision"
+      ],
+      "properties": {
+        "approval_id": {
+          "type": "string",
+          "pattern": "^apr-[A-Za-z0-9._-]+$"
+        },
+        "decision": {
+          "type": "string",
+          "enum": [
+            "approved",
+            "rejected",
+            "revoked"
+          ]
+        }
+      }
+    },
+    "teacherJudgmentBoundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "boundary_id",
+        "category",
+        "description",
+        "affected_output_classes",
+        "blocking_severity",
+        "resolution",
+        "allowed_next_ops_while_open",
+        "created_by",
+        "last_updated_round"
+      ],
+      "properties": {
+        "boundary_id": {
+          "type": "string",
+          "pattern": "^tj-[A-Za-z0-9._-]+$"
+        },
+        "category": {
+          "type": "string",
+          "enum": [
+            "goal-priority",
+            "evidence-definition",
+            "curriculum-selection",
+            "difficulty-tradeoff",
+            "artifact-scope",
+            "grouping-policy",
+            "accessibility-accommodation",
+            "assessment-weighting",
+            "sensitive-topic-handling",
+            "teacher-style-choice"
+          ]
+        },
+        "description": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "affected_output_classes": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/outputClass"
+          }
+        },
+        "blocking_severity": {
+          "type": "string",
+          "enum": [
+            "hard",
+            "soft"
+          ]
+        },
+        "resolution": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "status",
+            "teacher_confirmation",
+            "supporting_evidence"
+          ],
+          "properties": {
+            "status": {
+              "type": "string",
+              "enum": [
+                "open",
+                "resolved"
+              ]
+            },
+            "teacher_confirmation": {
+              "$ref": "#/$defs/teacherConfirmation"
+            },
+            "supporting_evidence": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/supportingEvidence"
+              }
+            },
+            "approval_record": {
+              "$ref": "#/$defs/approvalRecordRef"
+            }
+          },
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "status": {
+                    "const": "open"
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "teacher_confirmation": {
+                    "properties": {
+                      "confirmed": {
+                        "const": false
+                      }
+                    }
+                  }
+                }
+              },
+              "else": {
+                "required": [
+                  "approval_record"
+                ],
+                "properties": {
+                  "teacher_confirmation": {
+                    "properties": {
+                      "confirmed": {
+                        "const": true
+                      }
+                    }
+                  },
+                  "supporting_evidence": {
+                    "minItems": 1
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "allowed_next_ops_while_open": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "enum": [
+              "ask-question",
+              "summarize",
+              "judgment-only"
+            ]
+          }
+        },
+        "created_by": {
+          "type": "string",
+          "enum": [
+            "workflow",
+            "skill"
+          ]
+        },
+        "last_updated_round": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "providerContractSnapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "access_mode",
+        "provider_status",
+        "provenance_status",
+        "verification_status",
+        "source_license_status"
+      ],
+      "properties": {
+        "access_mode": {
+          "const": "read-only"
+        },
+        "provider_status": {
+          "const": "available"
+        },
+        "provenance_status": {
+          "const": "verified-non-inferred"
+        },
+        "verification_status": {
+          "const": "complete"
+        },
+        "source_license_status": {
+          "const": "verified-compatible"
+        }
+      },
+      "description": "Canonical IR proves the upstream provider cleanup/quarantine gate already cleared. Quarantined or unresolved provider inputs never validate here."
+    },
+    "providerIdentity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "provider_id",
+        "provider_kind",
+        "release_id",
+        "release_version"
+      ],
+      "properties": {
+        "provider_id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "provider_kind": {
+          "type": "string",
+          "enum": [
+            "curriculum-provider",
+            "textbook-provider",
+            "web-source"
+          ]
+        },
+        "release_id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "release_version": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "providerVerificationAnchor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "carrier",
+        "locator_type",
+        "locator_value"
+      ],
+      "properties": {
+        "carrier": {
+          "type": "string",
+          "minLength": 1
+        },
+        "locator_type": {
+          "type": "string",
+          "minLength": 1
+        },
+        "locator_value": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "oneOf": [
+        {
+          "properties": {
+            "carrier": {
+              "const": "provider-record"
+            },
+            "locator_type": {
+              "const": "provider-record-id"
+            },
+            "locator_value": {
+              "$ref": "#/$defs/nonEmptyString"
+            }
+          }
+        },
+        {
+          "properties": {
+            "carrier": {
+              "const": "provider-release-manifest"
+            },
+            "locator_type": {
+              "const": "release-id"
+            },
+            "locator_value": {
+              "$ref": "#/$defs/nonEmptyString"
+            }
+          }
+        },
+        {
+          "properties": {
+            "carrier": {
+              "const": "url"
+            },
+            "locator_type": {
+              "const": "absolute-url"
+            },
+            "locator_value": {
+              "type": "string",
+              "format": "uri",
+              "pattern": "^https?://"
+            }
+          }
+        }
+      ]
+    },
+    "teacherConfirmationAnchor": {
+      "$comment": "Teacher-confirmation anchors are transcript or handoff references inside the same IR payload. No external approval artifact namespace exists.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "carrier",
+        "locator_type",
+        "locator_value"
+      ],
+      "properties": {
+        "carrier": {
+          "type": "string",
+          "minLength": 1
+        },
+        "locator_type": {
+          "type": "string",
+          "minLength": 1
+        },
+        "locator_value": {}
+      },
+      "oneOf": [
+        {
+          "properties": {
+            "carrier": {
+              "const": "null"
+            },
+            "locator_type": {
+              "const": "null"
+            },
+            "locator_value": {
+              "type": "null"
+            }
+          }
+        },
+        {
+          "properties": {
+            "carrier": {
+              "const": "transcript"
+            },
+            "locator_type": {
+              "enum": [
+                "transcript-section",
+                "transcript-line-range"
+              ]
+            },
+            "locator_value": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        {
+          "properties": {
+            "carrier": {
+              "const": "handoff-artifact"
+            },
+            "locator_type": {
+              "const": "handoff-heading"
+            },
+            "locator_value": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      ]
+    },
+    "evidenceAnchor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "carrier",
+        "locator_type",
+        "locator_value"
+      ],
+      "properties": {
+        "carrier": {
+          "type": "string",
+          "minLength": 1
+        },
+        "locator_type": {
+          "type": "string",
+          "minLength": 1
+        },
+        "locator_value": {}
+      },
+      "oneOf": [
+        {
+          "properties": {
+            "carrier": {
+              "const": "transcript"
+            },
+            "locator_type": {
+              "enum": [
+                "transcript-section",
+                "transcript-line-range"
+              ]
+            },
+            "locator_value": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        {
+          "properties": {
+            "carrier": {
+              "const": "handoff-artifact"
+            },
+            "locator_type": {
+              "const": "handoff-heading"
+            },
+            "locator_value": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        {
+          "properties": {
+            "carrier": {
+              "const": "url"
+            },
+            "locator_type": {
+              "const": "absolute-url"
+            },
+            "locator_value": {
+              "type": "string",
+              "format": "uri",
+              "pattern": "^https?://"
+            }
+          }
+        }
+      ]
+    },
+    "supportingEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "anchor",
+        "sha256",
+        "detail"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "provided-document",
+            "web-verification"
+          ]
+        },
+        "anchor": {
+          "$ref": "#/$defs/evidenceAnchor"
+        },
+        "sha256": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[a-fA-F0-9]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "detail": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "web-verification"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "anchor": {
+                "properties": {
+                  "carrier": {
+                    "const": "url"
+                  },
+                  "locator_type": {
+                    "const": "absolute-url"
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "teacherConfirmation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "required",
+        "confirmed",
+        "confirmation_source",
+        "confirmation_anchor"
+      ],
+      "properties": {
+        "required": {
+          "const": true
+        },
+        "confirmed": {
+          "type": "boolean"
+        },
+        "confirmation_source": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "teacher-message",
+            "teacher-selection",
+            "teacher-approved-edit",
+            null
+          ]
+        },
+        "confirmation_anchor": {
+          "$ref": "#/$defs/teacherConfirmationAnchor"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "confirmed": {
+                "const": true
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "confirmation_source": {
+                "type": "string"
+              },
+              "confirmation_anchor": {
+                "not": {
+                  "properties": {
+                    "carrier": {
+                      "const": "null"
+                    }
+                  },
+                  "required": [
+                    "carrier"
+                  ]
+                }
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "confirmation_source": {
+                "const": null
+              },
+              "confirmation_anchor": {
+                "properties": {
+                  "carrier": {
+                    "const": "null"
+                  },
+                  "locator_type": {
+                    "const": "null"
+                  },
+                  "locator_value": {
+                    "type": "null"
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "sourceLicenseState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "license_id",
+        "evidence_anchor"
+      ],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": [
+            "verified-compatible",
+            "verified-restricted",
+            "prohibited",
+            "unknown"
+          ]
+        },
+        "license_id": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/nonEmptyString"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "evidence_anchor": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/providerVerificationAnchor"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "enum": [
+                  "verified-compatible",
+                  "verified-restricted",
+                  "prohibited"
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "license_id": {
+                "$ref": "#/$defs/nonEmptyString"
+              },
+              "evidence_anchor": {
+                "not": {
+                  "type": "null"
+                }
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "license_id": {
+                "type": "null"
+              },
+              "evidence_anchor": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "provenanceRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "record_id",
+        "record_scope",
+        "provider",
+        "provenance_grade",
+        "source_reference",
+        "verification_evidence_type",
+        "verification_anchor",
+        "source_license",
+        "read_only_input"
+      ],
+      "properties": {
+        "record_id": {
+          "type": "string",
+          "pattern": "^prov-[A-Za-z0-9._-]+$"
+        },
+        "record_scope": {
+          "type": "string",
+          "enum": [
+            "curriculum-context",
+            "curriculum-record"
+          ]
+        },
+        "provider": {
+          "$ref": "#/$defs/providerIdentity"
+        },
+        "provenance_grade": {
+          "type": "string",
+          "enum": [
+            ":provided",
+            ":web"
+          ]
+        },
+        "source_reference": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "verification_evidence_type": {
+          "type": "string",
+          "enum": ["provided-document", "web-verification"]
+        },
+        "verification_anchor": {
+          "$ref": "#/$defs/providerVerificationAnchor"
+        },
+        "source_license": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/sourceLicenseState"
+            },
+            {
+              "type": "object",
+              "required": ["status"],
+              "properties": {
+                "status": {
+                  "const": "verified-compatible"
+                }
+              }
+            }
+          ]
+        },
+        "read_only_input": {
+          "const": true
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "provenance_grade": {
+                "const": ":web"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "verification_evidence_type": {
+                "const": "web-verification"
+              },
+              "provider": {
+                "properties": {
+                  "provider_kind": {
+                    "const": "web-source"
+                  }
+                }
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "verification_evidence_type": {
+                "const": "provided-document"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "task": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "task_id",
+        "title",
+        "document_ids"
+      ],
+      "properties": {
+        "task_id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "title": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "document_ids": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/nonEmptyString"
+          }
+        }
+      }
+    },
+    "document": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "document_id",
+        "document_class",
+        "title",
+        "source_task_ids",
+        "render_targets"
+      ],
+      "properties": {
+        "document_id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "document_class": {
+          "type": "string",
+          "enum": [
+            "lesson-plan",
+            "worksheet",
+            "slides",
+            "assessment",
+            "rubric",
+            "teacher-guide",
+            "brief"
+          ]
+        },
+        "title": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "source_task_ids": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/nonEmptyString"
+          }
+        },
+        "render_targets": {
+          "const": [
+            "hwpx",
+            "docx",
+            "html"
+          ]
+        },
+        "content": {
+          "type": "object",
+          "description": "Renderer-consumed canonical content payload. Structure stays explicit JSON and remains authoritative over downstream rendered artifacts.",
+          "additionalProperties": true
+        }
+      }
+    }
+  },
+  "properties": {
+    "ir_schema_version": {
+      "const": "1"
+    },
+    "ir_id": {
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "ir_revision_id": {
+      "$ref": "#/$defs/revisionId"
+    },
+    "workflow_id": {
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "workflow_envelope_revision_id": {
+      "$ref": "#/$defs/envelopeRevisionId"
+    },
+    "authoritative_source": {
+      "const": "workflow-json-ir"
+    },
+    "approval_state": {
+      "type": "string",
+      "enum": [
+        "approved"
+      ],
+      "description": "IR authoring is fail-closed. Only approved workflow state may become canonical IR."
+    },
+    "handoff_mode": {
+      "type": "string",
+      "enum": [
+        "downstream-ready",
+        "blocked"
+      ],
+      "description": "Canonical IR may persist approved author-ir/render states even when handoff is blocked by hard boundaries. Context-only remains invalid for IR authoring, and IR authoring still stays fail-closed through the approved approval_state plus can-author-ir authoring_status requirements."
+    },
+    "authoring_status": {
+      "type": "string",
+      "enum": [
+        "can-author-ir"
+      ],
+      "description": "Fail-closed authoring flag frozen for stage 1."
+    },
+    "teacher_judgment_boundaries": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/teacherJudgmentBoundary"
+      }
+    },
+    "provider_contract": {
+      "$ref": "#/$defs/providerContractSnapshot"
+    },
+    "provenance_ledger": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/provenanceRecord"
+      }
+    },
+    "lesson_package": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "package_id",
+        "tasks",
+        "documents"
+      ],
+      "properties": {
+        "package_id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "tasks": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/task"
+          }
+        },
+        "documents": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/document"
+          }
+        }
+      },
+      "description": "Canonical package body for downstream rendered artifacts. Task/document linkage is explicit so parity checks stay machine-readable."
+    }
+  },
+  "allOf": [
+    {
+      "not": {
+        "properties": {
+          "teacher_judgment_boundaries": {
+            "contains": {
+              "type": "object",
+              "required": [
+                "blocking_severity",
+                "resolution",
+                "affected_output_classes"
+              ],
+              "properties": {
+                "blocking_severity": {
+                  "const": "hard"
+                },
+                "resolution": {
+                  "type": "object",
+                  "required": ["status"],
+                  "properties": {
+                    "status": {
+                      "const": "open"
+                    }
+                  }
+                },
+                "affected_output_classes": {
+                  "contains": {
+                    "const": "author-ir"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "not": {
+        "properties": {
+          "teacher_judgment_boundaries": {
+            "contains": {
+              "type": "object",
+              "required": [
+                "blocking_severity",
+                "resolution",
+                "affected_output_classes"
+              ],
+              "properties": {
+                "blocking_severity": {
+                  "const": "hard"
+                },
+                "affected_output_classes": {
+                  "contains": {
+                    "const": "author-ir"
+                  }
+                },
+                "resolution": {
+                  "type": "object",
+                  "required": ["status", "approval_record"],
+                  "properties": {
+                    "status": {
+                      "const": "resolved"
+                    },
+                    "approval_record": {
+                      "type": "object",
+                      "required": ["decision"],
+                      "properties": {
+                        "decision": {
+                          "enum": [
+                            "rejected",
+                            "revoked"
+                          ]
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "not": {
+        "properties": {
+          "teacher_judgment_boundaries": {
+            "contains": {
+              "type": "object",
+              "required": [
+                "blocking_severity",
+                "resolution",
+                "affected_output_classes"
+              ],
+              "properties": {
+                "blocking_severity": {
+                  "const": "hard"
+                },
+                "resolution": {
+                  "type": "object",
+                  "required": ["status"],
+                  "properties": {
+                    "status": {
+                      "const": "open"
+                    }
+                  }
+                },
+                "affected_output_classes": {
+                  "contains": {
+                    "const": "render"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "not": {
+        "properties": {
+          "teacher_judgment_boundaries": {
+            "contains": {
+              "type": "object",
+              "required": [
+                "blocking_severity",
+                "resolution",
+                "affected_output_classes"
+              ],
+              "properties": {
+                "blocking_severity": {
+                  "const": "hard"
+                },
+                "affected_output_classes": {
+                  "contains": {
+                    "const": "render"
+                  }
+                },
+                "resolution": {
+                  "type": "object",
+                  "required": ["status", "approval_record"],
+                  "properties": {
+                    "status": {
+                      "const": "resolved"
+                    },
+                    "approval_record": {
+                      "type": "object",
+                      "required": ["decision"],
+                      "properties": {
+                        "decision": {
+                          "enum": [
+                            "rejected",
+                            "revoked"
+                          ]
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "handoff_mode": {
+            "const": "downstream-ready"
+          }
+        }
+      },
+      "then": {
+        "not": {
+          "properties": {
+            "teacher_judgment_boundaries": {
+              "contains": {
+                "type": "object",
+                "required": [
+                  "blocking_severity",
+                  "resolution",
+                  "affected_output_classes"
+                ],
+                "properties": {
+                  "blocking_severity": {
+                    "const": "hard"
+                  },
+                  "affected_output_classes": {
+                    "contains": {
+                      "const": "handoff"
+                    }
+                  }
+                },
+                "anyOf": [
+                  {
+                    "properties": {
+                      "resolution": {
+                        "type": "object",
+                        "required": ["status"],
+                        "properties": {
+                          "status": {
+                            "const": "open"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "properties": {
+                      "resolution": {
+                        "type": "object",
+                        "required": ["status", "approval_record"],
+                        "properties": {
+                          "status": {
+                            "const": "resolved"
+                          },
+                          "approval_record": {
+                            "type": "object",
+                            "required": ["decision"],
+                            "properties": {
+                              "decision": {
+                                "enum": [
+                                  "rejected",
+                                  "revoked"
+                                ]
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "handoff_mode": {
+            "const": "blocked"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "teacher_judgment_boundaries": {
+            "contains": {
+              "type": "object",
+              "required": [
+                "blocking_severity",
+                "resolution",
+                "affected_output_classes"
+              ],
+              "properties": {
+                "blocking_severity": {
+                  "const": "hard"
+                },
+                "affected_output_classes": {
+                  "contains": {
+                    "const": "handoff"
+                  }
+                }
+              },
+              "anyOf": [
+                {
+                  "properties": {
+                    "resolution": {
+                      "type": "object",
+                      "required": ["status"],
+                      "properties": {
+                        "status": {
+                          "const": "open"
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "properties": {
+                    "resolution": {
+                      "type": "object",
+                      "required": ["status", "approval_record"],
+                      "properties": {
+                        "status": {
+                          "const": "resolved"
+                        },
+                        "approval_record": {
+                          "type": "object",
+                          "required": ["decision"],
+                          "properties": {
+                            "decision": {
+                              "enum": [
+                                "rejected",
+                                "revoked"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  ]
+}

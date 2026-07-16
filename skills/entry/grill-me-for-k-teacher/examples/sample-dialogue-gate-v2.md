@@ -222,6 +222,10 @@ Named context block (transcript-based, no persistent state):
 - 압박 패스 완료 (Round 2)
 - 다음 차시 미정 항목: 반대 의견 응답 도입, 짝 교환 도입
 - 교사 최종 판단 필요: 활동지 자가 점검 문구 톤(엄격 vs 격려)
+- Provenance 상태: curriculum/textbook 직접 인용 없음 (unresolved `:inferred` fact 0건)
+- Downstream-ready 상태: blocked — 이 named context는 transcript handoff 전용이며 `provider` · `provenance_grade` · `source_reference` · `verification_evidence_type` · `verification_anchor` · `source_license.status` · `source_license.license_id` · `source_license.evidence_anchor` · `read_only_input` record가 아직 없음
+- Clearance evidence record: none (`provider` / `provenance_grade` / `source_reference` / `verification_evidence_type` / `verification_anchor` / `source_license.status` / `source_license.license_id` / `source_license.evidence_anchor` / `read_only_input` 없이 summary 상태만으로 downstream-ready를 열지 않음)
+- Provider cleanup 상태: mixed-revision 또는 source/version/raw→normalized trace 미정리 record는 `quarantined`로 격리하며 downstream-ready handoff / `author-ir` / `render`를 열지 않음
 ```
 
 ---
@@ -259,12 +263,20 @@ AI는 성취기준 원문을 받지 못했다. 사전 학습 지식으로 추정
 > **추정입니다.** 제 학습 지식으로는 이 단원이 2022 개정 사회과 [5사03-04] 정도 ("시민의 권리와 책임을 ...")일 것 같지만 **신뢰도는 낮습니다**. 시도·출판사별 단원 번호 차이가 있을 수 있습니다.
 > **원문 한 줄만 알려주실 수 있을까요?** 확인되면 다음 질문으로 넘어가겠습니다.
 > `[from-curriculum:inferred]`
+>
+> **상태 메모:** `[from-curriculum:inferred]`가 unresolved인 동안에는 downstream-ready handoff / `author-ir` / `render`가 계속 blocked입니다.
 
 > 교사: 미래엔 5학년 2학기 3단원이고 성취기준은 [6사03-04] "인권 보장의 중요성을 인식하고 인권 신장을 위해 노력한 다양한 사례를 탐구한다."예요.
 
 > **AI:** 감사합니다. 성취기준이 갱신되었습니다.
 > "[6사03-04] 인권 보장의 중요성을 인식하고 인권 신장을 위해 노력한 다양한 사례를 탐구한다." (미래엔 5학년 2학기 3단원)
 > `[from-curriculum:provided]`
+>
+> **상태 메모:** curriculum fact의 provenance는 해결되었지만, `provider` · `source_license.status = verified-compatible` · `source_license.license_id` · `source_license.evidence_anchor` · `read_only_input: true` record를 아직 수집하지 않았으므로 downstream-ready handoff / `author-ir` / `render`는 여전히 blocked입니다.
+>
+> **상태 메모:** provider가 제공한 원문은 `provider` record에 묶인 read-only input으로만 취급합니다. `read_only_input: true`를 유지한 채 provider / provenance / license 중 하나라도 unresolved면 fail-closed로 유지합니다.
+>
+> **상태 메모:** downstream-ready clearance는 record 단위 evidence가 필요합니다. `provider` · `provenance_grade` · `source_reference` · `verification_evidence_type` · `verification_anchor` · `source_license.status` · `source_license.license_id` · `source_license.evidence_anchor` · `read_only_input`이 없는 summary 상태만으로는 열지 않습니다.
 >
 > 이제 핵심 동사는 *인식한다 / 탐구한다* 두 개로 좁혀집니다. Stage 1 첫 질문으로 넘어가겠습니다.
 > `[from-teacher-judgment]` ...
@@ -283,5 +295,10 @@ AI는 성취기준 원문을 받지 못했다. 사전 학습 지식으로 추정
 활동지·평가지·루브릭 *산출물*에 등장할 때:
 - `:provided` 또는 `:web` 등급 → 그대로 인용 가능.
 - `:inferred` 격상 안 된 채로 → 산출물에 직접 인용 금지. 격상 후이거나 "(추정)" 표시 유지.
+- unresolved `:inferred` 1건이라도 남아 있으면 `to-lesson-brief` downstream-ready handoff, `author-ir`, `render`로 넘기지 않는다.
+- provider가 제공한 원문·응답은 `provider` record의 read-only input으로만 취급한다. `read_only_input: true`를 유지한 채 downstream 단계가 이를 덮어써 provenance를 우회하지 않는다.
+- 각 provider/provenance/license record에 `provider` · `provenance_grade` · `source_reference` · `verification_evidence_type` · `verification_anchor` · `source_license.status` · `source_license.license_id` · `source_license.evidence_anchor` · `read_only_input`이 남아 있어야 clearance 근거가 된다.
+- provider / provenance / license 중 하나라도 비어 있거나 unresolved면 fail-closed로 유지한다. 특히 `source_license.status`가 `verified-compatible`이 아니면 downstream-ready를 열지 않는다.
+- `:provided` 또는 `:web`로 격상되더라도 `provider` · `source_license.status` · `source_license.license_id` · `source_license.evidence_anchor` · `read_only_input` evidence가 없으면 downstream-ready 상태를 열지 않는다.
 
 이 운영 룰은 `references/interview-readiness.md` §7 Provenance grading + Hallucination guard + Escalation rule을 따른다.

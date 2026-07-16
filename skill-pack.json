@@ -12,6 +12,36 @@
     "claude": "~/.claude/skills",
     "antigravity": "~/.gemini/antigravity/skills"
   },
+  "releaseGateAssets": {
+    "semanticEvalFixture": "tests/golden/semantic-eval/valid.json",
+    "semanticEvalDimensions": [
+      "workflow-selection-quality",
+      "pedagogy-quality",
+      "rigor-preservation",
+      "usability-accessibility",
+      "post-verification-curriculum-alignment-quality"
+    ],
+    "deterministicValidatorPrecedence": [
+      "workflow-envelope",
+      "lesson-package-ir",
+      "kteacher-backport-marker",
+      "renderer-parity"
+    ],
+    "observabilityFixture": "tests/golden/release-observability/valid.json",
+    "observabilityCounters": [
+      "entry_mode_counts",
+      "resume_mode_counts",
+      "open_boundary_counts_by_category_output_class",
+      "blocked_output_reasons_by_class",
+      "backport_enforcement_failures_by_format",
+      "udl_vs_differentiated_workflow_entry_counts",
+      "public_surface_drift_failures"
+    ],
+    "publicSurfaceDriftPluginMetadata": [
+      ".claude-plugin/plugin.json",
+      ".claude-plugin/marketplace.json"
+    ]
+  },
   "skills": [
     {
       "name": "grill-me-for-k-teacher",
@@ -101,17 +131,17 @@
   ],
   "workflows": [
     {
-      "name": "new-lesson-design",
+      "name": "new-lesson-package",
       "path": "workflows/new-lesson-design.md",
       "chain": ["grill-me-for-k-teacher", "assessment-first-design", "lesson-prototype", "to-lesson-brief"]
     },
     {
-      "name": "curriculum-grounded-redesign",
+      "name": "verified-curriculum-redesign",
       "path": "workflows/curriculum-grounded-redesign.md",
       "chain": ["grill-with-curriculum", "zoom-out-lesson", "assessment-first-design", "improve-lesson-architecture", "to-lesson-brief"]
     },
     {
-      "name": "lesson-failure-recovery",
+      "name": "failure-recovery",
       "path": "workflows/lesson-failure-recovery.md",
       "chain": ["diagnose-lesson-failure", "zoom-out-lesson", "lesson-prototype", "to-lesson-brief"]
     },
@@ -121,36 +151,36 @@
       "chain": ["improve-lesson-architecture", "assessment-first-design", "lesson-prototype", "to-lesson-brief"]
     },
     {
-      "name": "ai-resilient-assignment-redesign",
+      "name": "ai-resilient-assignment",
       "path": "workflows/ai-resilient-assignment-redesign.md",
       "chain": ["ai-resilient-assignment-redesign", "assessment-first-design", "to-lesson-brief"]
     },
     {
-      "name": "conceptual-inquiry-lesson",
+      "name": "conceptual-inquiry",
       "path": "workflows/conceptual-inquiry-lesson.md",
       "chain": ["grill-with-curriculum", "concept-based-inquiry-designer", "thinking-routine-selector", "assessment-first-design", "to-lesson-brief"]
     },
     {
-      "name": "differentiated-lesson-redesign",
+      "name": "differentiated-redesign",
       "path": "workflows/differentiated-lesson-redesign.md",
       "chain": ["diagnose-lesson-failure", "udl-barrier-remover", "differentiate-lesson-pathways", "lesson-prototype", "to-lesson-brief"]
     },
     {
-      "name": "assessment-quality-upgrade",
+      "name": "assessment-upgrade",
       "path": "workflows/assessment-quality-upgrade.md",
       "chain": ["assessment-first-design", "hinge-question-designer", "rubric-quality-guard", "to-lesson-brief"]
     },
     {
-      "name": "pbl-design-workflow",
+      "name": "pbl-design",
       "path": "workflows/pbl-design-workflow.md",
       "chain": ["zoom-out-lesson", "pbl-design-coach", "assessment-first-design", "rubric-quality-guard", "to-lesson-brief"]
     },
     {
-      "name": "udl-accessible-lesson-redesign",
+      "name": "udl-accessible-redesign",
       "path": "workflows/udl-accessible-lesson-redesign.md",
       "chain": ["improve-lesson-architecture", "udl-barrier-remover", "lesson-prototype", "to-lesson-brief"]
     }
   ],
   "routerFirstPrompt": "k-teacher-workflow-router로 내 요청을 분석하고 적절한 K-Teacher Skills workflow를 시작해줘.",
-  "validationCommand": "python tests/validate_skill_pack.py"
+  "validationCommand": "python tests/validate_skill_pack.py && python tests/validate_workflow_envelope.py && python tests/validate_lesson_package_ir.py && python tests/validate_backport_marker.py && python tests/validate_renderer_parity.py && python tests/validate_release_gate_assets.py"
 }

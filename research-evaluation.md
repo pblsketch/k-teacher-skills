@@ -229,6 +229,12 @@
 - "좋은 응답 / 나쁜 응답" 기준을 추가.
 - 실제 교사 1~3명에게 README만 주고 사용 가능한지 확인.
 
+추가 공개 계약(G005 release gate):
+
+- `tests/golden/semantic-eval/valid.json`은 semantic eval이 `workflow-envelope`·`lesson-package-ir`·`kteacher-backport-marker`·`renderer-parity` deterministic validator 실패 뒤에서만 실행되고, 그 실패를 override하지 못함을 고정합니다.
+- semantic eval 차원은 `workflow-selection-quality`, `pedagogy-quality`, `rigor-preservation`, `usability-accessibility`, `post-verification-curriculum-alignment-quality` 5개로 고정합니다.
+- `tests/golden/release-observability/valid.json`은 `entry_mode_counts`, `resume_mode_counts`, `open_boundary_counts_by_category_output_class`, `blocked_output_reasons_by_class`, `backport_enforcement_failures_by_format`, `udl_vs_differentiated_workflow_entry_counts`, `public_surface_drift_failures`를 공개 counter 계약으로 고정하며 `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json` drift를 포함합니다.
+
 ## Skill-by-Skill Evaluation
 
 ### `grill-me-for-k-teacher`: 8.6 / 10

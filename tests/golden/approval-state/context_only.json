@@ -1,0 +1,130 @@
+{
+  "workflow_envelope_version": "1",
+  "workflow_envelope_revision_id": "env-1002",
+  "workflow_id": "wf-context-only",
+  "workflow_type": "new-lesson-package",
+  "entry_mode": "direct-skill",
+  "parity_bootstrap": {
+    "required": true,
+    "completed": true,
+    "selected_workflow": "new-lesson-package",
+    "reason": "direct entry mapped to workflow"
+  },
+  "gate_v2": {
+    "profile": "Standard",
+    "threshold": 0.2,
+    "threshold_source": "skill-default",
+    "active_stage": "Stage 1 · Intent-first",
+    "fact_routing_labels": [
+      "from-curriculum",
+      "from-textbook",
+      "from-class-context",
+      "from-teacher-judgment"
+    ],
+    "provenance_grade_rules": {
+      "curriculum_or_textbook": [
+        ":provided",
+        ":web",
+        ":inferred"
+      ],
+      "never_unblock": [
+        ":inferred"
+      ]
+    },
+    "tier3_mode": "enabled",
+    "round0_topology": "unit",
+    "mandatory_gates": {
+      "non_goals_explicit": false,
+      "teacher_decision_boundaries_explicit": false,
+      "privacy_safe": true,
+      "observable_evidence_defined": false,
+      "pressure_pass_completed": false
+    },
+    "stage_priority": {
+      "stage1_weak_blocks_stage2": true,
+      "stage3_brownfield_only": true
+    }
+  },
+  "request_summary": "중2 사회 단원 재설계 초안 요청",
+  "topology": "unit",
+  "current_round": 3,
+  "current_ambiguity": 0.22,
+  "blocking_stage": "Stage 1",
+  "blocking_dimensions": [
+    "non_goals",
+    "teacher_decision_boundaries"
+  ],
+  "teacher_intent": {
+    "status": "partial",
+    "value": "핵심 목표 초안만 있음"
+  },
+  "learner_context": {
+    "status": "partial",
+    "value": "학급 맥락 일부만 확인됨"
+  },
+  "target_evidence": {
+    "status": "blocked",
+    "value": []
+  },
+  "curriculum_context": {
+    "status": "unverified",
+    "records": [],
+    "unblock_sources_allowed": [
+      ":provided",
+      ":web"
+    ],
+    "never_unblock_sources": [
+      ":inferred"
+    ]
+  },
+  "teacher_judgment_boundaries": [],
+  "approvals": [],
+  "approval_state": {
+    "handoff_mode": "context-only",
+    "can_continue_judgment_only": true,
+    "can_handoff": true,
+    "can_author_ir": false,
+    "can_render": false,
+    "envelope_authority": {
+      "registry_gate_ref": "registry:gate-v2:curriculum-or-textbook-provenance",
+      "never_unblock_sources": [
+        ":inferred"
+      ],
+      "provider_contract_state": "unknown",
+      "curriculum_provenance_state": "missing",
+      "verification_anchors_complete": false,
+      "source_license_state": "unknown",
+      "non_inferred_curriculum_evidence": false,
+      "downstream_operations_cleared": {
+        "handoff": false,
+        "author_ir": false,
+        "render": false
+      }
+    }
+  },
+  "provenance_ledger": [],
+  "capability_record": {
+    "provider_contract": {
+      "access_mode": "read-only",
+      "provider_status": "unknown",
+      "provenance_status": "missing",
+      "verification_status": "missing",
+      "source_license_status": "unknown"
+    },
+    "renderer": {
+      "available_formats": [
+        "html"
+      ],
+      "canonical_source_required": true,
+      "rendered_output_authority": "delivery-only"
+    },
+    "fallback_mode": "none"
+  },
+  "next_authorized_operation": "handoff",
+  "resume_summary": {
+    "profile": "Standard",
+    "topology": "unit",
+    "last_weak_dimension": "teacher_decision_boundaries",
+    "last_round_summary": "비목표와 교사 판단 경계가 아직 미확정이라 brief handoff만 허용됨"
+  }
+}

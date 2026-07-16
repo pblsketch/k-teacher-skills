@@ -143,12 +143,17 @@ k-teacher-workflow-router로 내 요청을 분석하고 적절한 K-Teacher Skil
 
 ## Skill pack manifest
 
-`skill-pack.json`은 이 저장소를 하나의 Skill Pack으로 설명합니다.
-
+`skill-pack.json`은 이 저장소를 하나의 Skill Pack으로 설명하는 파생 manifest입니다.
 - entry skill: `k-teacher-workflow-router`
 - skills: 17개
 - workflows: 10개
-- install targets: Codex, Claude
+- canonical new-lesson workflow: `new-lesson-package` → `workflows/new-lesson-design.md`
+- install targets: Codex, Claude Code, Google Antigravity
+- validation lane: `python tests/validate_skill_pack.py && python tests/validate_workflow_envelope.py && python tests/validate_lesson_package_ir.py && python tests/validate_backport_marker.py && python tests/validate_renderer_parity.py && python tests/validate_release_gate_assets.py`
+- release-gate fixtures: `tests/golden/semantic-eval/valid.json`, `tests/golden/release-observability/valid.json`
+- semantic eval은 `workflow-envelope`, `lesson-package-ir`, `kteacher-backport-marker`, `renderer-parity` deterministic validator가 모두 통과된 뒤에만 실행되며, deterministic 실패를 override하지 않습니다.
+- semantic eval dimensions: `workflow-selection-quality`, `pedagogy-quality`, `rigor-preservation`, `usability-accessibility`, `post-verification-curriculum-alignment-quality`
+- observability counters: `entry_mode_counts`, `resume_mode_counts`, `open_boundary_counts_by_category_output_class`, `blocked_output_reasons_by_class`, `backport_enforcement_failures_by_format`, `udl_vs_differentiated_workflow_entry_counts`, `public_surface_drift_failures` (README / `skill-pack.json` / `.claude-plugin/plugin.json` / `.claude-plugin/marketplace.json` 포함)
 
 자세한 workflow 연결은 `WORKFLOWS.md`를 참고하세요.
 
@@ -226,7 +231,7 @@ AI로 쉽게 대체되는 보고서, 활동지, 수행평가를 H→AI→H 구�
 
 이 저장소는 개별 스킬뿐 아니라 스킬 체인도 제공합니다.
 
-### New lesson design
+### `new-lesson-package`
 
 ```text
 grill-me-for-k-teacher
@@ -372,6 +377,15 @@ Readiness profile: {Quick|Standard|Deep} | threshold: {0.30|0.20|0.15} | source:
 
 자세한 사양은 `references/interview-readiness.md`를 참고하세요. v2.5.0의 모든 안전 가드(개인정보 비요구, 평가 증거 우선, mandatory gates)는 그대로 유지됩니다.
 
+추가 공개 계약은 다음과 같습니다.
+
+- provider 출력은 read-only input으로만 취급합니다. provider가 준 원문·응답은 `provider` record로만 들고 가며 `read_only_input: true`를 유지한 채 `author-ir`·`render` 단계에서 임의로 덮어써 provenance를 우회하지 않습니다.
+- downstream-ready 결론은 summary 상태만으로 열지 않습니다. provider / provenance / license evidence를 record 단위로 보존하고, 각 record의 `provider` · `provenance_grade` · `source_reference` · `verification_evidence_type` · `verification_anchor` · `source_license.status` · `source_license.license_id` · `source_license.evidence_anchor` · `read_only_input`이 모두 맞아야 clearance 근거가 됩니다.
+- provider / provenance / license 중 하나라도 비어 있거나 unresolved면 fail-closed로 유지합니다. 특히 `source_license.status`가 `verified-compatible`이 아니면 downstream-ready가 아닙니다.
+- unresolved `:inferred`는 `to-lesson-brief` downstream-ready handoff, `author-ir`, `render`를 unblock하지 않습니다.
+- `:provided`/`:web`로 provenance가 풀려도 `provider`, `source_license.status`, `source_license.license_id`, `source_license.evidence_anchor`, `read_only_input` evidence 없이는 downstream-ready가 아닙니다.
+- mixed-revision 또는 source/version/trace가 정리되지 않은 provider record는 `quarantined`로 격리하며 downstream-ready handoff, `author-ir`, `render`를 열지 않습니다.
+
 Tier 3 면제: `k-teacher-workflow-router`·`zoom-out-lesson`·`lesson-prototype`·`to-lesson-brief` 4개 Quick-profile 스킬은 Topology·Ontology·Challenge modes를 발동하지 않습니다.
 
 ## Which skill should I use?
@@ -434,7 +448,8 @@ Tier 3 면제: `k-teacher-workflow-router`·`zoom-out-lesson`·`lesson-prototype
 ```text
 grill-me-for-k-teacher
 → assessment-first-design
-→ improve-lesson-architecture
+→ lesson-prototype
+→ to-lesson-brief
 ```
 
 성취기준이나 기존 자료가 있다면:

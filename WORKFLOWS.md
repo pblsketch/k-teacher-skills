@@ -15,14 +15,18 @@ k-teacher-workflow-router로 내 요청을 분석하고 적절한 K-Teacher Skil
 Router는 다음을 판단한다.
 
 1. 요청 유형
-2. 시작할 skill
-3. 다음 skill 후보
-4. 막힌 readiness gate
-5. 교사에게 던질 첫 질문
+2. 선택한 workflow
+3. 선택 이유
+4. 시작할 skill
+5. 다음 skill 후보
+6. 참여/표상/표현 장벽에 대한 주의점
+7. 교사에게 던질 첫 질문
+8. readiness 상태 또는 막힌 gate
 
 ## Workflow index
 
-### 1. New lesson design
+### 1. `new-lesson-package`
+`skill-pack.json` canonical workflow id · path: `new-lesson-package` → `workflows/new-lesson-design.md`
 
 ```text
 grill-me-for-k-teacher

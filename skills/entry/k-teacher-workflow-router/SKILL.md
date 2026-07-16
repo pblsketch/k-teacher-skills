@@ -31,9 +31,9 @@ description: 교사의 수업 준비, 평가 설계, 자료 개선, 수업 실�
 
 ## Available workflows
 
-### 1. New lesson design
+### 1. New lesson package (`new-lesson-package`)
 
-사용자가 새 수업을 준비하려고 할 때.
+사용자가 새 수업을 준비하려고 할 때 선택하는 canonical vertical slice다.
 
 ```text
 grill-me-for-k-teacher
@@ -157,7 +157,7 @@ Example:
 Route:
 
 ```text
-New lesson design
+new-lesson-package
 ```
 
 Start:
@@ -177,7 +177,7 @@ Example:
 Route:
 
 ```text
-Curriculum-grounded redesign
+verified-curriculum-redesign
 ```
 
 Start:
@@ -197,7 +197,7 @@ Example:
 Route:
 
 ```text
-Lesson failure recovery
+failure-recovery
 ```
 
 Start:
@@ -217,7 +217,7 @@ PPT, 활동지, 퀴즈가 많은데 흐름이 산만해.
 Route:
 
 ```text
-Material architecture improvement
+material-architecture-improvement
 ```
 
 Start:
@@ -237,7 +237,7 @@ Example:
 Route:
 
 ```text
-AI-resilient assignment redesign
+ai-resilient-assignment
 ```
 
 Start:
@@ -257,13 +257,13 @@ Example:
 Route:
 
 ```text
-Thinking routine selection
+conceptual-inquiry
 ```
 
 Start:
 
 ```text
-thinking-routine-selector
+grill-with-curriculum
 ```
 
 ### If the user asks for concept-based inquiry
@@ -277,13 +277,13 @@ Example:
 Route:
 
 ```text
-Conceptual inquiry lesson
+conceptual-inquiry
 ```
 
 Start:
 
 ```text
-concept-based-inquiry-designer
+grill-with-curriculum
 ```
 
 ### If the user asks for differentiation
@@ -297,13 +297,13 @@ Example:
 Route:
 
 ```text
-Differentiated lesson redesign
+differentiated-redesign
 ```
 
 Start:
 
 ```text
-differentiate-lesson-pathways
+diagnose-lesson-failure
 ```
 
 ### If the user asks for rubric quality
@@ -317,13 +317,13 @@ Example:
 Route:
 
 ```text
-Assessment quality upgrade
+assessment-upgrade
 ```
 
 Start:
 
 ```text
-rubric-quality-guard
+assessment-first-design
 ```
 
 ### If the user asks for hinge questions or formative checks
@@ -337,13 +337,13 @@ Example:
 Route:
 
 ```text
-Assessment quality upgrade
+assessment-upgrade
 ```
 
 Start:
 
 ```text
-hinge-question-designer
+assessment-first-design
 ```
 
 ### If the user asks for PBL
@@ -357,13 +357,13 @@ Example:
 Route:
 
 ```text
-PBL design
+pbl-design
 ```
 
 Start:
 
 ```text
-pbl-design-coach
+zoom-out-lesson
 ```
 
 ### If the user asks for UDL or accessibility
@@ -377,13 +377,13 @@ Example:
 Route:
 
 ```text
-UDL accessible lesson redesign
+udl-accessible-redesign
 ```
 
 Start:
 
 ```text
-udl-barrier-remover
+improve-lesson-architecture
 ```
 
 ## Ambiguous request handling
@@ -393,7 +393,7 @@ udl-barrier-remover
 ```text
 요청을 보니 여러 방향이 가능합니다.
 
-A. 새 수업을 처음부터 설계한다
+A. 새 수업 패키지(`new-lesson-package`)를 처음부터 설계한다
 B. 성취기준/교육과정 기준으로 기존 수업을 점검한다
 C. 실패한 수업을 진단하고 다음 차시를 수정한다
 D. 평가/루브릭/힌지 질문을 개선한다

@@ -1,0 +1,233 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pblsketch.github.io/k-teacher-skills/schemas/kteacher-backport-marker.schema.json",
+  "title": "K-Teacher Backport Marker",
+  "description": "Revision-linked rendered-artifact backport marker for stage-1 HWPX, DOCX, and HTML delivery artifacts. The renderer writes it; deterministic validators read it from one fixed location per format.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "backport_marker_version",
+    "workflow_id",
+    "ir_id",
+    "ir_revision_id",
+    "render_revision_id",
+    "renderer_format",
+    "renderer_version",
+    "rendered_at",
+    "content_fingerprint",
+    "authoritative_source",
+    "manual_edit_status",
+    "backported_to_ir_revision_id",
+    "canonical_locations"
+  ],
+  "$comment": "Stage-1 fixed marker locations: HWPX uses META-INF/kteacher-backport-marker.json, DOCX uses /customXml/kteacher-backport-marker.json, HTML uses script#kteacher-backport-marker in document head. No alternate locations are valid.",
+  "$defs": {
+    "uuid": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+    },
+    "irRevisionId": {
+      "type": "string",
+      "pattern": "^rev-[0-9]{4,}$"
+    },
+    "renderRevisionId": {
+      "type": "string",
+      "pattern": "^render-[0-9]{4,}$"
+    },
+    "canonicalLocation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "locator_kind",
+        "locator_value",
+        "validator_extraction_method"
+      ],
+      "properties": {
+        "locator_kind": {
+          "type": "string",
+          "enum": [
+            "package-member",
+            "opc-part",
+            "dom-node"
+          ]
+        },
+        "locator_value": {
+          "type": "string",
+          "minLength": 1
+        },
+        "validator_extraction_method": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    }
+  },
+  "properties": {
+    "backport_marker_version": {
+      "const": "1"
+    },
+    "workflow_id": {
+      "$ref": "#/$defs/uuid"
+    },
+    "ir_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "ir_revision_id": {
+      "$ref": "#/$defs/irRevisionId"
+    },
+    "render_revision_id": {
+      "$ref": "#/$defs/renderRevisionId"
+    },
+    "renderer_format": {
+      "type": "string",
+      "enum": [
+        "hwpx",
+        "docx",
+        "html"
+      ]
+    },
+    "renderer_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "rendered_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "content_fingerprint": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "authoritative_source": {
+      "const": "json-ir"
+    },
+    "manual_edit_status": {
+      "type": "string",
+      "enum": [
+        "unmodified",
+        "modified-after-render",
+        "backported"
+      ]
+    },
+    "backported_to_ir_revision_id": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/irRevisionId"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "$comment": "Fail-closed lifecycle: modified-after-render stays null until a teacher-approved IR revision absorbs the manual edits; backported must point at that newer IR revision."
+    },
+    "canonical_locations": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "hwpx",
+        "docx",
+        "html"
+      ],
+      "properties": {
+        "hwpx": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/canonicalLocation"
+            },
+            {
+              "properties": {
+                "locator_kind": {
+                  "const": "package-member"
+                },
+                "locator_value": {
+                  "const": "META-INF/kteacher-backport-marker.json"
+                },
+                "validator_extraction_method": {
+                  "const": "read package member META-INF/kteacher-backport-marker.json and parse JSON"
+                }
+              }
+            }
+          ]
+        },
+        "docx": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/canonicalLocation"
+            },
+            {
+              "properties": {
+                "locator_kind": {
+                  "const": "opc-part"
+                },
+                "locator_value": {
+                  "const": "/customXml/kteacher-backport-marker.json"
+                },
+                "validator_extraction_method": {
+                  "const": "read OPC custom XML part /customXml/kteacher-backport-marker.json and parse JSON"
+                }
+              }
+            }
+          ]
+        },
+        "html": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/canonicalLocation"
+            },
+            {
+              "properties": {
+                "locator_kind": {
+                  "const": "dom-node"
+                },
+                "locator_value": {
+                  "const": "script#kteacher-backport-marker"
+                },
+                "validator_extraction_method": {
+                  "const": "read <script id=kteacher-backport-marker type=application/json> from document head and parse text as JSON"
+                }
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "manual_edit_status": {
+            "const": "backported"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "backported_to_ir_revision_id": {
+            "$ref": "#/$defs/irRevisionId"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "manual_edit_status": {
+            "enum": [
+              "unmodified",
+              "modified-after-render"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "backported_to_ir_revision_id": {
+            "type": "null"
+          }
+        }
+      }
+    }
+  ]
+}

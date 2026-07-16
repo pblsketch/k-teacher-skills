@@ -1,0 +1,27 @@
+{
+  "release_gate": "semantic-eval",
+  "deterministic_precedence": {
+    "blocking_validators": [
+      "workflow-envelope",
+      "lesson-package-ir",
+      "kteacher-backport-marker",
+      "renderer-parity"
+    ],
+    "semantic_eval_runs_only_after": "all_pass",
+    "semantic_eval_can_override": false
+  },
+  "dimensions": [
+    "workflow-selection-quality",
+    "pedagogy-quality",
+    "rigor-preservation",
+    "usability-accessibility",
+    "post-verification-curriculum-alignment-quality"
+  ],
+  "failure_example": {
+    "deterministic_failure": {
+      "validator": "workflow-envelope",
+      "semantic_eval_status": "skipped",
+      "release_decision": "blocked"
+    }
+  }
+}

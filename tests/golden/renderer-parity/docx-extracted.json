@@ -1,0 +1,37 @@
+{
+  "renderer_format": "docx",
+  "document_id": "doc-1",
+  "document_class": "lesson-plan",
+  "title": "2학년 사회 수업안",
+  "required_content": [
+    {"content_id": "lesson-title", "text": "수업 주제: 우리 지역 문제 해결 토론"},
+    {"content_id": "learning-goal", "text": "학습 목표: 지역 문제를 근거와 함께 설명하고 해결 방안을 제안한다."},
+    {"content_id": "activity-1", "text": "활동 1: 지역 자료를 읽고 핵심 문제를 표시한다."},
+    {"content_id": "activity-2", "text": "활동 2: 모둠 토론으로 해결 방안을 정리한다."}
+  ],
+  "provenance_markers": [
+    {"record_id": "prov-curriculum-2022-social-1", "label": "[from-curriculum:provided]", "evidence_text": "2022 개정 사회과 성취기준을 직접 확인함"},
+    {"record_id": "prov-textbook-social-unit2-1", "label": "[from-textbook:provided]", "evidence_text": "교과서 42~43쪽 지역 사례 읽기"}
+  ],
+  "unresolved_boundary_markers": [],
+  "embedded_backport_marker_locator": "/customXml/kteacher-backport-marker.json",
+  "embedded_backport_marker": {
+    "backport_marker_version": "1",
+    "workflow_id": "11111111-1111-4111-8111-111111111111",
+    "ir_id": "lesson-ir-001",
+    "ir_revision_id": "rev-1000",
+    "render_revision_id": "render-2101",
+    "renderer_format": "docx",
+    "renderer_version": "renderer-stage1@2026.07.15",
+    "rendered_at": "2026-07-15T00:00:00Z",
+    "content_fingerprint": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "authoritative_source": "json-ir",
+    "manual_edit_status": "backported",
+    "backported_to_ir_revision_id": "rev-1001",
+    "canonical_locations": {
+      "hwpx": {"locator_kind": "package-member", "locator_value": "META-INF/kteacher-backport-marker.json", "validator_extraction_method": "read package member META-INF/kteacher-backport-marker.json and parse JSON"},
+      "docx": {"locator_kind": "opc-part", "locator_value": "/customXml/kteacher-backport-marker.json", "validator_extraction_method": "read OPC custom XML part /customXml/kteacher-backport-marker.json and parse JSON"},
+      "html": {"locator_kind": "dom-node", "locator_value": "script#kteacher-backport-marker", "validator_extraction_method": "read <script id=kteacher-backport-marker type=application/json> from document head and parse text as JSON"}
+    }
+  }
+}

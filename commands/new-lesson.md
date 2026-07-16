@@ -1,10 +1,10 @@
 ---
-description: 새 수업 설계 workflow — 목표·학생 맥락·평가 증거가 흐릿한 상태에서 1차시 또는 단원을 처음 만들 때.
+description: 새 수업 패키지 workflow — canonical id `new-lesson-package`; 목표·학생 맥락·평가 증거가 흐릿한 상태에서 1차시 또는 단원을 처음 만들 때.
 ---
 
-# New lesson design
+# New lesson package
 
-K-Teacher Skills "new-lesson-design" workflow를 시작한다.
+K-Teacher Skills canonical workflow id `new-lesson-package`를 시작한다.
 
 **Chain:** `grill-me-for-k-teacher` → `assessment-first-design` → `lesson-prototype` → `to-lesson-brief`
 **Default profile:** Standard (threshold 0.20, max 8 rounds)

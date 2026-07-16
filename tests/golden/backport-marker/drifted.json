@@ -1,0 +1,31 @@
+{
+  "backport_marker_version": "1",
+  "workflow_id": "11111111-1111-4111-8111-111111111111",
+  "ir_id": "lesson-ir-001",
+  "ir_revision_id": "rev-1000",
+  "render_revision_id": "render-2000",
+  "renderer_format": "html",
+  "renderer_version": "renderer-stage1@2026.07.15",
+  "rendered_at": "2026-07-15T00:00:00Z",
+  "content_fingerprint": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+  "authoritative_source": "json-ir",
+  "manual_edit_status": "modified-after-render",
+  "backported_to_ir_revision_id": null,
+  "canonical_locations": {
+    "hwpx": {
+      "locator_kind": "package-member",
+      "locator_value": "META-INF/kteacher-backport-marker.json",
+      "validator_extraction_method": "read package member META-INF/kteacher-backport-marker.json and parse JSON"
+    },
+    "docx": {
+      "locator_kind": "opc-part",
+      "locator_value": "/customXml/kteacher-backport-marker.json",
+      "validator_extraction_method": "read OPC custom XML part /customXml/kteacher-backport-marker.json and parse JSON"
+    },
+    "html": {
+      "locator_kind": "dom-node",
+      "locator_value": "script#kteacher-backport-marker",
+      "validator_extraction_method": "read <script id=kteacher-backport-marker type=application/json> from document head and parse text as JSON"
+    }
+  }
+}

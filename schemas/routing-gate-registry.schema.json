@@ -1,0 +1,955 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pblsketch.github.io/k-teacher-skills/schemas/routing-gate-registry.schema.json",
+  "title": "K-Teacher routing and Gate registry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "registry_version",
+    "canonical_owner",
+    "repo_facts",
+    "profile_definitions",
+    "router_entrypoint",
+    "fail_closed_contract",
+    "workflows",
+    "commands",
+    "skills",
+    "plugin_projection",
+    "release_surface_projection"
+  ],
+  "properties": {
+    "$schema": {
+      "const": "../schemas/routing-gate-registry.schema.json"
+    },
+    "registry_version": {
+      "const": "1"
+    },
+    "canonical_owner": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "registry_path",
+        "schema_path",
+        "authority_scope",
+        "derivative_only_surfaces",
+        "docs_manifests_and_tests_are_derivative_only",
+        "coauthoritative_peer_forbidden"
+      ],
+      "properties": {
+        "registry_path": {
+          "const": "registry/routing-gate-registry.json"
+        },
+        "schema_path": {
+          "const": "schemas/routing-gate-registry.schema.json"
+        },
+        "authority_scope": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "workflow-ids",
+              "command-ids",
+              "workflow-chains",
+              "router-entrypoint",
+              "direct-entry-parity-bootstrap",
+              "gate-profile-mapping",
+              "plugin-projection",
+              "release-surface-projection"
+            ]
+          },
+          "minItems": 8,
+          "maxItems": 8,
+          "uniqueItems": true
+        },
+        "derivative_only_surfaces": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "README.md",
+              "WORKFLOWS.md",
+              "skill-pack.json",
+              ".claude-plugin/plugin.json",
+              ".claude-plugin/marketplace.json",
+              "tests/readiness_gate_v2_mapping.json",
+              "commands/*.md",
+              "workflows/*.md"
+            ]
+          },
+          "minItems": 8,
+          "maxItems": 8,
+          "uniqueItems": true
+        },
+        "docs_manifests_and_tests_are_derivative_only": {
+          "const": true
+        },
+        "coauthoritative_peer_forbidden": {
+          "const": true
+        }
+      }
+    },
+    "repo_facts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "skill_count",
+        "workflow_count",
+        "command_count",
+        "public_entry_counts",
+        "distinct_public_entries"
+      ],
+      "properties": {
+        "skill_count": { "const": 17 },
+        "workflow_count": { "const": 10 },
+        "command_count": { "const": 11 },
+        "public_entry_counts": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["workflows", "commands"],
+          "properties": {
+            "workflows": { "const": 10 },
+            "commands": { "const": 11 }
+          }
+        },
+        "distinct_public_entries": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "udl_command_id",
+            "differentiate_command_id",
+            "udl_workflow_id",
+            "differentiate_workflow_id",
+            "must_remain_distinct",
+            "aliasing_forbidden"
+          ],
+          "properties": {
+            "udl_command_id": { "const": "udl" },
+            "differentiate_command_id": { "const": "differentiate" },
+            "udl_workflow_id": { "const": "udl-accessible-redesign" },
+            "differentiate_workflow_id": { "const": "differentiated-redesign" },
+            "must_remain_distinct": { "const": true },
+            "aliasing_forbidden": { "const": true }
+          }
+        }
+      }
+    },
+    "profile_definitions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["Quick", "Standard", "Deep"],
+      "properties": {
+        "Quick": { "$ref": "#/$defs/quickProfile" },
+        "Standard": { "$ref": "#/$defs/standardProfile" },
+        "Deep": { "$ref": "#/$defs/deepProfile" }
+      }
+    },
+    "router_entrypoint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "command_id",
+        "skill_id",
+        "skill_path",
+        "entry_mode",
+        "router_first_prompt"
+      ],
+      "properties": {
+        "command_id": { "const": "k-teacher" },
+        "skill_id": { "const": "k-teacher-workflow-router" },
+        "skill_path": { "const": "skills/entry/k-teacher-workflow-router" },
+        "entry_mode": { "const": "router-first" },
+        "router_first_prompt": {
+          "const": "k-teacher-workflow-router로 내 요청을 분석하고 적절한 K-Teacher Skills workflow를 시작해줘."
+        }
+      }
+    },
+    "fail_closed_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["approval", "handoff", "teacher_judgment", "capability", "provenance", "license"],
+      "properties": {
+        "approval": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "missing_or_invalid_approval_state_blocks",
+            "approval_records_must_be_embedded_in_workflow_envelope",
+            "approval_anchor_reference_only_forms_forbidden"
+          ],
+          "properties": {
+            "missing_or_invalid_approval_state_blocks": {
+              "$ref": "#/$defs/outputClassArray"
+            },
+            "approval_records_must_be_embedded_in_workflow_envelope": { "const": true },
+            "approval_anchor_reference_only_forms_forbidden": { "const": true }
+          }
+        },
+        "handoff": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "allowed_modes",
+            "full_workflow_envelope_required",
+            "reference_only_handoff_forbidden",
+            "workflow_attachment_required_before"
+          ],
+          "properties": {
+            "allowed_modes": {
+              "type": "array",
+              "items": {
+                "enum": ["context-only", "downstream-ready", "blocked"]
+              },
+              "minItems": 3,
+              "maxItems": 3,
+              "uniqueItems": true
+            },
+            "full_workflow_envelope_required": { "const": true },
+            "reference_only_handoff_forbidden": { "const": true },
+            "workflow_attachment_required_before": {
+              "$ref": "#/$defs/outputClassArray"
+            }
+          }
+        },
+        "teacher_judgment": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "blocking_severities",
+            "open_hard_boundaries_block",
+            "teacher_judgment_needed_bucket_has_precedence",
+            "fail_closed_on_missing_resolution"
+          ],
+          "properties": {
+            "blocking_severities": {
+              "type": "array",
+              "items": {
+                "enum": ["hard", "soft"]
+              },
+              "minItems": 2,
+              "maxItems": 2,
+              "uniqueItems": true
+            },
+            "open_hard_boundaries_block": {
+              "$ref": "#/$defs/declaredAffectedOutputsOnlyContract"
+            },
+            "teacher_judgment_needed_bucket_has_precedence": { "const": true },
+            "fail_closed_on_missing_resolution": { "const": true }
+          }
+        },
+        "capability": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "provider_state_values",
+            "allowed_provider_states_for_downstream",
+            "renderer_output_values",
+            "fallback_mode_values",
+            "provider_outputs_are_read_only_inputs",
+            "missing_or_unknown_provider_state_blocks"
+          ],
+          "properties": {
+            "provider_state_values": {
+              "$ref": "#/$defs/providerStateArray"
+            },
+            "allowed_provider_states_for_downstream": {
+              "const": ["available"]
+            },
+            "renderer_output_values": {
+              "$ref": "#/$defs/rendererOutputArray"
+            },
+            "fallback_mode_values": {
+              "$ref": "#/$defs/fallbackModeArray"
+            },
+            "provider_outputs_are_read_only_inputs": { "const": true },
+            "missing_or_unknown_provider_state_blocks": {
+              "$ref": "#/$defs/outputClassArray"
+            }
+          }
+        },
+        "provenance": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "registry_gate_ref",
+            "curriculum_or_textbook_grades",
+            "unblock_sources_allowed",
+            "never_unblock_sources",
+            "verification_evidence_types",
+            "provider_outputs_require_source_reference",
+            "web_sources_require_verification",
+            "missing_or_unresolved_provenance_blocks"
+          ],
+          "properties": {
+            "registry_gate_ref": {
+              "const": "registry:gate-v2:curriculum-or-textbook-provenance"
+            },
+            "curriculum_or_textbook_grades": {
+              "$ref": "#/$defs/provenanceGradeArray"
+            },
+            "unblock_sources_allowed": {
+              "const": [":provided", ":web"]
+            },
+            "never_unblock_sources": {
+              "const": [":inferred"]
+            },
+            "verification_evidence_types": {
+              "$ref": "#/$defs/verificationEvidenceTypeArray"
+            },
+            "provider_outputs_require_source_reference": { "const": true },
+            "web_sources_require_verification": { "const": true },
+            "missing_or_unresolved_provenance_blocks": {
+              "$ref": "#/$defs/outputClassArray"
+            }
+          }
+        },
+        "license": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "status_values",
+            "accepted_for_downstream",
+            "provider_outputs_require_license_evidence",
+            "missing_or_unresolved_license_blocks"
+          ],
+          "properties": {
+            "status_values": {
+              "$ref": "#/$defs/licenseStatusArray"
+            },
+            "accepted_for_downstream": {
+              "const": ["verified-compatible"]
+            },
+            "provider_outputs_require_license_evidence": { "const": true },
+            "missing_or_unresolved_license_blocks": {
+              "$ref": "#/$defs/outputClassArray"
+            }
+          }
+        }
+      }
+    },
+    "workflows": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "new-lesson-package",
+        "verified-curriculum-redesign",
+        "failure-recovery",
+        "material-architecture-improvement",
+        "differentiated-redesign",
+        "udl-accessible-redesign",
+        "assessment-upgrade",
+        "conceptual-inquiry",
+        "pbl-design",
+        "ai-resilient-assignment"
+      ],
+      "properties": {
+        "new-lesson-package": { "$ref": "#/$defs/workflowContract" },
+        "verified-curriculum-redesign": { "$ref": "#/$defs/workflowContract" },
+        "failure-recovery": { "$ref": "#/$defs/workflowContract" },
+        "material-architecture-improvement": { "$ref": "#/$defs/workflowContract" },
+        "differentiated-redesign": { "$ref": "#/$defs/workflowContract" },
+        "udl-accessible-redesign": { "$ref": "#/$defs/workflowContract" },
+        "assessment-upgrade": { "$ref": "#/$defs/workflowContract" },
+        "conceptual-inquiry": { "$ref": "#/$defs/workflowContract" },
+        "pbl-design": { "$ref": "#/$defs/workflowContract" },
+        "ai-resilient-assignment": { "$ref": "#/$defs/workflowContract" }
+      }
+    },
+    "commands": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "k-teacher",
+        "new-lesson",
+        "redesign",
+        "failure",
+        "architecture",
+        "ai-assignment",
+        "inquiry",
+        "differentiate",
+        "assessment",
+        "pbl",
+        "udl"
+      ],
+      "properties": {
+        "k-teacher": { "$ref": "#/$defs/commandContract" },
+        "new-lesson": { "$ref": "#/$defs/commandContract" },
+        "redesign": { "$ref": "#/$defs/commandContract" },
+        "failure": { "$ref": "#/$defs/commandContract" },
+        "architecture": { "$ref": "#/$defs/commandContract" },
+        "ai-assignment": { "$ref": "#/$defs/commandContract" },
+        "inquiry": { "$ref": "#/$defs/commandContract" },
+        "differentiate": { "$ref": "#/$defs/commandContract" },
+        "assessment": { "$ref": "#/$defs/commandContract" },
+        "pbl": { "$ref": "#/$defs/commandContract" },
+        "udl": { "$ref": "#/$defs/commandContract" }
+      }
+    },
+    "skills": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "grill-me-for-k-teacher",
+        "grill-with-curriculum",
+        "k-teacher-workflow-router",
+        "lesson-prototype",
+        "to-lesson-brief",
+        "improve-lesson-architecture",
+        "zoom-out-lesson",
+        "thinking-routine-selector",
+        "concept-based-inquiry-designer",
+        "pbl-design-coach",
+        "assessment-first-design",
+        "rubric-quality-guard",
+        "hinge-question-designer",
+        "differentiate-lesson-pathways",
+        "udl-barrier-remover",
+        "diagnose-lesson-failure",
+        "ai-resilient-assignment-redesign"
+      ],
+      "properties": {
+        "grill-me-for-k-teacher": { "$ref": "#/$defs/skillContract" },
+        "grill-with-curriculum": { "$ref": "#/$defs/skillContract" },
+        "k-teacher-workflow-router": { "$ref": "#/$defs/skillContract" },
+        "lesson-prototype": { "$ref": "#/$defs/skillContract" },
+        "to-lesson-brief": { "$ref": "#/$defs/skillContract" },
+        "improve-lesson-architecture": { "$ref": "#/$defs/skillContract" },
+        "zoom-out-lesson": { "$ref": "#/$defs/skillContract" },
+        "thinking-routine-selector": { "$ref": "#/$defs/skillContract" },
+        "concept-based-inquiry-designer": { "$ref": "#/$defs/skillContract" },
+        "pbl-design-coach": { "$ref": "#/$defs/skillContract" },
+        "assessment-first-design": { "$ref": "#/$defs/skillContract" },
+        "rubric-quality-guard": { "$ref": "#/$defs/skillContract" },
+        "hinge-question-designer": { "$ref": "#/$defs/skillContract" },
+        "differentiate-lesson-pathways": { "$ref": "#/$defs/skillContract" },
+        "udl-barrier-remover": { "$ref": "#/$defs/skillContract" },
+        "diagnose-lesson-failure": { "$ref": "#/$defs/skillContract" },
+        "ai-resilient-assignment-redesign": { "$ref": "#/$defs/skillContract" }
+      }
+    },
+    "plugin_projection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ownership", "plugin_json", "marketplace_json"],
+      "properties": {
+        "ownership": { "const": "derivative-only" },
+        "plugin_json": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "path",
+            "top_level_key_order",
+            "name",
+            "version",
+            "description",
+            "author",
+            "homepage",
+            "repository",
+            "license",
+            "keywords",
+            "skills",
+            "commands"
+          ],
+          "properties": {
+            "path": { "const": ".claude-plugin/plugin.json" },
+            "top_level_key_order": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "name",
+                  "version",
+                  "description",
+                  "author",
+                  "homepage",
+                  "repository",
+                  "license",
+                  "keywords",
+                  "skills",
+                  "commands"
+                ]
+              },
+              "minItems": 10,
+              "maxItems": 10,
+              "uniqueItems": true
+            },
+            "name": { "const": "k-teacher-skills" },
+            "version": { "const": "2.5.3" },
+            "description": { "type": "string", "minLength": 1 },
+            "author": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["name"],
+              "properties": {
+                "name": { "const": "pblsketch" }
+              }
+            },
+            "homepage": { "const": "https://github.com/pblsketch/k-teacher-skills" },
+            "repository": { "const": "https://github.com/pblsketch/k-teacher-skills" },
+            "license": { "const": "MIT" },
+            "keywords": {
+              "type": "array",
+              "items": { "type": "string", "minLength": 1 },
+              "minItems": 9,
+              "maxItems": 9,
+              "uniqueItems": true
+            },
+            "skills": {
+              "type": "array",
+              "items": { "type": "string", "pattern": "^\\./skills/.+/$" },
+              "minItems": 17,
+              "maxItems": 17,
+              "uniqueItems": true
+            },
+            "commands": { "const": "./commands/" }
+          }
+        },
+        "marketplace_json": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "path",
+            "top_level_key_order",
+            "plugin_entry_key_order",
+            "$schema",
+            "name",
+            "description",
+            "owner",
+            "version",
+            "plugins"
+          ],
+          "properties": {
+            "path": { "const": ".claude-plugin/marketplace.json" },
+            "top_level_key_order": {
+              "type": "array",
+              "items": {
+                "enum": ["$schema", "name", "description", "owner", "plugins", "version"]
+              },
+              "minItems": 6,
+              "maxItems": 6,
+              "uniqueItems": true
+            },
+            "plugin_entry_key_order": {
+              "type": "array",
+              "items": {
+                "enum": ["name", "version", "description", "author", "source", "category", "homepage", "tags"]
+              },
+              "minItems": 8,
+              "maxItems": 8,
+              "uniqueItems": true
+            },
+            "$schema": { "const": "https://anthropic.com/claude-code/marketplace.schema.json" },
+            "name": { "const": "k-teacher" },
+            "description": { "type": "string", "minLength": 1 },
+            "owner": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["name"],
+              "properties": {
+                "name": { "const": "pblsketch" }
+              }
+            },
+            "version": { "const": "2.5.3" },
+            "plugins": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 1,
+              "items": { "$ref": "#/$defs/marketplacePluginEntry" }
+            }
+          }
+        }
+      }
+    },
+    "release_surface_projection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ownership", "surfaces"],
+      "properties": {
+        "ownership": { "const": "derivative-only" },
+        "surfaces": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "README.md",
+            "WORKFLOWS.md",
+            "skill-pack.json",
+            ".claude-plugin/plugin.json",
+            ".claude-plugin/marketplace.json",
+            "tests/readiness_gate_v2_mapping.json",
+            "commands/*.md",
+            "workflows/*.md"
+          ],
+          "properties": {
+            "README.md": { "$ref": "#/$defs/releaseSurfaceRule" },
+            "WORKFLOWS.md": { "$ref": "#/$defs/releaseSurfaceRule" },
+            "skill-pack.json": { "$ref": "#/$defs/releaseSurfaceRule" },
+            ".claude-plugin/plugin.json": { "$ref": "#/$defs/releaseSurfaceRule" },
+            ".claude-plugin/marketplace.json": { "$ref": "#/$defs/releaseSurfaceRule" },
+            "tests/readiness_gate_v2_mapping.json": { "$ref": "#/$defs/releaseSurfaceRule" },
+            "commands/*.md": { "$ref": "#/$defs/releaseSurfaceRule" },
+            "workflows/*.md": { "$ref": "#/$defs/releaseSurfaceRule" }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "workflowId": {
+      "enum": [
+        "new-lesson-package",
+        "verified-curriculum-redesign",
+        "failure-recovery",
+        "material-architecture-improvement",
+        "differentiated-redesign",
+        "udl-accessible-redesign",
+        "assessment-upgrade",
+        "conceptual-inquiry",
+        "pbl-design",
+        "ai-resilient-assignment"
+      ]
+    },
+    "commandId": {
+      "enum": [
+        "k-teacher",
+        "new-lesson",
+        "redesign",
+        "failure",
+        "architecture",
+        "ai-assignment",
+        "inquiry",
+        "differentiate",
+        "assessment",
+        "pbl",
+        "udl"
+      ]
+    },
+    "skillId": {
+      "enum": [
+        "grill-me-for-k-teacher",
+        "grill-with-curriculum",
+        "k-teacher-workflow-router",
+        "lesson-prototype",
+        "to-lesson-brief",
+        "improve-lesson-architecture",
+        "zoom-out-lesson",
+        "thinking-routine-selector",
+        "concept-based-inquiry-designer",
+        "pbl-design-coach",
+        "assessment-first-design",
+        "rubric-quality-guard",
+        "hinge-question-designer",
+        "differentiate-lesson-pathways",
+        "udl-barrier-remover",
+        "diagnose-lesson-failure",
+        "ai-resilient-assignment-redesign"
+      ]
+    },
+    "profileName": {
+      "enum": ["Quick", "Standard", "Deep"]
+    },
+    "factRoutingLabel": {
+      "enum": [
+        "from-curriculum",
+        "from-textbook",
+        "from-class-context",
+        "from-teacher-judgment"
+      ]
+    },
+    "tier3Mode": {
+      "enum": ["enabled", "disabled-for-quick-profile"]
+    },
+    "providerState": {
+      "enum": ["available", "unavailable", "unknown"]
+    },
+    "providerStateArray": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/providerState" },
+      "minItems": 3,
+      "maxItems": 3,
+      "uniqueItems": true
+    },
+    "downstreamProviderStateArray": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/providerState" },
+      "minItems": 1,
+      "maxItems": 1,
+      "uniqueItems": true
+    },
+    "rendererOutput": {
+      "enum": ["hwpx", "docx", "html"]
+    },
+    "rendererOutputArray": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/rendererOutput" },
+      "minItems": 1,
+      "maxItems": 3,
+      "uniqueItems": true
+    },
+    "fallbackMode": {
+      "enum": ["none", "manual-input"]
+    },
+    "fallbackModeArray": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/fallbackMode" },
+      "minItems": 2,
+      "maxItems": 2,
+      "uniqueItems": true
+    },
+    "provenanceGrade": {
+      "enum": [":provided", ":web", ":inferred"]
+    },
+    "provenanceGradeArray": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/provenanceGrade" },
+      "minItems": 1,
+      "maxItems": 3,
+      "uniqueItems": true
+    },
+    "unblockProvenanceGradeArray": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/provenanceGrade" },
+      "minItems": 1,
+      "maxItems": 2,
+      "uniqueItems": true
+    },
+    "neverUnblockProvenanceGradeArray": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/provenanceGrade" },
+      "minItems": 1,
+      "maxItems": 1,
+      "uniqueItems": true
+    },
+    "verificationEvidenceType": {
+      "enum": ["provided-document", "web-verification"]
+    },
+    "verificationEvidenceTypeArray": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/verificationEvidenceType" },
+      "minItems": 2,
+      "maxItems": 2,
+      "uniqueItems": true
+    },
+    "licenseStatus": {
+      "enum": ["verified-compatible", "verified-restricted", "prohibited", "unknown"]
+    },
+    "licenseStatusArray": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/licenseStatus" },
+      "minItems": 4,
+      "maxItems": 4,
+      "uniqueItems": true
+    },
+    "acceptedLicenseStatusArray": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/licenseStatus" },
+      "minItems": 1,
+      "maxItems": 1,
+      "uniqueItems": true
+    },
+    "outputClassArray": {
+      "type": "array",
+      "items": {
+        "enum": ["handoff", "author-ir", "render"]
+      },
+      "minItems": 3,
+      "maxItems": 3,
+      "uniqueItems": true
+    },
+    "declaredAffectedOutputsOnlyContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode", "allowed_output_classes"],
+      "properties": {
+        "mode": { "const": "declared-affected-outputs-only" },
+        "allowed_output_classes": {
+          "$ref": "#/$defs/outputClassArray"
+        }
+      }
+    },
+    "quickProfile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["threshold", "max_rounds"],
+      "properties": {
+        "threshold": { "const": 0.3 },
+        "max_rounds": { "const": 4 }
+      }
+    },
+    "standardProfile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["threshold", "max_rounds"],
+      "properties": {
+        "threshold": { "const": 0.2 },
+        "max_rounds": { "const": 8 }
+      }
+    },
+    "deepProfile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["threshold", "max_rounds"],
+      "properties": {
+        "threshold": { "const": 0.15 },
+        "max_rounds": { "const": 12 }
+      }
+    },
+    "workflowContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "workflow_id",
+        "legacy_manifest_name",
+        "title",
+        "workflow_path",
+        "primary_command_id",
+        "entry_skill_id",
+        "default_profile",
+        "default_threshold",
+        "max_rounds",
+        "chain"
+      ],
+      "properties": {
+        "workflow_id": { "$ref": "#/$defs/workflowId" },
+        "legacy_manifest_name": { "type": "string", "minLength": 1 },
+        "title": { "type": "string", "minLength": 1 },
+        "workflow_path": { "type": "string", "pattern": "^workflows/.+\\.md$" },
+        "primary_command_id": { "$ref": "#/$defs/commandId" },
+        "entry_skill_id": { "$ref": "#/$defs/skillId" },
+        "default_profile": { "$ref": "#/$defs/profileName" },
+        "default_threshold": { "enum": [0.2, 0.15] },
+        "max_rounds": { "enum": [8, 12] },
+        "chain": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/skillId" },
+          "minItems": 3,
+          "maxItems": 5,
+          "uniqueItems": false
+        },
+        "semantic_boundary": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kept_distinct_from", "difference"],
+          "properties": {
+            "kept_distinct_from": { "$ref": "#/$defs/workflowId" },
+            "difference": { "type": "string", "minLength": 1 }
+          }
+        }
+      }
+    },
+    "commandContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["command_id", "command_path", "entry_kind", "target"],
+      "properties": {
+        "command_id": { "$ref": "#/$defs/commandId" },
+        "command_path": { "type": "string", "pattern": "^commands/.+\\.md$" },
+        "entry_kind": { "enum": ["router", "workflow"] },
+        "target": {
+          "anyOf": [
+            { "const": "router-entrypoint" },
+            { "$ref": "#/$defs/workflowId" }
+          ]
+        }
+      }
+    },
+    "skillContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["skill_id", "skill_path", "gate", "direct_entry"],
+      "properties": {
+        "skill_id": { "$ref": "#/$defs/skillId" },
+        "skill_path": { "type": "string", "pattern": "^skills/.+$" },
+        "gate": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["profile", "active_stage", "fact_routing_labels", "tier3_mode"],
+          "properties": {
+            "profile": { "$ref": "#/$defs/profileName" },
+            "active_stage": { "type": "string", "minLength": 1 },
+            "fact_routing_labels": {
+              "type": "array",
+              "items": { "$ref": "#/$defs/factRoutingLabel" },
+              "minItems": 1,
+              "maxItems": 4,
+              "uniqueItems": true
+            },
+            "tier3_mode": { "$ref": "#/$defs/tier3Mode" }
+          }
+        },
+        "direct_entry": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "parity_bootstrap_required",
+            "allowed_workflow_ids",
+            "selected_workflow_id"
+          ],
+          "properties": {
+            "parity_bootstrap_required": { "type": "boolean" },
+            "allowed_workflow_ids": {
+              "type": "array",
+              "items": { "$ref": "#/$defs/workflowId" },
+              "uniqueItems": true
+            },
+            "selected_workflow_id": {
+              "anyOf": [
+                { "$ref": "#/$defs/workflowId" },
+                { "type": "null" }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "marketplacePluginEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "version", "description", "author", "source", "category", "homepage", "tags"],
+      "properties": {
+        "name": { "const": "k-teacher-skills" },
+        "version": { "const": "2.5.3" },
+        "description": { "type": "string", "minLength": 1 },
+        "author": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["name"],
+          "properties": {
+            "name": { "const": "pblsketch" }
+          }
+        },
+        "source": { "const": "./" },
+        "category": { "const": "education" },
+        "homepage": { "const": "https://github.com/pblsketch/k-teacher-skills" },
+        "tags": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "minItems": 8,
+          "maxItems": 8,
+          "uniqueItems": true
+        }
+      }
+    },
+    "releaseSurfaceRule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["classification", "projection_kind"],
+      "properties": {
+        "classification": {
+          "enum": [
+            "documentation",
+            "manifest",
+            "plugin-manifest",
+            "marketplace-manifest",
+            "derivative-test-data",
+            "public-command-surface",
+            "public-workflow-surface"
+          ]
+        },
+        "projection_kind": {
+          "enum": [
+            "registry-derived",
+            "registry-derived-or-registry-validated",
+            "registry-derived-or-strictly-registry-validated"
+          ]
+        }
+      }
+    }
+  }
+}

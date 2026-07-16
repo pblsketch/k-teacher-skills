@@ -1,0 +1,267 @@
+{
+  "workflow_envelope_version": "1",
+  "workflow_envelope_revision_id": "env-1004",
+  "workflow_id": "wf-global-gate-block",
+  "workflow_type": "verified-curriculum-redesign",
+  "entry_mode": "resume",
+  "parity_bootstrap": {
+    "required": true,
+    "completed": true,
+    "selected_workflow": "verified-curriculum-redesign",
+    "reason": "resumed from workflow envelope"
+  },
+  "gate_v2": {
+    "profile": "Deep",
+    "threshold": 0.15,
+    "threshold_source": "explicit",
+    "active_stage": "Stage 1+3 · Curriculum-grounded",
+    "fact_routing_labels": [
+      "from-curriculum",
+      "from-textbook",
+      "from-teacher-judgment"
+    ],
+    "provenance_grade_rules": {
+      "curriculum_or_textbook": [
+        ":provided",
+        ":web",
+        ":inferred"
+      ],
+      "never_unblock": [
+        ":inferred"
+      ]
+    },
+    "tier3_mode": "enabled",
+    "round0_topology": "unit",
+    "mandatory_gates": {
+      "non_goals_explicit": true,
+      "teacher_decision_boundaries_explicit": true,
+      "privacy_safe": true,
+      "observable_evidence_defined": true,
+      "pressure_pass_completed": true
+    },
+    "stage_priority": {
+      "stage1_weak_blocks_stage2": true,
+      "stage3_brownfield_only": true
+    }
+  },
+  "request_summary": "검증된 교육과정 기반 재설계이지만 provider contract가 중단된 상태",
+  "topology": "unit",
+  "current_round": 8,
+  "current_ambiguity": 0.05,
+  "blocking_stage": "Stage 3 · Curriculum-grounded capability gate",
+  "blocking_dimensions": [
+    "provider_contract"
+  ],
+  "teacher_intent": {
+    "status": "confirmed",
+    "value": "토론과 글쓰기를 결합한 재설계"
+  },
+  "learner_context": {
+    "status": "confirmed",
+    "value": "중2 사회 학급, 협업 경험 있음"
+  },
+  "target_evidence": {
+    "status": "confirmed",
+    "value": [
+      "개념 설명 글",
+      "토론 피드백"
+    ]
+  },
+  "curriculum_context": {
+    "status": "verified",
+    "records": [
+      {
+        "record_id": "prov-curriculum-2022-social-1",
+        "record_scope": "curriculum-context",
+        "provider": {
+          "provider_id": "curriculum-2022-social",
+          "provider_kind": "curriculum-provider",
+          "release_id": "2022-mid2-social",
+          "release_version": "2026.07"
+        },
+        "provenance_grade": ":provided",
+        "verification_status": "complete",
+        "source_reference": "curriculum.pdf#cs-2022-social-2-1",
+        "verification_evidence_type": "provided-document",
+        "verification_anchor": {
+          "carrier": "provider-record",
+          "locator_type": "provider-record-id",
+          "locator_value": "cs-2022-social-2-1"
+        },
+        "source_license": {
+          "status": "verified-compatible",
+          "license_id": "KOE-OPEN-2022",
+          "evidence_anchor": {
+            "carrier": "provider-release-manifest",
+            "locator_type": "release-id",
+            "locator_value": "2022-mid2-social"
+          }
+        },
+        "read_only_input": true
+      }
+    ],
+    "unblock_sources_allowed": [
+      ":provided",
+      ":web"
+    ],
+    "never_unblock_sources": [
+      ":inferred"
+    ]
+  },
+  "teacher_judgment_boundaries": [
+    {
+      "boundary_id": "tj-assessment-weight",
+      "category": "assessment-weighting",
+      "description": "수행평가와 과정평가 비중을 교사가 확정해야 함",
+      "affected_output_classes": [
+        "author-ir",
+        "render"
+      ],
+      "blocking_severity": "hard",
+      "resolution": {
+        "status": "resolved",
+        "teacher_confirmation": {
+          "required": true,
+          "confirmed": true,
+          "confirmation_source": "teacher-approved-edit",
+          "confirmation_anchor": {
+            "carrier": "transcript",
+            "locator_type": "transcript-line-range",
+            "locator_value": "L120-L126"
+          }
+        },
+        "supporting_evidence": [
+          {
+            "type": "web-verification",
+            "anchor": {
+              "carrier": "url",
+              "locator_type": "absolute-url",
+              "locator_value": "https://example.com/curriculum/assessment-weighting"
+            },
+            "sha256": null,
+            "detail": "교사가 참조한 평가 비중 안내 페이지"
+          }
+        ],
+        "approval_record": {
+          "approval_id": "apr-assessment-weight-1",
+          "boundary_id": "tj-assessment-weight",
+          "decision": "approved"
+        }
+      },
+      "allowed_next_ops_while_open": [
+        "ask-question",
+        "summarize",
+        "judgment-only"
+      ],
+      "created_by": "workflow",
+      "last_updated_round": 7
+    }
+  ],
+  "approvals": [
+    {
+      "approval_id": "apr-assessment-weight-1",
+      "boundary_id": "tj-assessment-weight",
+      "decision": "approved",
+      "decided_by": {
+        "actor_type": "teacher",
+        "actor_ref": "teacher:kim"
+      },
+      "decided_at": "2026-07-15T09:30:00Z",
+      "confirmation_anchor": {
+        "carrier": "transcript",
+        "locator_type": "transcript-line-range",
+        "locator_value": "L120-L126"
+      },
+      "supporting_evidence": [
+        {
+          "type": "web-verification",
+          "anchor": {
+            "carrier": "url",
+            "locator_type": "absolute-url",
+            "locator_value": "https://example.com/curriculum/assessment-weighting"
+          },
+          "sha256": null,
+          "detail": "교사가 참조한 평가 비중 안내 페이지"
+        }
+      ]
+    }
+  ],
+  "approval_state": {
+    "handoff_mode": "blocked",
+    "can_continue_judgment_only": false,
+    "can_handoff": false,
+    "can_author_ir": false,
+    "can_render": false,
+    "envelope_authority": {
+      "registry_gate_ref": "registry:gate-v2:curriculum-or-textbook-provenance",
+      "never_unblock_sources": [
+        ":inferred"
+      ],
+      "provider_contract_state": "unavailable",
+      "curriculum_provenance_state": "verified-non-inferred",
+      "verification_anchors_complete": true,
+      "source_license_state": "verified-compatible",
+      "non_inferred_curriculum_evidence": true,
+      "downstream_operations_cleared": {
+        "handoff": false,
+        "author_ir": false,
+        "render": false
+      }
+    }
+  },
+  "provenance_ledger": [
+    {
+      "record_id": "prov-curriculum-2022-social-1",
+      "record_scope": "curriculum-context",
+      "provider": {
+        "provider_id": "curriculum-2022-social",
+        "provider_kind": "curriculum-provider",
+        "release_id": "2022-mid2-social",
+        "release_version": "2026.07"
+      },
+      "provenance_grade": ":provided",
+      "source_reference": "curriculum.pdf#cs-2022-social-2-1",
+      "verification_evidence_type": "provided-document",
+      "verification_anchor": {
+        "carrier": "provider-record",
+        "locator_type": "provider-record-id",
+        "locator_value": "cs-2022-social-2-1"
+      },
+      "source_license": {
+        "status": "verified-compatible",
+        "license_id": "KOE-OPEN-2022",
+        "evidence_anchor": {
+          "carrier": "provider-release-manifest",
+          "locator_type": "release-id",
+          "locator_value": "2022-mid2-social"
+        }
+      },
+      "read_only_input": true
+    }
+  ],
+  "capability_record": {
+    "provider_contract": {
+      "access_mode": "read-only",
+      "provider_status": "unavailable",
+      "provenance_status": "verified-non-inferred",
+      "verification_status": "complete",
+      "source_license_status": "verified-compatible"
+    },
+    "renderer": {
+      "available_formats": [
+        "docx",
+        "html"
+      ],
+      "canonical_source_required": true,
+      "rendered_output_authority": "delivery-only"
+    },
+    "fallback_mode": "none"
+  },
+  "next_authorized_operation": "ask-question",
+  "resume_summary": {
+    "profile": "Deep",
+    "topology": "unit",
+    "last_weak_dimension": "provider_contract",
+    "last_round_summary": "교육과정 provenance와 교사 승인 기록은 충분하지만 provider contract unavailable 상태라 모든 downstream 출력이 fail-closed 됨"
+  }
+}

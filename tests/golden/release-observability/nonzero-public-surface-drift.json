@@ -1,0 +1,54 @@
+{
+  "release_gate": "release-observability",
+  "counters": {
+    "entry_mode_counts": {
+      "resume": 6,
+      "direct-skill": 2
+    },
+    "resume_mode_counts": {
+      "resume": 6,
+      "non_resume": 2
+    },
+    "open_boundary_counts_by_category_output_class": {
+      "artifact-scope": {
+        "handoff": 3,
+        "author-ir": 2,
+        "render": 2
+      }
+    },
+    "blocked_output_reasons_by_class": {
+      "handoff": {
+        "teacher_judgment_open": 3,
+        "unresolved_inferred": 1,
+        "missing_clearance_evidence": 1
+      },
+      "author-ir": {
+        "teacher_judgment_open": 2,
+        "unresolved_inferred": 2,
+        "missing_clearance_evidence": 1
+      },
+      "render": {
+        "teacher_judgment_open": 2,
+        "missing_clearance_evidence": 2,
+        "unresolved_inferred": 2
+      }
+    },
+    "backport_enforcement_failures_by_format": {
+      "hwpx": 4,
+      "docx": 4,
+      "html": 4
+    },
+    "udl_vs_differentiated_workflow_entry_counts": {
+      "udl-accessible-redesign": 1,
+      "differentiated-redesign": 1
+    },
+    "public_surface_drift_failures": {
+      "README.md": 1,
+      "skill-pack.json": 1,
+      "plugin_metadata": {
+        ".claude-plugin/plugin.json": 1,
+        ".claude-plugin/marketplace.json": 1
+      }
+    }
+  }
+}

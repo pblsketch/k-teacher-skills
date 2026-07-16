@@ -1,0 +1,133 @@
+{
+  "workflow_envelope_version": "1",
+  "workflow_envelope_revision_id": "env-1003",
+  "workflow_id": "wf-curriculum-global-block",
+  "workflow_type": "verified-curriculum-redesign",
+  "entry_mode": "direct-skill",
+  "parity_bootstrap": {
+    "required": true,
+    "completed": true,
+    "selected_workflow": "verified-curriculum-redesign",
+    "reason": "direct entry mapped to workflow"
+  },
+  "gate_v2": {
+    "profile": "Deep",
+    "threshold": 0.15,
+    "threshold_source": "skill-default",
+    "active_stage": "Stage 1+3 · Curriculum-grounded",
+    "fact_routing_labels": [
+      "from-curriculum",
+      "from-textbook",
+      "from-teacher-judgment"
+    ],
+    "provenance_grade_rules": {
+      "curriculum_or_textbook": [
+        ":provided",
+        ":web",
+        ":inferred"
+      ],
+      "never_unblock": [
+        ":inferred"
+      ]
+    },
+    "tier3_mode": "enabled",
+    "round0_topology": "unit",
+    "mandatory_gates": {
+      "non_goals_explicit": true,
+      "teacher_decision_boundaries_explicit": true,
+      "privacy_safe": true,
+      "observable_evidence_defined": true,
+      "pressure_pass_completed": true
+    },
+    "stage_priority": {
+      "stage1_weak_blocks_stage2": true,
+      "stage3_brownfield_only": true
+    }
+  },
+  "request_summary": "교육과정 근거가 아직 검증되지 않은 재설계 요청",
+  "topology": "unit",
+  "current_round": 2,
+  "current_ambiguity": 0.19,
+  "blocking_stage": "Stage 1+3 · Curriculum-grounded",
+  "blocking_dimensions": [
+    "curriculum_provenance",
+    "provider_contract",
+    "verification_anchor",
+    "source_license"
+  ],
+  "teacher_intent": {
+    "status": "partial",
+    "value": "토론 중심으로 다시 설계하고 싶음"
+  },
+  "learner_context": {
+    "status": "confirmed",
+    "value": "중2 혼합 수준 학급"
+  },
+  "target_evidence": {
+    "status": "partial",
+    "value": [
+      "토론 참여 흔적"
+    ]
+  },
+  "curriculum_context": {
+    "status": "unverified",
+    "records": [],
+    "unblock_sources_allowed": [
+      ":provided",
+      ":web"
+    ],
+    "never_unblock_sources": [
+      ":inferred"
+    ]
+  },
+  "teacher_judgment_boundaries": [],
+  "approvals": [],
+  "approval_state": {
+    "handoff_mode": "blocked",
+    "can_continue_judgment_only": false,
+    "can_handoff": false,
+    "can_author_ir": false,
+    "can_render": false,
+    "envelope_authority": {
+      "registry_gate_ref": "registry:gate-v2:curriculum-or-textbook-provenance",
+      "never_unblock_sources": [
+        ":inferred"
+      ],
+      "provider_contract_state": "unknown",
+      "curriculum_provenance_state": "missing",
+      "verification_anchors_complete": false,
+      "source_license_state": "unknown",
+      "non_inferred_curriculum_evidence": false,
+      "downstream_operations_cleared": {
+        "handoff": false,
+        "author_ir": false,
+        "render": false
+      }
+    }
+  },
+  "provenance_ledger": [],
+  "capability_record": {
+    "provider_contract": {
+      "access_mode": "read-only",
+      "provider_status": "unknown",
+      "provenance_status": "missing",
+      "verification_status": "missing",
+      "source_license_status": "unknown"
+    },
+    "renderer": {
+      "available_formats": [
+        "html"
+      ],
+      "canonical_source_required": true,
+      "rendered_output_authority": "delivery-only"
+    },
+    "fallback_mode": "none"
+  },
+  "next_authorized_operation": "ask-question",
+  "resume_summary": {
+    "profile": "Deep",
+    "topology": "unit",
+    "last_weak_dimension": "curriculum_provenance",
+    "last_round_summary": "verified-curriculum-redesign direct entry였지만 검증된 교육과정 기록과 provider/license 증빙이 없어 모든 downstream 출력이 차단됨"
+  }
+}

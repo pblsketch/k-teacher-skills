@@ -1,0 +1,945 @@
+{
+  "$schema": "../schemas/routing-gate-registry.schema.json",
+  "registry_version": "1",
+  "canonical_owner": {
+    "registry_path": "registry/routing-gate-registry.json",
+    "schema_path": "schemas/routing-gate-registry.schema.json",
+    "authority_scope": [
+      "workflow-ids",
+      "command-ids",
+      "workflow-chains",
+      "router-entrypoint",
+      "direct-entry-parity-bootstrap",
+      "gate-profile-mapping",
+      "plugin-projection",
+      "release-surface-projection"
+    ],
+    "derivative_only_surfaces": [
+      "README.md",
+      "WORKFLOWS.md",
+      "skill-pack.json",
+      ".claude-plugin/plugin.json",
+      ".claude-plugin/marketplace.json",
+      "tests/readiness_gate_v2_mapping.json",
+      "commands/*.md",
+      "workflows/*.md"
+    ],
+    "docs_manifests_and_tests_are_derivative_only": true,
+    "coauthoritative_peer_forbidden": true
+  },
+  "repo_facts": {
+    "skill_count": 17,
+    "workflow_count": 10,
+    "command_count": 11,
+    "public_entry_counts": {
+      "workflows": 10,
+      "commands": 11
+    },
+    "distinct_public_entries": {
+      "udl_command_id": "udl",
+      "differentiate_command_id": "differentiate",
+      "udl_workflow_id": "udl-accessible-redesign",
+      "differentiate_workflow_id": "differentiated-redesign",
+      "must_remain_distinct": true,
+      "aliasing_forbidden": true
+    }
+  },
+  "profile_definitions": {
+    "Quick": {
+      "threshold": 0.3,
+      "max_rounds": 4
+    },
+    "Standard": {
+      "threshold": 0.2,
+      "max_rounds": 8
+    },
+    "Deep": {
+      "threshold": 0.15,
+      "max_rounds": 12
+    }
+  },
+  "router_entrypoint": {
+    "command_id": "k-teacher",
+    "skill_id": "k-teacher-workflow-router",
+    "skill_path": "skills/entry/k-teacher-workflow-router",
+    "entry_mode": "router-first",
+    "router_first_prompt": "k-teacher-workflow-router로 내 요청을 분석하고 적절한 K-Teacher Skills workflow를 시작해줘."
+  },
+  "fail_closed_contract": {
+    "approval": {
+      "missing_or_invalid_approval_state_blocks": [
+        "handoff",
+        "author-ir",
+        "render"
+      ],
+      "approval_records_must_be_embedded_in_workflow_envelope": true,
+      "approval_anchor_reference_only_forms_forbidden": true
+    },
+    "handoff": {
+      "allowed_modes": [
+        "context-only",
+        "downstream-ready",
+        "blocked"
+      ],
+      "full_workflow_envelope_required": true,
+      "reference_only_handoff_forbidden": true,
+      "workflow_attachment_required_before": [
+        "handoff",
+        "author-ir",
+        "render"
+      ]
+    },
+    "teacher_judgment": {
+      "blocking_severities": [
+        "hard",
+        "soft"
+      ],
+      "open_hard_boundaries_block": {
+        "mode": "declared-affected-outputs-only",
+        "allowed_output_classes": [
+          "handoff",
+          "author-ir",
+          "render"
+        ]
+      },
+      "teacher_judgment_needed_bucket_has_precedence": true,
+      "fail_closed_on_missing_resolution": true
+    },
+    "capability": {
+      "provider_state_values": [
+        "available",
+        "unavailable",
+        "unknown"
+      ],
+      "allowed_provider_states_for_downstream": [
+        "available"
+      ],
+      "renderer_output_values": [
+        "hwpx",
+        "docx",
+        "html"
+      ],
+      "fallback_mode_values": [
+        "none",
+        "manual-input"
+      ],
+      "provider_outputs_are_read_only_inputs": true,
+      "missing_or_unknown_provider_state_blocks": [
+        "handoff",
+        "author-ir",
+        "render"
+      ]
+    },
+    "provenance": {
+      "registry_gate_ref": "registry:gate-v2:curriculum-or-textbook-provenance",
+      "curriculum_or_textbook_grades": [
+        ":provided",
+        ":web",
+        ":inferred"
+      ],
+      "unblock_sources_allowed": [
+        ":provided",
+        ":web"
+      ],
+      "never_unblock_sources": [
+        ":inferred"
+      ],
+      "verification_evidence_types": [
+        "provided-document",
+        "web-verification"
+      ],
+      "provider_outputs_require_source_reference": true,
+      "web_sources_require_verification": true,
+      "missing_or_unresolved_provenance_blocks": [
+        "handoff",
+        "author-ir",
+        "render"
+      ]
+    },
+    "license": {
+      "status_values": [
+        "verified-compatible",
+        "verified-restricted",
+        "prohibited",
+        "unknown"
+      ],
+      "accepted_for_downstream": [
+        "verified-compatible"
+      ],
+      "provider_outputs_require_license_evidence": true,
+      "missing_or_unresolved_license_blocks": [
+        "handoff",
+        "author-ir",
+        "render"
+      ]
+    }
+  },
+  "workflows": {
+    "new-lesson-package": {
+      "workflow_id": "new-lesson-package",
+      "legacy_manifest_name": "new-lesson-design",
+      "title": "New lesson design",
+      "workflow_path": "workflows/new-lesson-design.md",
+      "primary_command_id": "new-lesson",
+      "entry_skill_id": "grill-me-for-k-teacher",
+      "default_profile": "Standard",
+      "default_threshold": 0.2,
+      "max_rounds": 8,
+      "chain": [
+        "grill-me-for-k-teacher",
+        "assessment-first-design",
+        "lesson-prototype",
+        "to-lesson-brief"
+      ]
+    },
+    "verified-curriculum-redesign": {
+      "workflow_id": "verified-curriculum-redesign",
+      "legacy_manifest_name": "curriculum-grounded-redesign",
+      "title": "Curriculum-grounded redesign",
+      "workflow_path": "workflows/curriculum-grounded-redesign.md",
+      "primary_command_id": "redesign",
+      "entry_skill_id": "grill-with-curriculum",
+      "default_profile": "Deep",
+      "default_threshold": 0.15,
+      "max_rounds": 12,
+      "chain": [
+        "grill-with-curriculum",
+        "zoom-out-lesson",
+        "assessment-first-design",
+        "improve-lesson-architecture",
+        "to-lesson-brief"
+      ]
+    },
+    "failure-recovery": {
+      "workflow_id": "failure-recovery",
+      "legacy_manifest_name": "lesson-failure-recovery",
+      "title": "Lesson failure recovery",
+      "workflow_path": "workflows/lesson-failure-recovery.md",
+      "primary_command_id": "failure",
+      "entry_skill_id": "diagnose-lesson-failure",
+      "default_profile": "Standard",
+      "default_threshold": 0.2,
+      "max_rounds": 8,
+      "chain": [
+        "diagnose-lesson-failure",
+        "zoom-out-lesson",
+        "lesson-prototype",
+        "to-lesson-brief"
+      ]
+    },
+    "material-architecture-improvement": {
+      "workflow_id": "material-architecture-improvement",
+      "legacy_manifest_name": "material-architecture-improvement",
+      "title": "Material architecture improvement",
+      "workflow_path": "workflows/material-architecture-improvement.md",
+      "primary_command_id": "architecture",
+      "entry_skill_id": "improve-lesson-architecture",
+      "default_profile": "Standard",
+      "default_threshold": 0.2,
+      "max_rounds": 8,
+      "chain": [
+        "improve-lesson-architecture",
+        "assessment-first-design",
+        "lesson-prototype",
+        "to-lesson-brief"
+      ]
+    },
+    "differentiated-redesign": {
+      "workflow_id": "differentiated-redesign",
+      "legacy_manifest_name": "differentiated-lesson-redesign",
+      "title": "Differentiated lesson redesign",
+      "workflow_path": "workflows/differentiated-lesson-redesign.md",
+      "primary_command_id": "differentiate",
+      "entry_skill_id": "diagnose-lesson-failure",
+      "default_profile": "Standard",
+      "default_threshold": 0.2,
+      "max_rounds": 8,
+      "chain": [
+        "diagnose-lesson-failure",
+        "udl-barrier-remover",
+        "differentiate-lesson-pathways",
+        "lesson-prototype",
+        "to-lesson-brief"
+      ],
+      "semantic_boundary": {
+        "kept_distinct_from": "udl-accessible-redesign",
+        "difference": "same-goal differentiated pathways remain primary; no collapse into UDL-only accessibility flow"
+      }
+    },
+    "udl-accessible-redesign": {
+      "workflow_id": "udl-accessible-redesign",
+      "legacy_manifest_name": "udl-accessible-lesson-redesign",
+      "title": "UDL accessible lesson redesign",
+      "workflow_path": "workflows/udl-accessible-lesson-redesign.md",
+      "primary_command_id": "udl",
+      "entry_skill_id": "improve-lesson-architecture",
+      "default_profile": "Standard",
+      "default_threshold": 0.2,
+      "max_rounds": 8,
+      "chain": [
+        "improve-lesson-architecture",
+        "udl-barrier-remover",
+        "lesson-prototype",
+        "to-lesson-brief"
+      ],
+      "semantic_boundary": {
+        "kept_distinct_from": "differentiated-redesign",
+        "difference": "barrier removal and multimodal access remain primary; no aliasing to differentiated pathways"
+      }
+    },
+    "assessment-upgrade": {
+      "workflow_id": "assessment-upgrade",
+      "legacy_manifest_name": "assessment-quality-upgrade",
+      "title": "Assessment quality upgrade",
+      "workflow_path": "workflows/assessment-quality-upgrade.md",
+      "primary_command_id": "assessment",
+      "entry_skill_id": "assessment-first-design",
+      "default_profile": "Deep",
+      "default_threshold": 0.15,
+      "max_rounds": 12,
+      "chain": [
+        "assessment-first-design",
+        "hinge-question-designer",
+        "rubric-quality-guard",
+        "to-lesson-brief"
+      ]
+    },
+    "conceptual-inquiry": {
+      "workflow_id": "conceptual-inquiry",
+      "legacy_manifest_name": "conceptual-inquiry-lesson",
+      "title": "Conceptual inquiry lesson",
+      "workflow_path": "workflows/conceptual-inquiry-lesson.md",
+      "primary_command_id": "inquiry",
+      "entry_skill_id": "grill-with-curriculum",
+      "default_profile": "Deep",
+      "default_threshold": 0.15,
+      "max_rounds": 12,
+      "chain": [
+        "grill-with-curriculum",
+        "concept-based-inquiry-designer",
+        "thinking-routine-selector",
+        "assessment-first-design",
+        "to-lesson-brief"
+      ]
+    },
+    "pbl-design": {
+      "workflow_id": "pbl-design",
+      "legacy_manifest_name": "pbl-design-workflow",
+      "title": "PBL design",
+      "workflow_path": "workflows/pbl-design-workflow.md",
+      "primary_command_id": "pbl",
+      "entry_skill_id": "zoom-out-lesson",
+      "default_profile": "Deep",
+      "default_threshold": 0.15,
+      "max_rounds": 12,
+      "chain": [
+        "zoom-out-lesson",
+        "pbl-design-coach",
+        "assessment-first-design",
+        "rubric-quality-guard",
+        "to-lesson-brief"
+      ]
+    },
+    "ai-resilient-assignment": {
+      "workflow_id": "ai-resilient-assignment",
+      "legacy_manifest_name": "ai-resilient-assignment-redesign",
+      "title": "AI-resilient assignment redesign",
+      "workflow_path": "workflows/ai-resilient-assignment-redesign.md",
+      "primary_command_id": "ai-assignment",
+      "entry_skill_id": "ai-resilient-assignment-redesign",
+      "default_profile": "Deep",
+      "default_threshold": 0.15,
+      "max_rounds": 12,
+      "chain": [
+        "ai-resilient-assignment-redesign",
+        "assessment-first-design",
+        "to-lesson-brief"
+      ]
+    }
+  },
+  "commands": {
+    "k-teacher": {
+      "command_id": "k-teacher",
+      "command_path": "commands/k-teacher.md",
+      "entry_kind": "router",
+      "target": "router-entrypoint"
+    },
+    "new-lesson": {
+      "command_id": "new-lesson",
+      "command_path": "commands/new-lesson.md",
+      "entry_kind": "workflow",
+      "target": "new-lesson-package"
+    },
+    "redesign": {
+      "command_id": "redesign",
+      "command_path": "commands/redesign.md",
+      "entry_kind": "workflow",
+      "target": "verified-curriculum-redesign"
+    },
+    "failure": {
+      "command_id": "failure",
+      "command_path": "commands/failure.md",
+      "entry_kind": "workflow",
+      "target": "failure-recovery"
+    },
+    "architecture": {
+      "command_id": "architecture",
+      "command_path": "commands/architecture.md",
+      "entry_kind": "workflow",
+      "target": "material-architecture-improvement"
+    },
+    "ai-assignment": {
+      "command_id": "ai-assignment",
+      "command_path": "commands/ai-assignment.md",
+      "entry_kind": "workflow",
+      "target": "ai-resilient-assignment"
+    },
+    "inquiry": {
+      "command_id": "inquiry",
+      "command_path": "commands/inquiry.md",
+      "entry_kind": "workflow",
+      "target": "conceptual-inquiry"
+    },
+    "differentiate": {
+      "command_id": "differentiate",
+      "command_path": "commands/differentiate.md",
+      "entry_kind": "workflow",
+      "target": "differentiated-redesign"
+    },
+    "assessment": {
+      "command_id": "assessment",
+      "command_path": "commands/assessment.md",
+      "entry_kind": "workflow",
+      "target": "assessment-upgrade"
+    },
+    "pbl": {
+      "command_id": "pbl",
+      "command_path": "commands/pbl.md",
+      "entry_kind": "workflow",
+      "target": "pbl-design"
+    },
+    "udl": {
+      "command_id": "udl",
+      "command_path": "commands/udl.md",
+      "entry_kind": "workflow",
+      "target": "udl-accessible-redesign"
+    }
+  },
+  "skills": {
+    "grill-me-for-k-teacher": {
+      "skill_id": "grill-me-for-k-teacher",
+      "skill_path": "skills/entry/grill-me-for-k-teacher",
+      "gate": {
+        "profile": "Standard",
+        "active_stage": "Stage 1 · Intent-first",
+        "fact_routing_labels": [
+          "from-curriculum",
+          "from-textbook",
+          "from-class-context",
+          "from-teacher-judgment"
+        ],
+        "tier3_mode": "enabled"
+      },
+      "direct_entry": {
+        "parity_bootstrap_required": true,
+        "allowed_workflow_ids": [
+          "new-lesson-package"
+        ],
+        "selected_workflow_id": "new-lesson-package"
+      }
+    },
+    "grill-with-curriculum": {
+      "skill_id": "grill-with-curriculum",
+      "skill_path": "skills/entry/grill-with-curriculum",
+      "gate": {
+        "profile": "Deep",
+        "active_stage": "Stage 1+3 · Curriculum-grounded",
+        "fact_routing_labels": [
+          "from-curriculum",
+          "from-textbook",
+          "from-teacher-judgment"
+        ],
+        "tier3_mode": "enabled"
+      },
+      "direct_entry": {
+        "parity_bootstrap_required": true,
+        "allowed_workflow_ids": [
+          "verified-curriculum-redesign",
+          "conceptual-inquiry"
+        ],
+        "selected_workflow_id": null
+      }
+    },
+    "k-teacher-workflow-router": {
+      "skill_id": "k-teacher-workflow-router",
+      "skill_path": "skills/entry/k-teacher-workflow-router",
+      "gate": {
+        "profile": "Quick",
+        "active_stage": "Stage 1 · Intent-first (routing)",
+        "fact_routing_labels": [
+          "from-teacher-judgment"
+        ],
+        "tier3_mode": "disabled-for-quick-profile"
+      },
+      "direct_entry": {
+        "parity_bootstrap_required": false,
+        "allowed_workflow_ids": [],
+        "selected_workflow_id": null
+      }
+    },
+    "lesson-prototype": {
+      "skill_id": "lesson-prototype",
+      "skill_path": "skills/lesson-design/lesson-prototype",
+      "gate": {
+        "profile": "Quick",
+        "active_stage": "Stage 1 · Intent-first",
+        "fact_routing_labels": [
+          "from-teacher-judgment"
+        ],
+        "tier3_mode": "disabled-for-quick-profile"
+      },
+      "direct_entry": {
+        "parity_bootstrap_required": true,
+        "allowed_workflow_ids": [
+          "new-lesson-package",
+          "failure-recovery",
+          "material-architecture-improvement",
+          "differentiated-redesign",
+          "udl-accessible-redesign"
+        ],
+        "selected_workflow_id": null
+      }
+    },
+    "to-lesson-brief": {
+      "skill_id": "to-lesson-brief",
+      "skill_path": "skills/lesson-design/to-lesson-brief",
+      "gate": {
+        "profile": "Quick",
+        "active_stage": "Stage 1 · Intent-first (output-only)",
+        "fact_routing_labels": [
+          "from-curriculum",
+          "from-textbook",
+          "from-class-context",
+          "from-teacher-judgment"
+        ],
+        "tier3_mode": "disabled-for-quick-profile"
+      },
+      "direct_entry": {
+        "parity_bootstrap_required": true,
+        "allowed_workflow_ids": [
+          "new-lesson-package",
+          "verified-curriculum-redesign",
+          "failure-recovery",
+          "material-architecture-improvement",
+          "differentiated-redesign",
+          "udl-accessible-redesign",
+          "assessment-upgrade",
+          "conceptual-inquiry",
+          "pbl-design",
+          "ai-resilient-assignment"
+        ],
+        "selected_workflow_id": null
+      }
+    },
+    "improve-lesson-architecture": {
+      "skill_id": "improve-lesson-architecture",
+      "skill_path": "skills/lesson-design/improve-lesson-architecture",
+      "gate": {
+        "profile": "Standard",
+        "active_stage": "Stage 1+3 · Curriculum-grounded (brownfield)",
+        "fact_routing_labels": [
+          "from-curriculum",
+          "from-textbook",
+          "from-class-context",
+          "from-teacher-judgment"
+        ],
+        "tier3_mode": "enabled"
+      },
+      "direct_entry": {
+        "parity_bootstrap_required": true,
+        "allowed_workflow_ids": [
+          "material-architecture-improvement",
+          "udl-accessible-redesign",
+          "verified-curriculum-redesign"
+        ],
+        "selected_workflow_id": null
+      }
+    },
+    "zoom-out-lesson": {
+      "skill_id": "zoom-out-lesson",
+      "skill_path": "skills/lesson-design/zoom-out-lesson",
+      "gate": {
+        "profile": "Quick",
+        "active_stage": "Stage 1 · Intent-first",
+        "fact_routing_labels": [
+          "from-teacher-judgment"
+        ],
+        "tier3_mode": "disabled-for-quick-profile"
+      },
+      "direct_entry": {
+        "parity_bootstrap_required": true,
+        "allowed_workflow_ids": [
+          "verified-curriculum-redesign",
+          "failure-recovery",
+          "pbl-design"
+        ],
+        "selected_workflow_id": null
+      }
+    },
+    "thinking-routine-selector": {
+      "skill_id": "thinking-routine-selector",
+      "skill_path": "skills/lesson-design/thinking-routine-selector",
+      "gate": {
+        "profile": "Standard",
+        "active_stage": "Stage 1 · Intent-first",
+        "fact_routing_labels": [
+          "from-teacher-judgment",
+          "from-curriculum"
+        ],
+        "tier3_mode": "enabled"
+      },
+      "direct_entry": {
+        "parity_bootstrap_required": true,
+        "allowed_workflow_ids": [
+          "conceptual-inquiry"
+        ],
+        "selected_workflow_id": "conceptual-inquiry"
+      }
+    },
+    "concept-based-inquiry-designer": {
+      "skill_id": "concept-based-inquiry-designer",
+      "skill_path": "skills/inquiry-pbl/concept-based-inquiry-designer",
+      "gate": {
+        "profile": "Deep",
+        "active_stage": "Stage 1+3 · Curriculum-grounded",
+        "fact_routing_labels": [
+          "from-curriculum",
+          "from-textbook",
+          "from-teacher-judgment"
+        ],
+        "tier3_mode": "enabled"
+      },
+      "direct_entry": {
+        "parity_bootstrap_required": true,
+        "allowed_workflow_ids": [
+          "conceptual-inquiry"
+        ],
+        "selected_workflow_id": "conceptual-inquiry"
+      }
+    },
+    "pbl-design-coach": {
+      "skill_id": "pbl-design-coach",
+      "skill_path": "skills/inquiry-pbl/pbl-design-coach",
+      "gate": {
+        "profile": "Deep",
+        "active_stage": "Stage 1 · Intent-first",
+        "fact_routing_labels": [
+          "from-teacher-judgment",
+          "from-class-context"
+        ],
+        "tier3_mode": "enabled"
+      },
+      "direct_entry": {
+        "parity_bootstrap_required": true,
+        "allowed_workflow_ids": [
+          "pbl-design"
+        ],
+        "selected_workflow_id": "pbl-design"
+      }
+    },
+    "assessment-first-design": {
+      "skill_id": "assessment-first-design",
+      "skill_path": "skills/assessment/assessment-first-design",
+      "gate": {
+        "profile": "Deep",
+        "active_stage": "Stage 2 · Evidence-first",
+        "fact_routing_labels": [
+          "from-teacher-judgment",
+          "from-curriculum"
+        ],
+        "tier3_mode": "enabled"
+      },
+      "direct_entry": {
+        "parity_bootstrap_required": true,
+        "allowed_workflow_ids": [
+          "new-lesson-package",
+          "verified-curriculum-redesign",
+          "assessment-upgrade",
+          "conceptual-inquiry",
+          "pbl-design",
+          "ai-resilient-assignment",
+          "material-architecture-improvement"
+        ],
+        "selected_workflow_id": null
+      }
+    },
+    "rubric-quality-guard": {
+      "skill_id": "rubric-quality-guard",
+      "skill_path": "skills/assessment/rubric-quality-guard",
+      "gate": {
+        "profile": "Standard",
+        "active_stage": "Stage 2 · Evidence-first",
+        "fact_routing_labels": [
+          "from-curriculum",
+          "from-teacher-judgment"
+        ],
+        "tier3_mode": "enabled"
+      },
+      "direct_entry": {
+        "parity_bootstrap_required": true,
+        "allowed_workflow_ids": [
+          "assessment-upgrade",
+          "pbl-design"
+        ],
+        "selected_workflow_id": null
+      }
+    },
+    "hinge-question-designer": {
+      "skill_id": "hinge-question-designer",
+      "skill_path": "skills/assessment/hinge-question-designer",
+      "gate": {
+        "profile": "Standard",
+        "active_stage": "Stage 2 · Evidence-first",
+        "fact_routing_labels": [
+          "from-teacher-judgment"
+        ],
+        "tier3_mode": "enabled"
+      },
+      "direct_entry": {
+        "parity_bootstrap_required": true,
+        "allowed_workflow_ids": [
+          "assessment-upgrade"
+        ],
+        "selected_workflow_id": "assessment-upgrade"
+      }
+    },
+    "differentiate-lesson-pathways": {
+      "skill_id": "differentiate-lesson-pathways",
+      "skill_path": "skills/individualization/differentiate-lesson-pathways",
+      "gate": {
+        "profile": "Standard",
+        "active_stage": "Stage 1+2 · Mixed",
+        "fact_routing_labels": [
+          "from-class-context",
+          "from-teacher-judgment"
+        ],
+        "tier3_mode": "enabled"
+      },
+      "direct_entry": {
+        "parity_bootstrap_required": true,
+        "allowed_workflow_ids": [
+          "differentiated-redesign"
+        ],
+        "selected_workflow_id": "differentiated-redesign"
+      }
+    },
+    "udl-barrier-remover": {
+      "skill_id": "udl-barrier-remover",
+      "skill_path": "skills/individualization/udl-barrier-remover",
+      "gate": {
+        "profile": "Standard",
+        "active_stage": "Stage 1+2 · Mixed",
+        "fact_routing_labels": [
+          "from-class-context",
+          "from-teacher-judgment"
+        ],
+        "tier3_mode": "enabled"
+      },
+      "direct_entry": {
+        "parity_bootstrap_required": true,
+        "allowed_workflow_ids": [
+          "differentiated-redesign",
+          "udl-accessible-redesign"
+        ],
+        "selected_workflow_id": null
+      }
+    },
+    "diagnose-lesson-failure": {
+      "skill_id": "diagnose-lesson-failure",
+      "skill_path": "skills/diagnostics/diagnose-lesson-failure",
+      "gate": {
+        "profile": "Standard",
+        "active_stage": "Stage 2 · Evidence-first",
+        "fact_routing_labels": [
+          "from-class-context",
+          "from-teacher-judgment"
+        ],
+        "tier3_mode": "enabled"
+      },
+      "direct_entry": {
+        "parity_bootstrap_required": true,
+        "allowed_workflow_ids": [
+          "failure-recovery",
+          "differentiated-redesign"
+        ],
+        "selected_workflow_id": null
+      }
+    },
+    "ai-resilient-assignment-redesign": {
+      "skill_id": "ai-resilient-assignment-redesign",
+      "skill_path": "skills/ai-era/ai-resilient-assignment-redesign",
+      "gate": {
+        "profile": "Deep",
+        "active_stage": "Stage 1+2 · Mixed",
+        "fact_routing_labels": [
+          "from-teacher-judgment",
+          "from-curriculum"
+        ],
+        "tier3_mode": "enabled"
+      },
+      "direct_entry": {
+        "parity_bootstrap_required": true,
+        "allowed_workflow_ids": [
+          "ai-resilient-assignment"
+        ],
+        "selected_workflow_id": "ai-resilient-assignment"
+      }
+    }
+  },
+  "plugin_projection": {
+    "ownership": "derivative-only",
+    "plugin_json": {
+      "path": ".claude-plugin/plugin.json",
+      "top_level_key_order": [
+        "name",
+        "version",
+        "description",
+        "author",
+        "homepage",
+        "repository",
+        "license",
+        "keywords",
+        "skills",
+        "commands"
+      ],
+      "name": "k-teacher-skills",
+      "version": "2.5.3",
+      "description": "한국 교사용 Skill Pack — AI로 수업자료를 바로 생성하지 않고 수업 의도·학생 맥락·평가 증거·학습 장벽을 먼저 질문하고 검증한다. Readiness Gate v2 + provenance grading 메커니즘 포함. Claude Cowork·Claude Code 호환.",
+      "author": {
+        "name": "pblsketch"
+      },
+      "homepage": "https://github.com/pblsketch/k-teacher-skills",
+      "repository": "https://github.com/pblsketch/k-teacher-skills",
+      "license": "MIT",
+      "keywords": [
+        "education",
+        "korean",
+        "teacher",
+        "lesson-design",
+        "assessment",
+        "backward-design",
+        "udl",
+        "pbl",
+        "readiness-gate-v2"
+      ],
+      "skills": [
+        "./skills/entry/grill-me-for-k-teacher/",
+        "./skills/entry/grill-with-curriculum/",
+        "./skills/entry/k-teacher-workflow-router/",
+        "./skills/lesson-design/lesson-prototype/",
+        "./skills/lesson-design/to-lesson-brief/",
+        "./skills/lesson-design/improve-lesson-architecture/",
+        "./skills/lesson-design/zoom-out-lesson/",
+        "./skills/lesson-design/thinking-routine-selector/",
+        "./skills/inquiry-pbl/concept-based-inquiry-designer/",
+        "./skills/inquiry-pbl/pbl-design-coach/",
+        "./skills/assessment/assessment-first-design/",
+        "./skills/assessment/rubric-quality-guard/",
+        "./skills/assessment/hinge-question-designer/",
+        "./skills/individualization/differentiate-lesson-pathways/",
+        "./skills/individualization/udl-barrier-remover/",
+        "./skills/diagnostics/diagnose-lesson-failure/",
+        "./skills/ai-era/ai-resilient-assignment-redesign/"
+      ],
+      "commands": "./commands/"
+    },
+    "marketplace_json": {
+      "path": ".claude-plugin/marketplace.json",
+      "top_level_key_order": [
+        "$schema",
+        "name",
+        "description",
+        "owner",
+        "plugins",
+        "version"
+      ],
+      "plugin_entry_key_order": [
+        "name",
+        "version",
+        "description",
+        "author",
+        "source",
+        "category",
+        "homepage",
+        "tags"
+      ],
+      "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+      "name": "k-teacher",
+      "description": "한국 교사용 Skill Pack marketplace — Readiness Gate v2 + provenance grading. 17 skills + 10 workflow chains + 11 slash commands.",
+      "owner": {
+        "name": "pblsketch"
+      },
+      "version": "2.5.3",
+      "plugins": [
+        {
+          "name": "k-teacher-skills",
+          "version": "2.5.3",
+          "description": "한국 교사용 Skill Pack. 수업안·활동지·평가지·루브릭을 바로 만들지 않고 수업 의도·학생 맥락·평가 증거·학습 장벽을 먼저 묻는다. Backward Design + UDL + AI-resilient assignment 통합.",
+          "author": {
+            "name": "pblsketch"
+          },
+          "source": "./",
+          "category": "education",
+          "homepage": "https://github.com/pblsketch/k-teacher-skills",
+          "tags": [
+            "korean",
+            "teacher",
+            "lesson-design",
+            "assessment",
+            "backward-design",
+            "udl",
+            "pbl",
+            "readiness-gate-v2"
+          ]
+        }
+      ]
+    }
+  },
+  "release_surface_projection": {
+    "ownership": "derivative-only",
+    "surfaces": {
+      "README.md": {
+        "classification": "documentation",
+        "projection_kind": "registry-derived-or-registry-validated"
+      },
+      "WORKFLOWS.md": {
+        "classification": "documentation",
+        "projection_kind": "registry-derived-or-registry-validated"
+      },
+      "skill-pack.json": {
+        "classification": "manifest",
+        "projection_kind": "registry-derived-or-strictly-registry-validated"
+      },
+      ".claude-plugin/plugin.json": {
+        "classification": "plugin-manifest",
+        "projection_kind": "registry-derived-or-strictly-registry-validated"
+      },
+      ".claude-plugin/marketplace.json": {
+        "classification": "marketplace-manifest",
+        "projection_kind": "registry-derived-or-strictly-registry-validated"
+      },
+      "tests/readiness_gate_v2_mapping.json": {
+        "classification": "derivative-test-data",
+        "projection_kind": "registry-derived-or-strictly-registry-validated"
+      },
+      "commands/*.md": {
+        "classification": "public-command-surface",
+        "projection_kind": "registry-derived"
+      },
+      "workflows/*.md": {
+        "classification": "public-workflow-surface",
+        "projection_kind": "registry-derived"
+      }
+    }
+  }
+}

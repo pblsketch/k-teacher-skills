@@ -39,6 +39,12 @@ v2.5.1 Global checks v2에 더해, 사실 라벨의 출처 등급 운영을 추�
 - **Escalation 표시** — 교사가 확인·정정해 `:inferred → :provided`로 격상되면 transcript에 갱신을 명시한다 (예: "성취기준이 갱신되었습니다. `[from-curriculum:provided]`").
 - **산출물 직접 인용 금지 (`:inferred`)** — `:inferred` 상태로는 활동지·평가지·루브릭 등 산출물에 해당 사실을 직접 인용하지 않는다. 산출물에 등장할 때는 격상 후이거나 "(추정)" 표시를 유지한다.
 - **선택지 질문 금지 (`:inferred`)** — `:inferred` 사실은 객관식 선택지 형태로 묻지 않는다 (사용자가 무비판적으로 추정안을 택할 위험 차단). 자유 서술 형태로 원문 확인 요청만 허용.
+- **Downstream-ready no-unblock (`:inferred`)** — unresolved `:inferred` 사실이 하나라도 남아 있으면 downstream-ready handoff, `author-ir`, `render`로 넘기지 않는다. handoff에는 blocking provenance 상태를 유지한다.
+- **Provider output read-only 입력** — provider가 건넨 원문·응답은 read-only input으로만 취급한다. downstream 단계는 이를 `provider` record로만 들고 가며 `read_only_input: true`를 유지한 채 provenance를 우회해 ready 상태를 만들지 않는다.
+- **Per-record clearance evidence** — downstream-ready 결론은 summary 문구만으로 열지 않는다. 각 record에 `provider` · `provenance_grade` · `source_reference` · `verification_evidence_type` · `verification_anchor` · `source_license.status` · `source_license.license_id` · `source_license.evidence_anchor` · `read_only_input`을 남기고 그 record가 clearance 근거가 되어야 한다.
+- **Provider/provenance/license fail-closed** — provider / provenance / license 중 하나라도 비어 있거나 unresolved면 fail-closed로 유지한다. 특히 `source_license.status`가 `verified-compatible`이 아니면 downstream-ready가 아니다.
+- **Provider/license evidence 유지** — `:provided`/`:web`로 provenance가 풀려도 `provider` · `source_license.status` · `source_license.license_id` · `source_license.evidence_anchor` · `read_only_input` evidence 없이는 downstream-ready가 아니다.
+- **Provider quarantine fail-closed** — mixed-revision 또는 source/version/raw→normalized trace가 정리되지 않은 provider record는 `quarantined`로 격리한다. 이 상태에서는 downstream-ready handoff, `author-ir`, `render`를 열지 않는다.
 
 ## Skill-specific checks
 

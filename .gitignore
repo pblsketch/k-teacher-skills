@@ -5,3 +5,10 @@ Thumbs.db
 node_modules/
 .env
 .env.*
+
+# Local agent/runtime state
+.gjc/
+
+# Python generated files
+__pycache__/
+*.py[cod]

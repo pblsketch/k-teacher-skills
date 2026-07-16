@@ -1,0 +1,155 @@
+{
+  "schema_version": "1",
+  "purpose": "Stage-1 public and release-facing surface validation matrix. Every listed surface is registry-derived, registry-validated, or otherwise derivative-only; none is a co-equal authority with the canonical routing/Gate registry.",
+  "surfaces": [
+    {
+      "surface": "workflows/*.md",
+      "current_count": 10,
+      "classification": "public-entry-surface",
+      "canonical_source": "registry-derived",
+      "validation_requirements": [
+        "workflow id exact",
+        "workflow chain exact",
+        "profile exact",
+        "canonical target exact"
+      ]
+    },
+    {
+      "surface": "commands/*.md",
+      "current_count": 11,
+      "classification": "public-entry-surface",
+      "canonical_source": "registry-derived",
+      "validation_requirements": [
+        "command id exact",
+        "canonical workflow id exact",
+        "udl command remains distinct from differentiate command"
+      ]
+    },
+    {
+      "surface": "README.md",
+      "current_count": 1,
+      "classification": "public-doc-surface",
+      "canonical_source": "registry-derived or registry-validated release doc, never independent authority",
+      "validation_requirements": [
+        "workflow ids exact",
+        "command names exact",
+        "router-first guidance exact",
+        "release-gate semantic precedence, dimensions, and observability counters exact"
+      ],
+      "validator_keys": [
+        "provider_contract_present",
+        "release_gate_semantic_precedence_present",
+        "release_gate_semantic_dimensions_present",
+        "release_gate_observability_counters_present"
+      ]
+    },
+    {
+      "surface": "WORKFLOWS.md",
+      "current_count": 1,
+      "classification": "public-doc-surface",
+      "canonical_source": "registry-derived or registry-validated",
+      "validation_requirements": [
+        "canonical workflow table exact"
+      ]
+    },
+    {
+      "surface": "references/interview-readiness.md",
+      "current_count": 1,
+      "classification": "contract-reference-surface",
+      "canonical_source": "registry-aligned handoff reference, never independent authority",
+      "validation_requirements": [
+        "Gate and handoff contract remains registry-aligned",
+        "stateless resume response explicitly requests profile, topology lock, weakest dimension, and last answer summary",
+        "to-lesson-brief handoff remains transcript-based from the last §12 block plus topology lock result"
+      ],
+      "validator_keys": [
+        "gate_contract_registry_aligned",
+        "stateless_resume_fields_present",
+        "transcript_handoff_is_last_section12_plus_topology"
+      ]
+    },
+    {
+      "surface": "tests/expected-behaviors.md",
+      "current_count": 1,
+      "classification": "expected-behavior-surface",
+      "canonical_source": "registry-aligned expected-behavior reference, never independent authority",
+      "validation_requirements": [
+        "topology-lock acknowledgement preserved",
+        "stateless transparency preserved via transcript-based resume guidance",
+        "to-lesson-brief separates confirmed, inferred, teacher-judgment-needed, and unconfirmed buckets"
+      ],
+      "validator_keys": [
+        "topology_lock_acknowledged",
+        "stateless_resume_guidance_present",
+        "lesson_brief_bucket_separation_present"
+      ]
+    },
+    {
+      "surface": "skill-pack.json",
+      "current_count": 1,
+      "classification": "release-manifest-surface",
+      "canonical_source": "registry-derived projection or strictly registry-validated derivative, never independent authority",
+      "validation_requirements": [
+        "entry skill exact",
+        "validation lane exact",
+        "semantic-eval release-gate asset contract exact",
+        "observability counter contract exact"
+      ],
+      "validator_keys": [
+        "entry_skill_exact",
+        "validation_lane_exact",
+        "semantic_eval_release_gate_assets_present",
+        "observability_counter_contract_present"
+      ]
+    },
+    {
+      "surface": "research-evaluation.md",
+      "current_count": 1,
+      "classification": "release-gate-doc-surface",
+      "canonical_source": "release-gate rationale doc, never independent authority",
+      "validation_requirements": [
+        "semantic-eval deterministic precedence published",
+        "semantic-eval dimension set published",
+        "observability counter and plugin metadata drift contract published"
+      ],
+      "validator_keys": [
+        "semantic_eval_deterministic_precedence_present",
+        "semantic_eval_dimensions_present",
+        "observability_and_plugin_metadata_present"
+      ]
+    },
+    {
+      "surface": ".claude-plugin/plugin.json",
+      "current_count": 1,
+      "classification": "release-plugin-surface",
+      "canonical_source": "registry-derived projection or strictly registry-validated derivative, never independent authority",
+      "validation_requirements": [
+        "registry.plugin_projection.plugin_json closed-world deep equality: top-level key set and order, every value, author record, keywords order, 17-path skills order with on-disk existence, and commands root"
+      ],
+      "validator_keys": [
+        "plugin_json_registry_projection_exact"
+      ]
+    },
+    {
+      "surface": ".claude-plugin/marketplace.json",
+      "current_count": 1,
+      "classification": "release-plugin-surface",
+      "canonical_source": "registry-derived projection or strictly registry-validated derivative, never independent authority",
+      "validation_requirements": [
+        "registry.plugin_projection.marketplace_json closed-world deep equality: top-level key set and order, every value, owner record, single-plugin cardinality, plugins[0] key set and order with source/category/homepage, and tags order"
+      ],
+      "validator_keys": [
+        "marketplace_json_registry_projection_exact"
+      ]
+    },
+    {
+      "surface": "tests/readiness_gate_v2_mapping.json",
+      "current_count": 1,
+      "classification": "derivative-test-surface",
+      "canonical_source": "derivative from registry",
+      "validation_requirements": [
+        "exact Gate mapping parity"
+      ]
+    }
+  ]
+}

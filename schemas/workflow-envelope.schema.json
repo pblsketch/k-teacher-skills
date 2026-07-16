@@ -1,0 +1,2691 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://k-teacher-skills.local/schemas/workflow-envelope.schema.json",
+  "title": "Workflow Envelope",
+  "$comment": "Authoritative stage-1 workflow envelope contract. This schema is the only owner for serialized workflow envelopes, workflow-embedded approvals[], and approval-record anchor semantics. No separate approval schema owner or approval artifact namespace exists.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "workflow_envelope_version",
+    "workflow_envelope_revision_id",
+    "workflow_id",
+    "workflow_type",
+    "entry_mode",
+    "parity_bootstrap",
+    "gate_v2",
+    "request_summary",
+    "topology",
+    "current_round",
+    "current_ambiguity",
+    "blocking_stage",
+    "blocking_dimensions",
+    "teacher_intent",
+    "learner_context",
+    "target_evidence",
+    "curriculum_context",
+    "teacher_judgment_boundaries",
+    "approvals",
+    "approval_state",
+    "provenance_ledger",
+    "capability_record",
+    "next_authorized_operation",
+    "resume_summary"
+  ],
+  "properties": {
+    "workflow_envelope_version": {
+      "const": "1"
+    },
+    "workflow_envelope_revision_id": {
+      "type": "string",
+      "pattern": "^env-[0-9]{4,}$"
+    },
+    "workflow_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "workflow_type": {
+      "$ref": "#/$defs/canonicalWorkflowId"
+    },
+    "entry_mode": {
+      "type": "string",
+      "enum": [
+        "router",
+        "direct-skill",
+        "resume"
+      ]
+    },
+    "parity_bootstrap": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "required",
+        "completed",
+        "selected_workflow",
+        "reason"
+      ],
+      "properties": {
+        "required": {
+          "type": "boolean"
+        },
+        "completed": {
+          "type": "boolean"
+        },
+        "selected_workflow": {
+          "$ref": "#/$defs/canonicalWorkflowId"
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "gate_v2": {
+      "$ref": "#/$defs/gateV2"
+    },
+    "request_summary": {
+      "type": "string",
+      "minLength": 1
+    },
+    "topology": {
+      "type": "string",
+      "enum": [
+        "single-lesson",
+        "unit",
+        "assessment-system",
+        "term-flow",
+        "multi",
+        "disabled"
+      ]
+    },
+    "current_round": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "current_ambiguity": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "blocking_stage": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "blocking_dimensions": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "teacher_intent": {
+      "$ref": "#/$defs/statusValue"
+    },
+    "learner_context": {
+      "$ref": "#/$defs/statusValue"
+    },
+    "target_evidence": {
+      "$ref": "#/$defs/statusValue"
+    },
+    "curriculum_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "records",
+        "unblock_sources_allowed",
+        "never_unblock_sources"
+      ],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": [
+            "unverified",
+            "partial",
+            "verified",
+            "blocked"
+          ]
+        },
+        "records": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/curriculumProviderRecord"
+          }
+        },
+        "unblock_sources_allowed": {
+          "$ref": "#/$defs/registryOwnedUnblockSourcesAllowed"
+        },
+        "never_unblock_sources": {
+          "$ref": "#/$defs/registryOwnedNeverUnblockSet"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "verified"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "records": {
+                "minItems": 1
+              }
+            }
+          }
+        }
+      ]
+    },
+    "teacher_judgment_boundaries": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/teacherJudgmentBoundary"
+      }
+    },
+    "approvals": {
+      "$comment": "In-envelope approval history. This schema owns per-record structure (approval_id, boundary_id, decision enum, decided_at format, and confirmation anchors). Same-boundary temporal supersession is not expressible in JSON Schema and is owned by the semantic validator: group approvals by boundary_id, order by decided_at, select the latest valid winner, fail closed on equal-timestamp conflicts, and block a stale approved decision when a newer revoked/rejected/invalid decision exists.",
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/approvalRecord"
+      }
+    },
+    "approval_state": {
+      "$ref": "#/$defs/approvalState"
+    },
+    "provenance_ledger": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/provenanceRecord"
+      }
+    },
+    "capability_record": {
+      "$ref": "#/$defs/capabilityRecord"
+    },
+    "next_authorized_operation": {
+      "type": "string",
+      "enum": [
+        "ask-question",
+        "summarize",
+        "judgment-only",
+        "handoff",
+        "author-ir",
+        "render"
+      ]
+    },
+    "resume_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "topology",
+        "last_weak_dimension",
+        "last_round_summary"
+      ],
+      "properties": {
+        "profile": {
+          "type": "string",
+          "enum": [
+            "Quick",
+            "Standard",
+            "Deep"
+          ]
+        },
+        "topology": {
+          "type": "string",
+          "enum": [
+            "single-lesson",
+            "unit",
+            "assessment-system",
+            "term-flow",
+            "multi",
+            "disabled"
+          ]
+        },
+        "last_weak_dimension": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "last_round_summary": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    }
+  },
+  "$defs": {
+    "canonicalWorkflowId": {
+      "$comment": "Canonical workflow IDs are owned by registry/routing-gate-registry.json; this schema mirrors that registry-owned set for envelope binding only.",
+      "type": "string",
+      "enum": [
+        "new-lesson-package",
+        "verified-curriculum-redesign",
+        "failure-recovery",
+        "material-architecture-improvement",
+        "differentiated-redesign",
+        "udl-accessible-redesign",
+        "assessment-upgrade",
+        "conceptual-inquiry",
+        "pbl-design",
+        "ai-resilient-assignment"
+      ]
+    },
+    "statusValue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "value"
+      ],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": [
+            "missing",
+            "partial",
+            "blocked",
+            "confirmed",
+            "resolved"
+          ]
+        },
+        "value": {}
+      }
+    },
+    "gateV2": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "threshold",
+        "threshold_source",
+        "active_stage",
+        "fact_routing_labels",
+        "provenance_grade_rules",
+        "tier3_mode",
+        "round0_topology",
+        "mandatory_gates",
+        "stage_priority"
+      ],
+      "properties": {
+        "profile": {
+          "type": "string",
+          "enum": [
+            "Quick",
+            "Standard",
+            "Deep"
+          ]
+        },
+        "threshold": {
+          "type": "number",
+          "enum": [
+            0.3,
+            0.2,
+            0.15
+          ]
+        },
+        "threshold_source": {
+          "type": "string",
+          "enum": [
+            "explicit",
+            "router-inferred",
+            "skill-default"
+          ]
+        },
+        "active_stage": {
+          "type": "string",
+          "minLength": 1
+        },
+        "fact_routing_labels": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "from-curriculum",
+              "from-textbook",
+              "from-class-context",
+              "from-teacher-judgment"
+            ]
+          },
+          "uniqueItems": true,
+          "minItems": 1
+        },
+        "provenance_grade_rules": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "curriculum_or_textbook",
+            "never_unblock"
+          ],
+          "properties": {
+            "curriculum_or_textbook": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/provenanceGrade"
+              },
+              "uniqueItems": true,
+              "minItems": 1
+            },
+            "never_unblock": {
+              "$ref": "#/$defs/registryOwnedNeverUnblockSet"
+            }
+          }
+        },
+        "tier3_mode": {
+          "type": "string",
+          "enum": [
+            "enabled",
+            "disabled-for-quick-profile"
+          ]
+        },
+        "round0_topology": {
+          "type": "string",
+          "enum": [
+            "single-lesson",
+            "unit",
+            "assessment-system",
+            "term-flow",
+            "multi",
+            "disabled"
+          ]
+        },
+        "mandatory_gates": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "non_goals_explicit",
+            "teacher_decision_boundaries_explicit",
+            "privacy_safe",
+            "observable_evidence_defined",
+            "pressure_pass_completed"
+          ],
+          "properties": {
+            "non_goals_explicit": {
+              "type": "boolean"
+            },
+            "teacher_decision_boundaries_explicit": {
+              "type": "boolean"
+            },
+            "privacy_safe": {
+              "type": "boolean"
+            },
+            "observable_evidence_defined": {
+              "type": "boolean"
+            },
+            "pressure_pass_completed": {
+              "type": "boolean"
+            }
+          }
+        },
+        "stage_priority": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "stage1_weak_blocks_stage2",
+            "stage3_brownfield_only"
+          ],
+          "properties": {
+            "stage1_weak_blocks_stage2": {
+              "type": "boolean"
+            },
+            "stage3_brownfield_only": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    },
+    "teacherActor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "actor_type",
+        "actor_ref"
+      ],
+      "properties": {
+        "actor_type": {
+          "const": "teacher"
+        },
+        "actor_ref": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "transcriptOrHandoffAnchor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "carrier",
+        "locator_type",
+        "locator_value"
+      ],
+      "properties": {
+        "carrier": {
+          "type": "string",
+          "minLength": 1
+        },
+        "locator_type": {
+          "type": "string",
+          "minLength": 1
+        },
+        "locator_value": {}
+      },
+      "oneOf": [
+        {
+          "properties": {
+            "carrier": {
+              "const": "transcript"
+            },
+            "locator_type": {
+              "enum": [
+                "transcript-section",
+                "transcript-line-range"
+              ]
+            },
+            "locator_value": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        {
+          "properties": {
+            "carrier": {
+              "const": "handoff-artifact"
+            },
+            "locator_type": {
+              "const": "handoff-heading"
+            },
+            "locator_value": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      ]
+    },
+    "teacherConfirmationAnchor": {
+      "$comment": "Teacher-confirmation anchors are transcript or handoff references inside the same serialized envelope. No external approval artifact namespace exists.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "carrier",
+        "locator_type",
+        "locator_value"
+      ],
+      "properties": {
+        "carrier": {
+          "type": "string",
+          "minLength": 1
+        },
+        "locator_type": {
+          "type": "string",
+          "minLength": 1
+        },
+        "locator_value": {}
+      },
+      "oneOf": [
+        {
+          "properties": {
+            "carrier": {
+              "const": "null"
+            },
+            "locator_type": {
+              "const": "null"
+            },
+            "locator_value": {
+              "type": "null"
+            }
+          }
+        },
+        {
+          "properties": {
+            "carrier": {
+              "const": "transcript"
+            },
+            "locator_type": {
+              "enum": [
+                "transcript-section",
+                "transcript-line-range"
+              ]
+            },
+            "locator_value": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        {
+          "properties": {
+            "carrier": {
+              "const": "handoff-artifact"
+            },
+            "locator_type": {
+              "const": "handoff-heading"
+            },
+            "locator_value": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      ]
+    },
+    "evidenceAnchor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "carrier",
+        "locator_type",
+        "locator_value"
+      ],
+      "properties": {
+        "carrier": {
+          "type": "string",
+          "minLength": 1
+        },
+        "locator_type": {
+          "type": "string",
+          "minLength": 1
+        },
+        "locator_value": {}
+      },
+      "oneOf": [
+        {
+          "properties": {
+            "carrier": {
+              "const": "transcript"
+            },
+            "locator_type": {
+              "enum": [
+                "transcript-section",
+                "transcript-line-range"
+              ]
+            },
+            "locator_value": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        {
+          "properties": {
+            "carrier": {
+              "const": "handoff-artifact"
+            },
+            "locator_type": {
+              "const": "handoff-heading"
+            },
+            "locator_value": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        {
+          "properties": {
+            "carrier": {
+              "const": "url"
+            },
+            "locator_type": {
+              "const": "absolute-url"
+            },
+            "locator_value": {
+              "type": "string",
+              "format": "uri",
+              "pattern": "^https?://"
+            }
+          }
+        }
+      ]
+    },
+    "supportingEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "anchor",
+        "sha256",
+        "detail"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "provided-document",
+            "web-verification"
+          ]
+        },
+        "anchor": {
+          "$ref": "#/$defs/evidenceAnchor"
+        },
+        "sha256": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[a-fA-F0-9]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "detail": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "web-verification"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "anchor": {
+                "properties": {
+                  "carrier": {
+                    "const": "url"
+                  },
+                  "locator_type": {
+                    "const": "absolute-url"
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "teacherConfirmation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "required",
+        "confirmed",
+        "confirmation_source",
+        "confirmation_anchor"
+      ],
+      "properties": {
+        "required": {
+          "const": true
+        },
+        "confirmed": {
+          "type": "boolean"
+        },
+        "confirmation_source": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "teacher-message",
+            "teacher-selection",
+            "teacher-approved-edit",
+            null
+          ]
+        },
+        "confirmation_anchor": {
+          "$ref": "#/$defs/teacherConfirmationAnchor"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "confirmed": {
+                "const": true
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "confirmation_source": {
+                "type": "string"
+              },
+              "confirmation_anchor": {
+                "not": {
+                  "properties": {
+                    "carrier": {
+                      "const": "null"
+                    }
+                  },
+                  "required": [
+                    "carrier"
+                  ]
+                }
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "confirmation_source": {
+                "const": null
+              },
+              "confirmation_anchor": {
+                "properties": {
+                  "carrier": {
+                    "const": "null"
+                  },
+                  "locator_type": {
+                    "const": "null"
+                  },
+                  "locator_value": {
+                    "type": "null"
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "teacherJudgmentBoundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "boundary_id",
+        "category",
+        "description",
+        "affected_output_classes",
+        "blocking_severity",
+        "resolution",
+        "allowed_next_ops_while_open",
+        "created_by",
+        "last_updated_round"
+      ],
+      "properties": {
+        "boundary_id": {
+          "type": "string",
+          "pattern": "^tj-[A-Za-z0-9._-]+$"
+        },
+        "category": {
+          "type": "string",
+          "enum": [
+            "goal-priority",
+            "evidence-definition",
+            "curriculum-selection",
+            "difficulty-tradeoff",
+            "artifact-scope",
+            "grouping-policy",
+            "accessibility-accommodation",
+            "assessment-weighting",
+            "sensitive-topic-handling",
+            "teacher-style-choice"
+          ]
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "affected_output_classes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "handoff",
+              "author-ir",
+              "render"
+            ]
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "blocking_severity": {
+          "type": "string",
+          "enum": [
+            "hard",
+            "soft"
+          ]
+        },
+        "resolution": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "status",
+            "teacher_confirmation",
+            "supporting_evidence"
+          ],
+          "properties": {
+            "status": {
+              "type": "string",
+              "enum": [
+                "open",
+                "resolved"
+              ]
+            },
+            "teacher_confirmation": {
+              "$ref": "#/$defs/teacherConfirmation"
+            },
+            "supporting_evidence": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/supportingEvidence"
+              }
+            },
+            "approval_record": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "approval_id",
+                "boundary_id",
+                "decision"
+              ],
+              "properties": {
+                "approval_id": {
+                  "type": "string",
+                  "pattern": "^apr-[A-Za-z0-9._-]+$"
+                },
+                "boundary_id": {
+                  "type": "string",
+                  "pattern": "^tj-[A-Za-z0-9._-]+$"
+                },
+                "decision": {
+                  "type": "string",
+                  "enum": [
+                    "approved",
+                    "rejected",
+                    "revoked"
+                  ]
+                }
+              }
+            }
+          },
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "status": {
+                    "const": "open"
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "teacher_confirmation": {
+                    "properties": {
+                      "confirmed": {
+                        "const": false
+                      }
+                    }
+                  }
+                }
+              },
+              "else": {
+                "required": [
+                  "approval_record"
+                ],
+                "properties": {
+                  "teacher_confirmation": {
+                    "properties": {
+                      "confirmed": {
+                        "const": true
+                      }
+                    }
+                  },
+                  "supporting_evidence": {
+                    "minItems": 1
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "allowed_next_ops_while_open": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "ask-question",
+              "summarize",
+              "judgment-only"
+            ]
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "created_by": {
+          "type": "string",
+          "enum": [
+            "workflow",
+            "skill"
+          ]
+        },
+        "last_updated_round": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "approvalRecord": {
+      "$comment": "Minimum in-envelope approval record. Approval confirmation anchors are fail-closed and may not recurse through approval-record. This schema owns approval shape; there is no separate approval artifact namespace.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "approval_id",
+        "boundary_id",
+        "decision",
+        "decided_by",
+        "decided_at",
+        "confirmation_anchor",
+        "supporting_evidence"
+      ],
+      "properties": {
+        "approval_id": {
+          "type": "string",
+          "pattern": "^apr-[A-Za-z0-9._-]+$"
+        },
+        "boundary_id": {
+          "type": "string",
+          "pattern": "^tj-[A-Za-z0-9._-]+$"
+        },
+        "decision": {
+          "type": "string",
+          "enum": [
+            "approved",
+            "rejected",
+            "revoked"
+          ]
+        },
+        "decided_by": {
+          "$ref": "#/$defs/teacherActor"
+        },
+        "decided_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:\\.[0-9]+)?Z$"
+        },
+        "confirmation_anchor": {
+          "$ref": "#/$defs/transcriptOrHandoffAnchor"
+        },
+        "supporting_evidence": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/supportingEvidence"
+          }
+        }
+      }
+    },
+    "approvalState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "handoff_mode",
+        "can_continue_judgment_only",
+        "can_handoff",
+        "can_author_ir",
+        "can_render",
+        "envelope_authority"
+      ],
+      "properties": {
+        "handoff_mode": {
+          "type": "string",
+          "enum": [
+            "context-only",
+            "downstream-ready",
+            "blocked"
+          ]
+        },
+        "can_continue_judgment_only": {
+          "type": "boolean"
+        },
+        "can_handoff": {
+          "type": "boolean"
+        },
+        "can_author_ir": {
+          "type": "boolean"
+        },
+        "can_render": {
+          "type": "boolean"
+        },
+        "envelope_authority": {
+          "$ref": "#/$defs/envelopeAuthority"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "handoff_mode": {
+                "const": "blocked"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "can_handoff": {
+                "const": false
+              },
+              "can_continue_judgment_only": {
+                "const": false
+              },
+              "envelope_authority": {
+                "properties": {
+                  "downstream_operations_cleared": {
+                    "properties": {
+                      "handoff": {
+                        "const": false
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "handoff_mode": {
+                "const": "context-only"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "can_handoff": {
+                "const": true
+              },
+              "can_author_ir": {
+                "const": false
+              },
+              "can_render": {
+                "const": false
+              },
+              "can_continue_judgment_only": {
+                "const": true
+              },
+              "envelope_authority": {
+                "properties": {
+                  "downstream_operations_cleared": {
+                    "properties": {
+                      "handoff": {
+                        "const": false
+                      },
+                      "author_ir": {
+                        "const": false
+                      },
+                      "render": {
+                        "const": false
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "handoff_mode": {
+                "const": "downstream-ready"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "can_handoff": {
+                "const": true
+              },
+              "can_continue_judgment_only": {
+                "const": false
+              },
+              "envelope_authority": {
+                "properties": {
+                  "provider_contract_state": {
+                    "const": "available"
+                  },
+                  "curriculum_provenance_state": {
+                    "const": "verified-non-inferred"
+                  },
+                  "verification_anchors_complete": {
+                    "const": true
+                  },
+                  "source_license_state": {
+                    "const": "verified-compatible"
+                  },
+                  "non_inferred_curriculum_evidence": {
+                    "const": true
+                  },
+                  "downstream_operations_cleared": {
+                    "properties": {
+                      "handoff": {
+                        "const": true
+                      }
+                    }
+                  }
+                }
+              },
+              "provenance_ledger": {
+                "minItems": 1,
+                "contains": {
+                  "$ref": "#/$defs/downstreamRelevantProvenanceRecord"
+                },
+                "not": {
+                  "contains": {
+                    "allOf": [
+                      {
+                        "type": "object",
+                        "required": ["record_scope"],
+                        "properties": {
+                          "record_scope": {
+                            "enum": ["curriculum-context", "curriculum-record"]
+                          }
+                        }
+                      },
+                      {
+                        "not": {
+                          "$ref": "#/$defs/downstreamRelevantProvenanceRecord"
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "can_author_ir": {
+                "const": true
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "envelope_authority": {
+                "properties": {
+                  "provider_contract_state": {
+                    "const": "available"
+                  },
+                  "curriculum_provenance_state": {
+                    "const": "verified-non-inferred"
+                  },
+                  "verification_anchors_complete": {
+                    "const": true
+                  },
+                  "source_license_state": {
+                    "const": "verified-compatible"
+                  },
+                  "non_inferred_curriculum_evidence": {
+                    "const": true
+                  },
+                  "downstream_operations_cleared": {
+                    "properties": {
+                      "author_ir": {
+                        "const": true
+                      }
+                    }
+                  }
+                }
+              },
+              "provenance_ledger": {
+                "minItems": 1,
+                "contains": {
+                  "$ref": "#/$defs/downstreamRelevantProvenanceRecord"
+                },
+                "not": {
+                  "contains": {
+                    "allOf": [
+                      {
+                        "type": "object",
+                        "required": ["record_scope"],
+                        "properties": {
+                          "record_scope": {
+                            "enum": ["curriculum-context", "curriculum-record"]
+                          }
+                        }
+                      },
+                      {
+                        "not": {
+                          "$ref": "#/$defs/downstreamRelevantProvenanceRecord"
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "can_render": {
+                "const": true
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "envelope_authority": {
+                "properties": {
+                  "provider_contract_state": {
+                    "const": "available"
+                  },
+                  "curriculum_provenance_state": {
+                    "const": "verified-non-inferred"
+                  },
+                  "verification_anchors_complete": {
+                    "const": true
+                  },
+                  "source_license_state": {
+                    "const": "verified-compatible"
+                  },
+                  "non_inferred_curriculum_evidence": {
+                    "const": true
+                  },
+                  "downstream_operations_cleared": {
+                    "properties": {
+                      "render": {
+                        "const": true
+                      }
+                    }
+                  }
+                }
+              },
+              "provenance_ledger": {
+                "minItems": 1,
+                "contains": {
+                  "$ref": "#/$defs/downstreamRelevantProvenanceRecord"
+                },
+                "not": {
+                  "contains": {
+                    "allOf": [
+                      {
+                        "type": "object",
+                        "required": ["record_scope"],
+                        "properties": {
+                          "record_scope": {
+                            "enum": ["curriculum-context", "curriculum-record"]
+                          }
+                        }
+                      },
+                      {
+                        "not": {
+                          "$ref": "#/$defs/downstreamRelevantProvenanceRecord"
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "provenanceGrade": {
+      "type": "string",
+      "enum": [
+        ":provided",
+        ":web",
+        ":inferred"
+      ]
+    },
+    "providerIdentity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "provider_id",
+        "provider_kind",
+        "release_id",
+        "release_version"
+      ],
+      "properties": {
+        "provider_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "provider_kind": {
+          "type": "string",
+          "enum": [
+            "curriculum-provider",
+            "textbook-provider",
+            "web-source"
+          ]
+        },
+        "release_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "release_version": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "providerVerificationAnchor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "carrier",
+        "locator_type",
+        "locator_value"
+      ],
+      "properties": {
+        "carrier": {
+          "type": "string",
+          "minLength": 1
+        },
+        "locator_type": {
+          "type": "string",
+          "minLength": 1
+        },
+        "locator_value": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "oneOf": [
+        {
+          "properties": {
+            "carrier": {
+              "const": "provider-record"
+            },
+            "locator_type": {
+              "const": "provider-record-id"
+            },
+            "locator_value": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        {
+          "properties": {
+            "carrier": {
+              "const": "provider-release-manifest"
+            },
+            "locator_type": {
+              "const": "release-id"
+            },
+            "locator_value": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        {
+          "properties": {
+            "carrier": {
+              "const": "url"
+            },
+            "locator_type": {
+              "const": "absolute-url"
+            },
+            "locator_value": {
+              "type": "string",
+              "format": "uri",
+              "pattern": "^https?://"
+            }
+          }
+        }
+      ]
+    },
+    "sourceLicenseState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "license_id",
+        "evidence_anchor"
+      ],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": [
+            "verified-compatible",
+            "verified-restricted",
+            "prohibited",
+            "unknown"
+          ]
+        },
+        "license_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "evidence_anchor": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/providerVerificationAnchor"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "enum": [
+                  "verified-compatible",
+                  "verified-restricted",
+                  "prohibited"
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "license_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "evidence_anchor": {
+                "not": {
+                  "type": "null"
+                }
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "license_id": {
+                "type": "null"
+              },
+              "evidence_anchor": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "curriculumProviderRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "record_id",
+        "record_scope",
+        "provider",
+        "provenance_grade",
+        "verification_status",
+        "source_reference",
+        "verification_evidence_type",
+        "verification_anchor",
+        "source_license",
+        "read_only_input"
+      ],
+      "properties": {
+        "record_id": {
+          "type": "string",
+          "pattern": "^prov-[A-Za-z0-9._-]+$"
+        },
+        "record_scope": {
+          "type": "string",
+          "enum": [
+            "curriculum-context",
+            "curriculum-record"
+          ]
+        },
+        "provider": {
+          "$ref": "#/$defs/providerIdentity"
+        },
+        "provenance_grade": {
+          "$ref": "#/$defs/provenanceGrade"
+        },
+        "verification_status": {
+          "type": "string",
+          "enum": [
+            "complete",
+            "quarantined",
+            "missing"
+          ]
+        },
+        "source_reference": {
+          "type": "string",
+          "minLength": 1
+        },
+        "verification_evidence_type": {
+          "anyOf": [
+            {
+              "type": "string",
+              "enum": ["provided-document", "web-verification"]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "verification_anchor": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/providerVerificationAnchor"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "source_license": {
+          "$ref": "#/$defs/sourceLicenseState"
+        },
+        "read_only_input": {
+          "const": true
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "verification_status": {
+                "const": "complete"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "verification_evidence_type": {
+                "type": "string"
+              },
+              "verification_anchor": {
+                "not": {
+                  "type": "null"
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "verification_status": {
+                "enum": [
+                  "quarantined",
+                  "missing"
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "verification_anchor": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "provenanceRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "record_id",
+        "record_scope",
+        "provider",
+        "provenance_grade",
+        "source_reference",
+        "verification_evidence_type",
+        "verification_anchor",
+        "source_license",
+        "read_only_input"
+      ],
+      "properties": {
+        "record_id": {
+          "type": "string",
+          "pattern": "^prov-[A-Za-z0-9._-]+$"
+        },
+        "record_scope": {
+          "type": "string",
+          "enum": [
+            "curriculum-context",
+            "curriculum-record",
+            "approval-supporting-evidence"
+          ]
+        },
+        "provider": {
+          "$ref": "#/$defs/providerIdentity"
+        },
+        "provenance_grade": {
+          "$ref": "#/$defs/provenanceGrade"
+        },
+        "source_reference": {
+          "type": "string",
+          "minLength": 1
+        },
+        "verification_evidence_type": {
+          "type": "string",
+          "enum": ["provided-document", "web-verification"]
+        },
+        "verification_anchor": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/providerVerificationAnchor"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "source_license": {
+          "$ref": "#/$defs/sourceLicenseState"
+        },
+        "read_only_input": {
+          "const": true
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "provenance_grade": {
+                "enum": [
+                  ":provided",
+                  ":web"
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "verification_anchor": {
+                "not": {
+                  "type": "null"
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "provenance_grade": {
+                "const": ":web"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "verification_evidence_type": {
+                "const": "web-verification"
+              },
+              "provider": {
+                "properties": {
+                  "provider_kind": {
+                    "const": "web-source"
+                  }
+                }
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "verification_evidence_type": {
+                "const": "provided-document"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "registryOwnedUnblockSourcesAllowed": {
+      "const": [":provided", ":web"]
+    },
+    "registryOwnedNeverUnblockSet": {
+      "const": [":inferred"]
+    },
+    "downstreamRelevantProvenanceRecord": {
+      "type": "object",
+      "required": [
+        "record_scope",
+        "provenance_grade",
+        "source_reference",
+        "verification_evidence_type",
+        "verification_anchor",
+        "source_license",
+        "read_only_input"
+      ],
+      "properties": {
+        "record_scope": {
+          "enum": ["curriculum-context", "curriculum-record"]
+        },
+        "provenance_grade": {
+          "enum": [":provided", ":web"]
+        },
+        "source_reference": {
+          "type": "string",
+          "minLength": 1
+        },
+        "verification_evidence_type": {
+          "enum": ["provided-document", "web-verification"]
+        },
+        "verification_anchor": {
+          "not": {
+            "type": "null"
+          }
+        },
+        "source_license": {
+          "type": "object",
+          "required": ["status"],
+          "properties": {
+            "status": {
+              "const": "verified-compatible"
+            }
+          }
+        },
+        "read_only_input": {
+          "const": true
+        }
+      }
+    },
+    "providerCapabilityContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "access_mode",
+        "provider_status",
+        "provenance_status",
+        "verification_status",
+        "source_license_status"
+      ],
+      "properties": {
+        "access_mode": {
+          "const": "read-only"
+        },
+        "provider_status": {
+          "type": "string",
+          "enum": [
+            "available",
+            "quarantined",
+            "unavailable",
+            "unknown"
+          ]
+        },
+        "provenance_status": {
+          "type": "string",
+          "enum": [
+            "verified-non-inferred",
+            "inferred-only",
+            "missing"
+          ]
+        },
+        "verification_status": {
+          "type": "string",
+          "enum": [
+            "complete",
+            "quarantined",
+            "missing"
+          ]
+        },
+        "source_license_status": {
+          "type": "string",
+          "enum": [
+            "verified-compatible",
+            "verified-restricted",
+            "prohibited",
+            "unknown"
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "provider_status": {
+                "const": "available"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "provenance_status": {
+                "const": "verified-non-inferred"
+              },
+              "verification_status": {
+                "const": "complete"
+              },
+              "source_license_status": {
+                "const": "verified-compatible"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "provider_status": {
+                "const": "quarantined"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "verification_status": {
+                "const": "quarantined"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "provider_status": {
+                "const": "unknown"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "provenance_status": {
+                "const": "missing"
+              },
+              "verification_status": {
+                "const": "missing"
+              },
+              "source_license_status": {
+                "const": "unknown"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "rendererCapabilityContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "available_formats",
+        "canonical_source_required",
+        "rendered_output_authority"
+      ],
+      "properties": {
+        "available_formats": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "hwpx",
+              "docx",
+              "html"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "canonical_source_required": {
+          "const": true
+        },
+        "rendered_output_authority": {
+          "const": "delivery-only"
+        }
+      }
+    },
+    "capabilityRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "provider_contract",
+        "renderer",
+        "fallback_mode"
+      ],
+      "properties": {
+        "provider_contract": {
+          "$ref": "#/$defs/providerCapabilityContract"
+        },
+        "renderer": {
+          "$ref": "#/$defs/rendererCapabilityContract"
+        },
+        "fallback_mode": {
+          "type": "string",
+          "enum": [
+            "none",
+            "manual-input"
+          ]
+        }
+      }
+    },
+    "envelopeAuthority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "registry_gate_ref",
+        "never_unblock_sources",
+        "provider_contract_state",
+        "curriculum_provenance_state",
+        "verification_anchors_complete",
+        "source_license_state",
+        "non_inferred_curriculum_evidence",
+        "downstream_operations_cleared"
+      ],
+      "properties": {
+        "registry_gate_ref": {
+          "const": "registry:gate-v2:curriculum-or-textbook-provenance"
+        },
+        "never_unblock_sources": {
+          "$ref": "#/$defs/registryOwnedNeverUnblockSet"
+        },
+        "provider_contract_state": {
+          "type": "string",
+          "enum": [
+            "available",
+            "quarantined",
+            "unavailable",
+            "unknown"
+          ]
+        },
+        "curriculum_provenance_state": {
+          "type": "string",
+          "enum": [
+            "verified-non-inferred",
+            "inferred-only",
+            "missing"
+          ]
+        },
+        "verification_anchors_complete": {
+          "type": "boolean"
+        },
+        "source_license_state": {
+          "type": "string",
+          "enum": [
+            "verified-compatible",
+            "verified-restricted",
+            "prohibited",
+            "unknown"
+          ]
+        },
+        "non_inferred_curriculum_evidence": {
+          "type": "boolean"
+        },
+        "downstream_operations_cleared": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "handoff",
+            "author_ir",
+            "render"
+          ],
+          "properties": {
+            "handoff": {
+              "type": "boolean"
+            },
+            "author_ir": {
+              "type": "boolean"
+            },
+            "render": {
+              "type": "boolean"
+            }
+          }
+        }
+      },
+      "allOf": [
+        {
+          "properties": {
+            "never_unblock_sources": {
+              "contains": {
+                "const": ":inferred"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "anyOf": [
+              {
+                "properties": {
+                  "provider_contract_state": {
+                    "enum": [
+                      "quarantined",
+                      "unavailable",
+                      "unknown"
+                    ]
+                  }
+                }
+              },
+              {
+                "properties": {
+                  "curriculum_provenance_state": {
+                    "enum": [
+                      "missing",
+                      "inferred-only"
+                    ]
+                  }
+                }
+              },
+              {
+                "properties": {
+                  "verification_anchors_complete": {
+                    "const": false
+                  }
+                }
+              },
+              {
+                "properties": {
+                  "source_license_state": {
+                    "enum": [
+                      "unknown",
+                      "verified-restricted",
+                      "prohibited"
+                    ]
+                  }
+                }
+              },
+              {
+                "properties": {
+                  "non_inferred_curriculum_evidence": {
+                    "const": false
+                  }
+                }
+              }
+            ]
+          },
+          "then": {
+            "properties": {
+              "downstream_operations_cleared": {
+                "properties": {
+                  "handoff": {
+                    "const": false
+                  },
+                  "author_ir": {
+                    "const": false
+                  },
+                  "render": {
+                    "const": false
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "entry_mode": {
+            "const": "direct-skill"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "parity_bootstrap": {
+            "properties": {
+              "required": {
+                "const": true
+              },
+              "completed": {
+                "const": true
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "entry_mode": {
+            "const": "resume"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "parity_bootstrap": {
+            "properties": {
+              "required": {
+                "const": true
+              },
+              "completed": {
+                "const": true
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "allOf": [
+          {
+            "properties": {
+              "workflow_type": {
+                "enum": [
+                  "verified-curriculum-redesign",
+                  "conceptual-inquiry"
+                ]
+              }
+            }
+          },
+          {
+            "anyOf": [
+              {
+                "properties": {
+                  "approval_state": {
+                    "properties": {
+                      "handoff_mode": {
+                        "const": "downstream-ready"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "properties": {
+                  "approval_state": {
+                    "properties": {
+                      "can_author_ir": {
+                        "const": true
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "properties": {
+                  "approval_state": {
+                    "properties": {
+                      "can_render": {
+                        "const": true
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "then": {
+        "properties": {
+          "curriculum_context": {
+            "properties": {
+              "status": {
+                "const": "verified"
+              },
+              "records": {
+                "minItems": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "approval_state": {
+            "properties": {
+              "handoff_mode": {
+                "const": "downstream-ready"
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "provenance_ledger": {
+            "minItems": 1,
+            "contains": {
+              "$ref": "#/$defs/downstreamRelevantProvenanceRecord"
+            },
+            "not": {
+              "contains": {
+                "allOf": [
+                  {
+                    "type": "object",
+                    "required": ["record_scope"],
+                    "properties": {
+                      "record_scope": {
+                        "enum": ["curriculum-context", "curriculum-record"]
+                      }
+                    }
+                  },
+                  {
+                    "not": {
+                      "$ref": "#/$defs/downstreamRelevantProvenanceRecord"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "capability_record": {
+            "properties": {
+              "provider_contract": {
+                "properties": {
+                  "provider_status": {
+                    "const": "available"
+                  },
+                  "provenance_status": {
+                    "const": "verified-non-inferred"
+                  },
+                  "verification_status": {
+                    "const": "complete"
+                  },
+                  "source_license_status": {
+                    "const": "verified-compatible"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "approval_state": {
+            "properties": {
+              "can_author_ir": {
+                "const": true
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "provenance_ledger": {
+            "minItems": 1,
+            "contains": {
+              "$ref": "#/$defs/downstreamRelevantProvenanceRecord"
+            },
+            "not": {
+              "contains": {
+                "allOf": [
+                  {
+                    "type": "object",
+                    "required": ["record_scope"],
+                    "properties": {
+                      "record_scope": {
+                        "enum": ["curriculum-context", "curriculum-record"]
+                      }
+                    }
+                  },
+                  {
+                    "not": {
+                      "$ref": "#/$defs/downstreamRelevantProvenanceRecord"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "capability_record": {
+            "properties": {
+              "provider_contract": {
+                "properties": {
+                  "provider_status": {
+                    "const": "available"
+                  },
+                  "provenance_status": {
+                    "const": "verified-non-inferred"
+                  },
+                  "verification_status": {
+                    "const": "complete"
+                  },
+                  "source_license_status": {
+                    "const": "verified-compatible"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "approval_state": {
+            "properties": {
+              "can_render": {
+                "const": true
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "provenance_ledger": {
+            "minItems": 1,
+            "contains": {
+              "$ref": "#/$defs/downstreamRelevantProvenanceRecord"
+            },
+            "not": {
+              "contains": {
+                "allOf": [
+                  {
+                    "type": "object",
+                    "required": ["record_scope"],
+                    "properties": {
+                      "record_scope": {
+                        "enum": ["curriculum-context", "curriculum-record"]
+                      }
+                    }
+                  },
+                  {
+                    "not": {
+                      "$ref": "#/$defs/downstreamRelevantProvenanceRecord"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "capability_record": {
+            "properties": {
+              "provider_contract": {
+                "properties": {
+                  "provider_status": {
+                    "const": "available"
+                  },
+                  "provenance_status": {
+                    "const": "verified-non-inferred"
+                  },
+                  "verification_status": {
+                    "const": "complete"
+                  },
+                  "source_license_status": {
+                    "const": "verified-compatible"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "approval_state": {
+            "properties": {
+              "can_handoff": {
+                "const": true
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "not": {
+          "properties": {
+            "teacher_judgment_boundaries": {
+              "contains": {
+                "type": "object",
+                "required": [
+                  "blocking_severity",
+                  "resolution",
+                  "affected_output_classes"
+                ],
+                "properties": {
+                  "blocking_severity": {
+                    "const": "hard"
+                  },
+                  "affected_output_classes": {
+                    "contains": {
+                      "const": "handoff"
+                    }
+                  }
+                },
+                "anyOf": [
+                  {
+                    "properties": {
+                      "resolution": {
+                        "type": "object",
+                        "required": ["status"],
+                        "properties": {
+                          "status": {
+                            "const": "open"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "properties": {
+                      "resolution": {
+                        "type": "object",
+                        "required": ["status", "approval_record"],
+                        "properties": {
+                          "status": {
+                            "const": "resolved"
+                          },
+                          "approval_record": {
+                            "type": "object",
+                            "required": ["decision"],
+                            "properties": {
+                              "decision": {
+                                "enum": [
+                                  "rejected",
+                                  "revoked"
+                                ]
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "approval_state": {
+            "properties": {
+              "can_author_ir": {
+                "const": true
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "not": {
+          "properties": {
+            "teacher_judgment_boundaries": {
+              "contains": {
+                "type": "object",
+                "required": [
+                  "blocking_severity",
+                  "resolution",
+                  "affected_output_classes"
+                ],
+                "properties": {
+                  "blocking_severity": {
+                    "const": "hard"
+                  },
+                  "affected_output_classes": {
+                    "contains": {
+                      "const": "author-ir"
+                    }
+                  }
+                },
+                "anyOf": [
+                  {
+                    "properties": {
+                      "resolution": {
+                        "type": "object",
+                        "required": ["status"],
+                        "properties": {
+                          "status": {
+                            "const": "open"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "properties": {
+                      "resolution": {
+                        "type": "object",
+                        "required": ["status", "approval_record"],
+                        "properties": {
+                          "status": {
+                            "const": "resolved"
+                          },
+                          "approval_record": {
+                            "type": "object",
+                            "required": ["decision"],
+                            "properties": {
+                              "decision": {
+                                "enum": [
+                                  "rejected",
+                                  "revoked"
+                                ]
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "approval_state": {
+            "properties": {
+              "can_render": {
+                "const": true
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "not": {
+          "properties": {
+            "teacher_judgment_boundaries": {
+              "contains": {
+                "type": "object",
+                "required": [
+                  "blocking_severity",
+                  "resolution",
+                  "affected_output_classes"
+                ],
+                "properties": {
+                  "blocking_severity": {
+                    "const": "hard"
+                  },
+                  "affected_output_classes": {
+                    "contains": {
+                      "const": "render"
+                    }
+                  }
+                },
+                "anyOf": [
+                  {
+                    "properties": {
+                      "resolution": {
+                        "type": "object",
+                        "required": ["status"],
+                        "properties": {
+                          "status": {
+                            "const": "open"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "properties": {
+                      "resolution": {
+                        "type": "object",
+                        "required": ["status", "approval_record"],
+                        "properties": {
+                          "status": {
+                            "const": "resolved"
+                          },
+                          "approval_record": {
+                            "type": "object",
+                            "required": ["decision"],
+                            "properties": {
+                              "decision": {
+                                "enum": [
+                                  "rejected",
+                                  "revoked"
+                                ]
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "approval_state": {
+            "properties": {
+              "can_render": {
+                "const": true
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "approval_state": {
+            "properties": {
+              "can_author_ir": {
+                "const": true
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

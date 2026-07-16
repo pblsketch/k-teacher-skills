@@ -1,0 +1,221 @@
+{
+  "workflow_envelope_version": "1",
+  "workflow_envelope_revision_id": "env-1001",
+  "workflow_id": "wf-blocked-handoff",
+  "workflow_type": "verified-curriculum-redesign",
+  "entry_mode": "resume",
+  "parity_bootstrap": {
+    "required": true,
+    "completed": true,
+    "selected_workflow": "verified-curriculum-redesign",
+    "reason": "resumed from workflow envelope"
+  },
+  "gate_v2": {
+    "profile": "Deep",
+    "threshold": 0.15,
+    "threshold_source": "explicit",
+    "active_stage": "Stage 1+3 · Curriculum-grounded",
+    "fact_routing_labels": [
+      "from-curriculum",
+      "from-textbook",
+      "from-teacher-judgment"
+    ],
+    "provenance_grade_rules": {
+      "curriculum_or_textbook": [
+        ":provided",
+        ":web",
+        ":inferred"
+      ],
+      "never_unblock": [
+        ":inferred"
+      ]
+    },
+    "tier3_mode": "enabled",
+    "round0_topology": "unit",
+    "mandatory_gates": {
+      "non_goals_explicit": true,
+      "teacher_decision_boundaries_explicit": true,
+      "privacy_safe": true,
+      "observable_evidence_defined": true,
+      "pressure_pass_completed": true
+    },
+    "stage_priority": {
+      "stage1_weak_blocks_stage2": true,
+      "stage3_brownfield_only": true
+    }
+  },
+  "request_summary": "교육과정 정렬 기반 재설계",
+  "topology": "unit",
+  "current_round": 6,
+  "current_ambiguity": 0.08,
+  "blocking_stage": null,
+  "blocking_dimensions": [],
+  "teacher_intent": {
+    "status": "confirmed",
+    "value": "토론 중심 재설계"
+  },
+  "learner_context": {
+    "status": "confirmed",
+    "value": "중2 혼합 수준 학급"
+  },
+  "target_evidence": {
+    "status": "confirmed",
+    "value": [
+      "개념 설명 글",
+      "토론 메모"
+    ]
+  },
+  "curriculum_context": {
+    "status": "verified",
+    "records": [
+      {
+        "record_id": "prov-curriculum-2022-social-web-1",
+        "record_scope": "curriculum-context",
+        "provider": {
+          "provider_id": "curriculum-2022-social-web-cache",
+          "provider_kind": "web-source",
+          "release_id": "mirror-2026-07-15",
+          "release_version": "2026.07.15"
+        },
+        "provenance_grade": ":web",
+        "verification_status": "complete",
+        "source_reference": "https://example.com/curriculum/social-grade8-unit2",
+        "verification_evidence_type": "web-verification",
+        "verification_anchor": {
+          "carrier": "url",
+          "locator_type": "absolute-url",
+          "locator_value": "https://example.com/curriculum/social-grade8-unit2"
+        },
+        "source_license": {
+          "status": "verified-compatible",
+          "license_id": "CC-BY-4.0",
+          "evidence_anchor": {
+            "carrier": "url",
+            "locator_type": "absolute-url",
+            "locator_value": "https://example.com/curriculum/license"
+          }
+        },
+        "read_only_input": true
+      }
+    ],
+    "unblock_sources_allowed": [
+      ":provided",
+      ":web"
+    ],
+    "never_unblock_sources": [
+      ":inferred"
+    ]
+  },
+  "teacher_judgment_boundaries": [
+    {
+      "boundary_id": "tj-handoff-scope",
+      "category": "artifact-scope",
+      "description": "다운스트림 인계 전에 최종 산출물 범위를 교사가 확정해야 함",
+      "affected_output_classes": [
+        "handoff",
+        "author-ir"
+      ],
+      "blocking_severity": "hard",
+      "resolution": {
+        "status": "open",
+        "teacher_confirmation": {
+          "required": true,
+          "confirmed": false,
+          "confirmation_source": null,
+          "confirmation_anchor": {
+            "carrier": "null",
+            "locator_type": "null",
+            "locator_value": null
+          }
+        },
+        "supporting_evidence": []
+      },
+      "allowed_next_ops_while_open": [
+        "ask-question",
+        "summarize",
+        "judgment-only"
+      ],
+      "created_by": "workflow",
+      "last_updated_round": 6
+    }
+  ],
+  "approvals": [],
+  "approval_state": {
+    "handoff_mode": "blocked",
+    "can_continue_judgment_only": false,
+    "can_handoff": false,
+    "can_author_ir": false,
+    "can_render": false,
+    "envelope_authority": {
+      "registry_gate_ref": "registry:gate-v2:curriculum-or-textbook-provenance",
+      "never_unblock_sources": [
+        ":inferred"
+      ],
+      "provider_contract_state": "available",
+      "curriculum_provenance_state": "verified-non-inferred",
+      "verification_anchors_complete": true,
+      "source_license_state": "verified-compatible",
+      "non_inferred_curriculum_evidence": true,
+      "downstream_operations_cleared": {
+        "handoff": false,
+        "author_ir": false,
+        "render": false
+      }
+    }
+  },
+  "provenance_ledger": [
+    {
+      "record_id": "prov-curriculum-2022-social-web-1",
+      "record_scope": "curriculum-context",
+      "provider": {
+        "provider_id": "curriculum-2022-social-web-cache",
+        "provider_kind": "web-source",
+        "release_id": "mirror-2026-07-15",
+        "release_version": "2026.07.15"
+      },
+      "provenance_grade": ":web",
+      "source_reference": "https://example.com/curriculum/social-grade8-unit2",
+      "verification_evidence_type": "web-verification",
+      "verification_anchor": {
+        "carrier": "url",
+        "locator_type": "absolute-url",
+        "locator_value": "https://example.com/curriculum/social-grade8-unit2"
+      },
+      "source_license": {
+        "status": "verified-compatible",
+        "license_id": "CC-BY-4.0",
+        "evidence_anchor": {
+          "carrier": "url",
+          "locator_type": "absolute-url",
+          "locator_value": "https://example.com/curriculum/license"
+        }
+      },
+      "read_only_input": true
+    }
+  ],
+  "capability_record": {
+    "provider_contract": {
+      "access_mode": "read-only",
+      "provider_status": "available",
+      "provenance_status": "verified-non-inferred",
+      "verification_status": "complete",
+      "source_license_status": "verified-compatible"
+    },
+    "renderer": {
+      "available_formats": [
+        "docx",
+        "html"
+      ],
+      "canonical_source_required": true,
+      "rendered_output_authority": "delivery-only"
+    },
+    "fallback_mode": "none"
+  },
+  "next_authorized_operation": "judgment-only",
+  "resume_summary": {
+    "profile": "Deep",
+    "topology": "unit",
+    "last_weak_dimension": null,
+    "last_round_summary": "handoff와 author-ir에 영향을 주는 hard boundary가 아직 열려 있어 다운스트림 진행이 차단됨"
+  }
+}
