@@ -175,7 +175,7 @@ k-teacher-workflow-router로 내 요청을 분석하고 적절한 K-Teacher Skil
 
 ### Provider-orchestration skills (별도 클래스, `skills/school-materials/`)
 
-17개 Gate-v2 인터뷰/설계 스킬과 **분리된 provider-orchestration 클래스**(2개의 direct-entry 오케스트레이터 포함, 총 7개)입니다. `registry.provider_skills` + `skill-pack.json`의 `providerSkills`로 정식 등록되며(closed-world 검증 `tests/validate_provider_skills.py` + negative mutation regression), 17개 인터뷰 스킬의 registry·plugin projection은 불변입니다. 각 오케스트레이터는 자신의 의존 서브셋만 선언합니다.
+17개 Gate-v2 인터뷰/설계 스킬과 **분리된 provider-orchestration 클래스**(3개의 direct-entry 오케스트레이터 포함, 총 8개)입니다. `registry.provider_skills` + `skill-pack.json`의 `providerSkills`로 정식 등록되며(closed-world 검증 `tests/validate_provider_skills.py` + negative mutation regression), 17개 인터뷰 스킬의 registry·plugin projection은 불변입니다. 각 오케스트레이터는 자신의 의존 서브셋만 선언합니다.
 
 - `school-evaluation-plan-to-materials` (오케스트레이터) — 학교 평가계획+국가 성취기준 → 학생·교사 2차 자료
 - `school-plan-grounding` — 학교 공시 평가계획 pin·교사승인 fallback·PII mask-or-block
@@ -184,6 +184,7 @@ k-teacher-workflow-router로 내 요청을 분석하고 적절한 K-Teacher Skil
 - `secondary-material-builder` — single IR → 학생·교사·학부모 문서, HWPX/DOCX/HTML parity
 - `material-rubric-qa` — 루브릭·양방향 정합성·rigor·PII 최종 QA
 - `student-worksheet-builder` (오케스트레이터, direct-entry) — 단일 IR `content.blocks` 기반 학생 활동지: 물리성 게이트(분량·쓰기공간·페이지밀도·출구표·흑백안전·모둠중립), facet 블록 재귀, standalone quick-draft fail-closed. 의존: `standard-alignment-verify`·`secondary-material-builder`·`material-rubric-qa`.
+- `individualized-material-package-builder` (오케스트레이터, direct-entry) — **개별화** 수업 자료 패키지: 교사 `개별화 수업 운영안` 1개 + 학생 `Group A/B/C 활동지` 3개를 단일 IR에서 조립해 HWPX/DOCX/HTML 12개로 렌더링. 공통 목표·과제·성공기준·최난도 출구표는 모둠 간 동일하고 지원만 달라지며, 진단·수준·교사 프로파일 언어는 학생 표면에 노출되지 않는다(rigor 유지·fail-closed). 의존: `standard-alignment-verify`·`secondary-material-builder`·`material-rubric-qa`.
 
 ### Constraints / license / provenance
 

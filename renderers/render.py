@@ -271,6 +271,29 @@ def render_all(ir: dict, out_dir: str | Path, *, document_index: int = 0) -> dic
         paths[fmt] = str(p)
     return paths
 
+SUPPORTED_RENDER_TARGETS = ["hwpx", "docx", "html"]
+
+
+def render_package(ir: dict, out_dir: str | Path) -> dict:
+    """Render every document in the package to all three formats.
+
+    Returns `{document_id: {fmt: path}}`. Refuses duplicate document ids and any
+    document whose render_targets are not exactly the supported HWPX/DOCX/HTML set.
+    Reuses `render_all` per document (the single-document path stays unchanged)."""
+    out_dir = Path(out_dir)
+    out_dir.mkdir(parents=True, exist_ok=True)
+    documents = ir["lesson_package"]["documents"]
+    seen: set = set()
+    result: dict = {}
+    for index, document in enumerate(documents):
+        did = document["document_id"]
+        if did in seen:
+            raise ValueError(f"duplicate document id in package: {did!r}")
+        seen.add(did)
+        if document.get("render_targets") != SUPPORTED_RENDER_TARGETS:
+            raise ValueError(f"unsupported render targets for {did!r}: {document.get('render_targets')!r}")
+        result[did] = render_all(ir, out_dir, document_index=index)
+    return result
 
 # --- extractors (real round-trip) ----------------------------------------------
 

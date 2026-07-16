@@ -34,6 +34,7 @@ EXPECTED = {
     "secondary-material-builder",
     "material-rubric-qa",
     "student-worksheet-builder",
+    "individualized-material-package-builder",
 }
 # Each orchestrator declares its OWN dependency subset (not a shared union).
 ORCHESTRATOR_DEPS = {
@@ -45,6 +46,11 @@ ORCHESTRATOR_DEPS = {
         "material-rubric-qa",
     },
     "student-worksheet-builder": {
+        "standard-alignment-verify",
+        "secondary-material-builder",
+        "material-rubric-qa",
+    },
+    "individualized-material-package-builder": {
         "standard-alignment-verify",
         "secondary-material-builder",
         "material-rubric-qa",
@@ -75,7 +81,7 @@ def validate_class(registry: dict, manifest: dict) -> None:
     man_ids = {s["name"] for s in manifest["providerSkills"]}
     disk_ids = {p.name for p in SM_DIR.iterdir() if p.is_dir()}
 
-    # 2. Closed-world triad: registry == manifest == on-disk == EXPECTED (now 7).
+    # 2. Closed-world triad: registry == manifest == on-disk == EXPECTED (now 8).
     assert_true(reg_ids == EXPECTED, f"registry provider_skills set drift: {reg_ids ^ EXPECTED}")
     assert_true(man_ids == EXPECTED, f"skill-pack providerSkills set drift: {man_ids ^ EXPECTED}")
     assert_true(disk_ids == EXPECTED, f"on-disk school-materials set drift: {disk_ids ^ EXPECTED}")
@@ -116,13 +122,13 @@ def validate_class(registry: dict, manifest: dict) -> None:
     assert_true(len(registry["plugin_projection"]["plugin_json"]["skills"]) == 17, "plugin projection must stay 17-skill")
 
 
-def positive_two_orchestrator_case(registry: dict, manifest: dict) -> None:
-    """The real registry has exactly two valid own-subset orchestrators and PASSES."""
+def positive_orchestrator_case(registry: dict, manifest: dict) -> None:
+    """The real registry has exactly three valid own-subset orchestrators and PASSES."""
     validate_class(registry, manifest)
     ps = registry["provider_skills"]["skills"]
     orchestrators = [sid for sid, e in ps.items() if e["type"] == "orchestrator"]
-    assert_true(len(orchestrators) == 2, f"expected exactly 2 orchestrators, found {orchestrators}")
-    assert_true(set(orchestrators) == set(ORCHESTRATOR_DEPS), "the two orchestrators must be the known pair")
+    assert_true(len(orchestrators) == 3, f"expected exactly 3 orchestrators, found {orchestrators}")
+    assert_true(set(orchestrators) == set(ORCHESTRATOR_DEPS), "the three orchestrators must be the known set")
 
 
 def _mutated(base: dict, mutate) -> dict:
@@ -161,14 +167,14 @@ def main() -> None:
     registry = load(REGISTRY)
     manifest = load(SKILL_PACK)
     validate_class(registry, manifest)
-    positive_two_orchestrator_case(registry, manifest)
+    positive_orchestrator_case(registry, manifest)
     negative_regressions(registry, manifest)
     print("PASS validate_provider_skills")
-    print("- provider-orchestration class closed-world: registry.provider_skills == skill-pack.providerSkills == on-disk (7)")
-    print("- two direct-entry orchestrators, each with its OWN dependency subset (own-subset validation)")
+    print("- provider-orchestration class closed-world: registry.provider_skills == skill-pack.providerSkills == on-disk (8)")
+    print("- three direct-entry orchestrators, each with its OWN dependency subset (own-subset validation)")
     print("- per-skill contract (type/direct_entry/deps/outputs/fail_closed/workflow) + SKILL.md present")
     print("- Gate-v2 interview class untouched: registry.skills==17, repo_facts.skill_count==17, plugin projection 17")
-    print("- positive 2-orchestrator case passes; negatives fail closed (drop/path-drift/count-bump +")
+    print("- positive 3-orchestrator case passes; negatives fail closed (drop/path-drift/count-bump +")
     print("  nonexistent-dep / missing-deps / dependency-drift / self-dependency)")
 
 

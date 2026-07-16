@@ -29,6 +29,16 @@ from .worksheet import (
     FACET_LEAK_PATTERNS,
 )
 
+from .individualized import (
+    IndividualizedPathway,
+    GROUP_LABELS,
+    build_individualized_package_ir,
+    validate_individualized_package,
+    individualization_contract,
+    package_core_fingerprint,
+    STUDENT_DIAGNOSTIC_TERMS,
+)
+
 __all__ = [
     "SharedRegistry",
     "build_material_ir",
@@ -49,4 +59,11 @@ __all__ = [
     "STANDALONE_QUICK_DRAFT_MARKER",
     "STUDENT_FACET_FORBIDDEN_KEYS",
     "FACET_LEAK_PATTERNS",
+    "IndividualizedPathway",
+    "GROUP_LABELS",
+    "build_individualized_package_ir",
+    "validate_individualized_package",
+    "individualization_contract",
+    "package_core_fingerprint",
+    "STUDENT_DIAGNOSTIC_TERMS",
 ]

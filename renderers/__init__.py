@@ -1,6 +1,7 @@
 """Minimal own HWPX/DOCX/HTML renderer derived from a single canonical IR."""
 from .render import (
     render_all,
+    render_package,
     extract_all,
     extract_hwpx,
     extract_docx,
@@ -14,6 +15,7 @@ from .render import (
 
 __all__ = [
     "render_all",
+    "render_package",
     "extract_all",
     "extract_hwpx",
     "extract_docx",

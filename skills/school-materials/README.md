@@ -26,3 +26,4 @@ Skills:
 - `secondary-material-builder`
 - `material-rubric-qa`
 - `student-worksheet-builder` (orchestrator, direct-entry) — 단일 IR `content.blocks` 학생 활동지: 물리성 게이트·facet 블록 재귀·quick-draft fail-closed
+- `individualized-material-package-builder` (orchestrator, direct-entry) — 개별화 자료 패키지: 교사 운영안 1 + 학생 Group A/B/C 활동지 3, 단일 IR·12개 렌더, 공통 계약 불변·진단어 격리·rigor 유지

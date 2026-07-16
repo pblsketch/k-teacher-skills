@@ -290,7 +290,8 @@ FACET_LEAK_PATTERNS = {
         rf"{_ko_pattern('배점', '가중치', '반영비율').pattern}|{_en_pattern('weight').pattern}", re.IGNORECASE
     ),
     "internal_level": re.compile(
-        rf"{_ko_pattern('기초', '표준', '심화', '상중하').pattern}|{_en_pattern('tier', 'scaffold').pattern}", re.IGNORECASE
+        rf"{_ko_pattern('기초단계', '기초경로', '기초그룹', '기초모둠', '표준단계', '표준경로', '표준그룹', '표준모둠', '심화단계', '심화경로', '심화과정', '심화그룹', '심화모둠', '상중하').pattern}|{_en_pattern('tier', 'scaffold').pattern}",
+        re.IGNORECASE,
     ),
     "teacher_prompt": re.compile(
         rf"{_ko_pattern('교사용', '발문', '관찰기록', '채점', '루브릭', '교사노트').pattern}|{_en_pattern('rubric').pattern}",

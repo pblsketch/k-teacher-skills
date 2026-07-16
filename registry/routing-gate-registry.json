@@ -75,6 +75,16 @@
         "outputs": ["student-worksheet", "hwpx-docx-html-parity", "physical-workload-gated"],
         "fail_closed_boundaries": ["facet-leak", "physical-workload-violation", "unverified-provider-quick-draft", "teacher-approval-missing"],
         "workflow_membership": "student-worksheet-builder"
+      },
+      "individualized-material-package-builder": {
+        "skill_id": "individualized-material-package-builder",
+        "skill_path": "skills/school-materials/individualized-material-package-builder",
+        "type": "orchestrator",
+        "direct_entry": true,
+        "dependencies": ["standard-alignment-verify", "secondary-material-builder", "material-rubric-qa"],
+        "outputs": ["teacher-individualized-plan", "student-worksheet-group-abc", "hwpx-docx-html-parity-12"],
+        "fail_closed_boundaries": ["facet-leak", "diagnostic-language-leak", "rigor-drop", "physical-workload-violation", "teacher-approval-missing"],
+        "workflow_membership": "individualized-material-package-builder"
       }
     }
   },
