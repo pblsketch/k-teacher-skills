@@ -18,3 +18,7 @@ providers/_local/
 
 # Generated worksheet and QA artifacts — keep local, never commit
 artifacts/
+
+# Python virtualenv for the production render toolchain — never commit
+.venv/
+venv/

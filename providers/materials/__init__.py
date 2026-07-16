@@ -31,9 +31,11 @@ from .worksheet import (
 
 from .individualized import (
     IndividualizedPathway,
+    IndividualizedLessonContext,
     GROUP_LABELS,
     build_individualized_package_ir,
     validate_individualized_package,
+    check_cross_domain_grounding,
     individualization_contract,
     package_core_fingerprint,
     STUDENT_DIAGNOSTIC_TERMS,
@@ -60,9 +62,11 @@ __all__ = [
     "STUDENT_FACET_FORBIDDEN_KEYS",
     "FACET_LEAK_PATTERNS",
     "IndividualizedPathway",
+    "IndividualizedLessonContext",
     "GROUP_LABELS",
     "build_individualized_package_ir",
     "validate_individualized_package",
+    "check_cross_domain_grounding",
     "individualization_contract",
     "package_core_fingerprint",
     "STUDENT_DIAGNOSTIC_TERMS",

@@ -35,9 +35,11 @@ from providers.materials import (  # noqa: E402
 )
 from providers.materials.individualized import (  # noqa: E402
     IndividualizedPathway,
+    IndividualizedLessonContext,
     GROUP_LABELS,
     build_individualized_package_ir,
     validate_individualized_package,
+    check_cross_domain_grounding,
     package_core_fingerprint,
     STUDENT_DIAGNOSTIC_TERMS,
 )
@@ -82,7 +84,7 @@ def sample_pathways() -> list:
             group_label="Group A",
             teacher_profile_label="자료 해석에 추가 발판이 필요한 학습자",
             access_supports=["핵심 용어에 밑줄이 표시된 자료를 사용한다.", "단계별 안내 질문을 함께 제공한다."],
-            representation_supports=["그림과 표로 정보를 함께 제시한다."],
+            representation_supports=["대기권 표의 각 층을 색과 기호로 구분해 표시하며 읽어요."],
             response_options=["문장 또는 그림과 문장을 함께 사용해 답한다."],
             rigor_evidence="동일한 분석·설명 과제와 가장 어려운 사례 출구표를 그대로 수행한다.",
         ),
@@ -90,7 +92,7 @@ def sample_pathways() -> list:
             group_label="Group B",
             teacher_profile_label="핵심 과제를 독립적으로 수행하는 학습자",
             access_supports=["필요할 때만 참고할 수 있는 힌트 카드를 둔다."],
-            representation_supports=["자료를 글 중심으로 제시한다."],
+            representation_supports=["대기권 표를 글로 요약한 뒤 핵심만 남겨 읽어요."],
             response_options=["문장으로 설명한다."],
             rigor_evidence="공통 과제와 동일한 출구표를 동일 기준으로 수행한다.",
         ),
@@ -98,7 +100,7 @@ def sample_pathways() -> list:
             group_label="Group C",
             teacher_profile_label="빠르게 도달하여 확장 연결이 필요한 학습자",
             access_supports=["자료를 스스로 조직하도록 최소한의 안내만 제공한다."],
-            representation_supports=["원자료를 그대로 제시한다."],
+            representation_supports=["원자료 표를 그대로 읽고 필요한 표를 직접 만들어요."],
             response_options=["문장과 도식을 함께 사용한다."],
             rigor_evidence="공통 과제를 수행한 뒤 인과 관계를 새로운 상황에 적용한다.",
             extension_move={"cognitive_operation": "create",
@@ -107,8 +109,49 @@ def sample_pathways() -> list:
     ]
 
 
+def sample_context() -> IndividualizedLessonContext:
+    return IndividualizedLessonContext(
+        subject="과학",
+        unit="대기권과 기상",
+        grade="중학교 3학년",
+        school_level="중학교",
+        standard_code="[9과17-01]",
+        lesson_minutes=45,
+        materials=["대기권 층상 구조 자료(교사 제작)", "온실효과 근거 카드", "색연필 또는 형광펜", "활동지"],
+        source_data={
+            "caption": "대기권 층상 구조 자료 (교사 제작 학습자료)",
+            "headers": ["층", "고도 범위", "높이에 따른 기온 변화", "특징 단서"],
+            "cells": [
+                ["대류권", "지표~약 11 km", "고도가 높아질수록 기온 하강", "기상 현상, 대류 활발"],
+                ["성층권", "약 11~50 km", "고도가 높아질수록 기온 상승", "오존층이 자외선 흡수"],
+                ["중간권", "약 50~80 km", "고도가 높아질수록 기온 하강", "유성 관측, 수증기 거의 없음"],
+                ["열권", "약 80 km 이상", "고도가 높아질수록 기온 상승", "태양 복사 직접 흡수, 오로라"],
+            ],
+        },
+        source_card={
+            "title": "복사 평형과 온실효과 근거 카드 (교사 제작 학습자료)",
+            "body": ("지구는 흡수하는 태양 복사 에너지와 방출하는 지구 복사 에너지가 같은 복사 평형 상태를 이룬다. "
+                     "대기 중 온실기체가 늘어나면 지표에서 방출된 복사 에너지의 일부가 다시 지표로 돌아와 지표 부근 기온이 높아진다. "
+                     "관측 자료에서 이산화 탄소 농도가 증가한 시기에 지구 평균 기온도 함께 상승하는 경향이 나타난다."),
+            "source": "교사 제작 학습자료 (공식 인용 아님)",
+        },
+        lesson_phases=[
+            {"phase": "도입", "minutes": 5, "teacher_move": "대기권 자료를 제시하고 층을 나누는 기준을 질문한다.",
+             "student_action": "자료를 훑어보고 고도-기온 변화 단서를 찾는다.", "evidence": "층 구분 기준 발화"},
+            {"phase": "전개1 (탐구)", "minutes": 12, "teacher_move": "고도-기온 변화를 근거로 층 구분을 안내한다.",
+             "student_action": "대기권을 네 개 층으로 구분하여 표시한다.", "evidence": "과제1 층 구분 표시"},
+            {"phase": "전개2 (설명)", "minutes": 18, "teacher_move": "복사 평형 관점으로 온실효과 변화를 발문한다.",
+             "student_action": "온실효과가 커질 때 기온 변화를 복사 평형으로 설명한다.", "evidence": "과제2 서술, 관찰 기록"},
+            {"phase": "정리", "minutes": 10, "teacher_move": "출구표로 가장 어려운 사례를 점검하고 재편성을 판단한다.",
+             "student_action": "출구표에 근거와 함께 답한다.", "evidence": "출구표 응답"},
+        ],
+        observation_criteria=["층 구분 근거", "복사 평형 설명", "관측 자료 근거"],
+        submission_instruction="활동지 2쪽을 모두 작성한 뒤 이름을 확인하고 정해진 제출함에 제출한다.",
+    )
+
+
 def build_sample_ir() -> dict:
-    return build_individualized_package_ir(sample_shared(), sample_pathways(), BASE_IR)
+    return build_individualized_package_ir(sample_shared(), sample_pathways(), BASE_IR, sample_context())
 
 
 def _docs(ir: dict) -> dict:

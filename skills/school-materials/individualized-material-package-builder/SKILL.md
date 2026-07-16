@@ -14,7 +14,7 @@ core_skill_links:
 
 # individualized-material-package-builder
 
-직접 진입(direct-entry) 가능한 **개별화(individualized) 수업 자료 패키지** 오케스트레이터입니다. 하나의 성취기준·공통 수업에서 교사용 `개별화 수업 운영안` 1개와 학생용 `Group A/B/C 활동지` 3개를 **하나의 canonical `lesson-package-ir`** 위에서 조립하고, 기존 renderer로 HWPX/DOCX/HTML 12개를 만듭니다.
+직접 진입(direct-entry) 가능한 **개별화(individualized) 수업 자료 패키지** 오케스트레이터입니다. 하나의 성취기준·공통 수업에서 교사용 `개별화 수업 운영안` 1개와 학생용 `Group A/B/C 활동지` 3개를 **하나의 canonical `lesson-package-ir`** 위에서 조립하고, 프로덕션 renderer로 실제 열리는 HWPX/DOCX/HTML 12개를 만듭니다.
 
 > 용어 계약: 사용자 표면에서는 **개별화**라는 표현을 일관되게 사용합니다.
 
@@ -23,7 +23,19 @@ core_skill_links:
 ## 산출
 - `teacher-individualized-plan` (document_class `individualized-plan`, facet teacher): 공통 목표·과제·성공기준·가장 어려운 사례 출구표, 임시 모둠 편성 정책, 재편성 근거, 그리고 Group A/B/C 각각의 pathway 프로파일(교사 프로파일 라벨·접근/표상/반응 지원·엄격성 유지 근거·확장 이동)을 담습니다.
 - `worksheet-group-a/b/c` (document_class `worksheet`, facet student): 동일한 핵심 과제와 동일한 최난도 출구표를 그대로 담고, **모둠별로 다른 것은 학생 안전 지원과 반응 방식뿐**입니다.
-- HWPX/DOCX/HTML 12개 파일: 문서별 3형식 parity, 문서 간 공통 계약(fingerprint) 동일.
+- HWPX/DOCX/HTML 12개 파일: 프로덕션 라이터(python-docx OOXML, 공식 python-hwpx OWPML builder, 인쇄용 A4 HTML)로 실제 열람 가능하게 생성됩니다. 문서별 3형식 **의미 parity**와 문서 간 공통 계약(fingerprint) 동일성은 backport marker/content 사이드카로 검증합니다.
+
+## Open-safety & visual-quality 근거 (정의)
+> **ZIP/XML 유효성·3형식 parity만으로는 "Word/한글에서 열려 바로 쓸 수 있다"고 말하지 않는다.** 아래 근거를 분리해 제시한다.
+- **DOCX open-safety**: `python-docx`(실제 OOXML 소비자)로 재열람 성공 + `word/styles.xml`·`settings.xml`·`_rels/document.xml.rels`·`[Content_Types].xml`·`docProps` 필수 파트, `sections>=1`, A4 지오메트리, 실제 표/문단.
+- **HWPX open-safety**: 공식 `python-hwpx`의 `validate_package`(ERROR 0건) + `HwpxDocument.open` 재열람 성공 + 표준 파트(header/settings/manifest/container.rdf/preview/version) + 텍스트/표 추출. 잔여 fallback 경고(masterPage/history/version)는 python-hwpx 내부의 매니페스트 선택 파트 미참조에서 나오는 **비손상 경고**로, reopen ok·ERROR 0건과 함께 명시한다.
+- **HTML visual-quality**: `@page A4`·`@media print`·페이지 컨테이너·한국어 폰트 스택·외부 네트워크 의존 없음·중복 id 없음·단일 `h1`·대상별(교사 매트릭스/학생 답란) 구조.
+- **한계(정직)**: Microsoft Word·한컴오피스 한글 애플리케이션 자체의 실제 열람은 이 환경에서 실행하지 못한다. 위 근거는 실제 OOXML/OWPML 소비 라이브러리 기준이며, 최종 애플리케이션 열람은 미검증으로 명시한다.
+
+## Setup (render dependencies)
+- 렌더링은 `python-docx`, `python-hwpx`가 필요하다: `pip install -r requirements-render.txt`.
+- 추출/parity 계층은 순수 표준 라이브러리로 해당 의존 없이 import된다. 의존 부재 시 렌더러는 실행 가능한 오류 메시지를 낸다.
+- 생성물(`artifacts/`)·미리보기·QA는 ignore되며 커밋하지 않는다.
 
 ## Dependencies (own subset)
 - `standard-alignment-verify` — 성취기준 검증/격리(국가 provider 대조).

@@ -1,0 +1,10 @@
+# Production document renderer dependencies (renderers/render.py).
+# Required only to *render* individualized-material-package artifacts to real
+# DOCX/HWPX. The extraction/parity layer is pure-stdlib and needs none of these.
+#
+#   python -m venv .venv && . .venv/bin/activate
+#   pip install -r requirements-render.txt
+#
+python-docx>=1.1,<2      # real OOXML writer: styles/settings/rels/sectPr/tables
+python-hwpx>=3.0,<4      # official OWPML builder + package/open-safety validation
+jsonschema>=4.20         # IR schema validation used by the renderer test suite
