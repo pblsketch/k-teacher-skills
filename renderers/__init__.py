@@ -12,6 +12,12 @@ from .render import (
     build_marker,
     CANONICAL_LOCATIONS,
 )
+from .backends import (
+    select_hwpx_backend,
+    HwpxBackendNotCapable,
+    CapabilityReport,
+    DEFAULT_BACKEND,
+)
 
 __all__ = [
     "render_all",
@@ -25,4 +31,8 @@ __all__ = [
     "content_fingerprint",
     "build_marker",
     "CANONICAL_LOCATIONS",
+    "select_hwpx_backend",
+    "HwpxBackendNotCapable",
+    "CapabilityReport",
+    "DEFAULT_BACKEND",
 ]

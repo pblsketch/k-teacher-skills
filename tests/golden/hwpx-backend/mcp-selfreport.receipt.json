@@ -1,0 +1,197 @@
+{
+  "filename": "/tmp/kts-hwpx-mcp-backend/artifacts/hwpx-mcp-spike/science-worksheet-mcp.hwpx",
+  "created": true,
+  "style_preset": "standard_korean_business",
+  "quality_profile": null,
+  "plan_validation": {
+    "ok": true,
+    "schemaVersion": "hwpx.document_plan.v1",
+    "errors": [],
+    "warnings": [],
+    "issues": [],
+    "repairHints": []
+  },
+  "handoff_status": "ready",
+  "next_action": "structural handoff is ready; complete visual review before final submission",
+  "quality": {
+    "report_version": "hwpx-authoring-quality-v1",
+    "schemaVersion": "hwpx.document_plan.v1",
+    "plan_validation": {
+      "ok": true,
+      "schemaVersion": "hwpx.document_plan.v1",
+      "errors": [],
+      "warnings": [],
+      "issues": [],
+      "repairHints": []
+    },
+    "pass": true,
+    "korean_proofing_status": "unverified",
+    "gongmun_structure": null,
+    "block_counts": {
+      "heading": 7,
+      "table": 3,
+      "paragraph": 13,
+      "page_break": 1
+    },
+    "document": {
+      "paragraph_count": 24,
+      "non_empty_paragraph_count": 21,
+      "table_count": 3,
+      "page_break_count": 0
+    },
+    "render_checked": false,
+    "visual_complete": "unverified",
+    "validation": {
+      "reopened": true,
+      "validate_package": {
+        "ok": true,
+        "errors": [],
+        "issues": [
+          {
+            "part": "Contents/content.hpf",
+            "message": "manifest does not reference a version part; engine will fall back to 'version.xml'",
+            "level": "warning",
+            "suggestion": "Inspect Contents/content.hpf and version.xml references."
+          }
+        ]
+      },
+      "validate_document": {
+        "ok": true,
+        "errors": [],
+        "issues": []
+      }
+    },
+    "content_evidence": {
+      "text_char_count": 1099,
+      "required_text": []
+    },
+    "quality_gates": {
+      "validatePackage": true,
+      "validateDocument": true,
+      "reopen": true,
+      "minNonEmptyParagraphs": true,
+      "minTableCount": true,
+      "requiredText": true,
+      "visualReviewRequired": true
+    },
+    "style_token_usage": {
+      "used_run_style_ids": [
+        "21",
+        "22",
+        "26",
+        "52",
+        "61",
+        "62",
+        "72",
+        "73",
+        "74"
+      ],
+      "used_run_style_count": 9,
+      "available_char_style_count": 123
+    },
+    "recovery": {
+      "repair_hints": [
+        {
+          "path": "Contents/content.hpf",
+          "code": "package_validation_issue",
+          "action": "review",
+          "message": "Inspect Contents/content.hpf and version.xml references."
+        }
+      ],
+      "next_actions": [
+        "Review package validation warnings before handoff."
+      ]
+    },
+    "profiles": {},
+    "visual_review_required": true,
+    "gaps": []
+  },
+  "verification": {
+    "ok": true,
+    "summary": "verification passed",
+    "filePath": "/tmp/kts-hwpx-mcp-backend/artifacts/hwpx-mcp-spike/science-worksheet-mcp.hwpx",
+    "fileSizeBytes": 15242,
+    "requiredFilesChecked": [
+      "mimetype",
+      "Contents/content.hpf",
+      "Contents/header.xml",
+      "Contents/section0.xml"
+    ],
+    "missingFiles": [],
+    "openSafety": {
+      "ok": true,
+      "summary": "open-safety verification passed",
+      "validatePackage": {
+        "ok": true,
+        "validatorOk": true,
+        "errors": [],
+        "warnings": [
+          "Contents/content.hpf: manifest does not reference a version part; engine will fall back to 'version.xml'"
+        ],
+        "validatorErrors": []
+      },
+      "validateDocument": {
+        "ok": true,
+        "errors": [],
+        "warnings": []
+      },
+      "reopen": {
+        "ok": true,
+        "error": null
+      }
+    },
+    "sectionReports": [
+      {
+        "section": 0,
+        "xmlDeclaration": true,
+        "truncatedXml": false,
+        "brokenTagPattern": false,
+        "xmlLength": 34922,
+        "hpTabs": 0,
+        "paragraphs": 73,
+        "tables": 3,
+        "placeholderCount": 0,
+        "placeholderExamples": [],
+        "suspiciousPatternCount": 0,
+        "suspiciousPatterns": []
+      }
+    ],
+    "totals": {
+      "sections": 1,
+      "xmlLength": 34922,
+      "hpTabs": 0,
+      "paragraphs": 73,
+      "tables": 3,
+      "placeholders": 0,
+      "suspiciousPatterns": 0
+    },
+    "diffSummary": {
+      "xmlLength": 0,
+      "hpTabs": 0,
+      "paragraphs": 0,
+      "tables": 0
+    },
+    "warnings": [],
+    "visualComplete": {
+      "ok": true,
+      "visualComplete": false,
+      "status": "unverified",
+      "renderChecked": false,
+      "errors": [],
+      "errorCodes": [],
+      "warnings": [],
+      "suggestedRetry": null,
+      "form": {
+        "ok": true,
+        "fields": [],
+        "warnings": [],
+        "errors": []
+      },
+      "layout": {
+        "ok": true,
+        "warnings": [],
+        "errors": []
+      }
+    }
+  }
+}

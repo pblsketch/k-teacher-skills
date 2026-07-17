@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kteacher.local/schemas/backend-receipt.schema.json",
+  "title": "K-Teacher HWPX backend provenance receipt (kteacher.hwpx-backend-receipt.v1)",
+  "type": "object",
+  "required": [
+    "receipt_version",
+    "backend",
+    "pinned",
+    "no_silent_fallback",
+    "capability"
+  ],
+  "additionalProperties": true,
+  "properties": {
+    "receipt_version": {"const": "kteacher.hwpx-backend-receipt.v1"},
+    "backend": {"type": "string", "enum": ["builder", "document_plan"]},
+    "delivered_path": {"type": ["string", "null"]},
+    "hwpx_mcp_server_version": {"type": ["string", "null"]},
+    "python_hwpx_version": {"type": ["string", "null"]},
+    "pinned": {"type": "boolean"},
+    "no_silent_fallback": {"const": true},
+    "source_fingerprint": {"type": ["string", "null"]},
+    "capability": {
+      "type": "object",
+      "required": ["capable", "physical_page_break_count", "reasons"],
+      "additionalProperties": true,
+      "properties": {
+        "capable": {"type": "boolean"},
+        "physical_page_break_count": {"type": "integer", "minimum": 0},
+        "page_count": {"type": ["integer", "null"]},
+        "open_safety_ok": {"type": ["boolean", "null"]},
+        "quality_page_break_count": {"type": ["integer", "null"]},
+        "reasons": {"type": "array", "items": {"type": "string"}},
+        "evidence": {"type": "object"}
+      }
+    }
+  }
+}

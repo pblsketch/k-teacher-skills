@@ -1,0 +1,44 @@
+{
+  "schemaVersion": "hwpx.render-preview.v1",
+  "status": "blocked",
+  "generatedAt": "2026-07-17T00:33:31.786229Z",
+  "sourcePath": "artifacts/hwpx-mcp-spike/science-worksheet-mcp-pagebreak.hwpx",
+  "outputDir": "artifacts/hwpx-mcp-spike/preview-pagebreak",
+  "htmlPath": "artifacts/hwpx-mcp-spike/preview-pagebreak/preview.html",
+  "manifestPath": "artifacts/hwpx-mcp-spike/preview-pagebreak/manifest.json",
+  "visualReviewPath": "artifacts/hwpx-mcp-spike/preview-pagebreak/visual-review.json",
+  "mode": "pages",
+  "pageCount": 1,
+  "pages": [
+    {
+      "index": 0,
+      "sectionIndex": 0,
+      "pageId": "hwpx-preview-page-1",
+      "widthMm": 210.0,
+      "heightMm": 296.99,
+      "marginsMm": {
+        "left": 20.0,
+        "right": 20.0,
+        "top": 15.0,
+        "bottom": 15.0,
+        "header": 10.0,
+        "footer": 10.0,
+        "gutter": 0.0
+      },
+      "contentWidthMm": 170.0,
+      "contentHeightMm": 266.99,
+      "paragraphCount": 24,
+      "tableCount": 3,
+      "htmlPath": "artifacts/hwpx-mcp-spike/preview-pagebreak/page-001.html"
+    }
+  ],
+  "screenshots": [],
+  "screenshotEngine": {
+    "requested": true,
+    "available": false,
+    "backend": null,
+    "message": "No screenshot backend available. Install playwright browsers or set HWPX_MCP_CHROME_PATH to a Chrome executable. Playwright import error: No module named 'playwright'"
+  },
+  "warnings": [],
+  "suggestion": "Open preview.html manually or install a headless browser backend (Playwright browsers or Chrome via HWPX_MCP_CHROME_PATH) and rerun render_preview."
+}

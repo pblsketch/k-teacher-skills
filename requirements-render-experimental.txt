@@ -1,0 +1,10 @@
+# OPTIONAL, EXPERIMENTAL HWPX authoring backend (renderers/backends/document_plan_backend.py).
+# NOT required for the default classroom render path. Pinned EXACTLY to the versions the
+# capability probe and the frozen self-report oracle were captured against. The experimental
+# `document_plan` backend fails closed unless a probe proves the SAVED package materializes
+# page breaks; these pins never change the default `builder` output.
+#
+#   pip install -r requirements-render-experimental.txt
+#
+hwpx-mcp-server==4.0.0
+python-hwpx==3.1.0

@@ -669,15 +669,25 @@ def _render_hwpx_document(canonical: dict):
     return B.Document(sections=[section], metadata=B.Metadata(title=canonical["title"], author="교사", organization="학교"))
 
 
-def render_hwpx(canonical: dict, marker: dict, path: Path) -> None:
-    document = _render_hwpx_document(canonical)
-    document.save_to_path(str(path))
-    with zipfile.ZipFile(path, "a", zipfile.ZIP_DEFLATED) as z:
-        z.writestr(_HWPX_MARKER, json.dumps(marker, ensure_ascii=False))
-        z.writestr(_HWPX_CONTENT, _content_sidecar_xml(canonical))
+def render_hwpx(canonical: dict, marker: dict, path: Path, *, backend: str | None = None) -> None:
+    """Author real HWPX. `backend=None` (or "builder") is the DEFAULT, unchanged path.
+
+    Any other backend name is dispatched to the additive pluggable registry
+    (`renderers.backends`). `backend=None` short-circuits before importing any
+    backend module so the default classroom output stays byte-identical."""
+    if backend is None or backend == "builder":
+        document = _render_hwpx_document(canonical)
+        document.save_to_path(str(path))
+        with zipfile.ZipFile(path, "a", zipfile.ZIP_DEFLATED) as z:
+            z.writestr(_HWPX_MARKER, json.dumps(marker, ensure_ascii=False))
+            z.writestr(_HWPX_CONTENT, _content_sidecar_xml(canonical))
+        return
+    from renderers.backends import select_hwpx_backend
+
+    select_hwpx_backend(backend).render(canonical, marker, Path(path))
 
 
-def render_all(ir: dict, out_dir: str | Path, *, document_index: int = 0) -> dict:
+def render_all(ir: dict, out_dir: str | Path, *, document_index: int = 0, backend: str | None = None) -> dict:
     out_dir = Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
     document = ir["lesson_package"]["documents"][document_index]
@@ -687,19 +697,23 @@ def render_all(ir: dict, out_dir: str | Path, *, document_index: int = 0) -> dic
     for i, (fmt, renderer) in enumerate((("hwpx", render_hwpx), ("docx", render_docx), ("html", render_html))):
         marker = build_marker(ir, fmt, fp, render_revision_id=f"render-{2100 + i}")
         p = out_dir / f"{document['document_id']}.{fmt}"
-        renderer(canonical, marker, p)
+        if fmt == "hwpx":
+            renderer(canonical, marker, p, backend=backend)
+        else:
+            renderer(canonical, marker, p)
         paths[fmt] = str(p)
     return paths
 
 SUPPORTED_RENDER_TARGETS = ["hwpx", "docx", "html"]
 
 
-def render_package(ir: dict, out_dir: str | Path) -> dict:
+def render_package(ir: dict, out_dir: str | Path, *, backend: str | None = None) -> dict:
     """Render every document in the package to all three formats.
 
     Returns `{document_id: {fmt: path}}`. Refuses duplicate document ids and any
     document whose render_targets are not exactly the supported HWPX/DOCX/HTML set.
-    Reuses `render_all` per document (the single-document path stays unchanged)."""
+    Reuses `render_all` per document (the single-document path stays unchanged).
+    `backend` is forwarded to the HWPX entry only; docx/html are untouched."""
     out_dir = Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
     documents = ir["lesson_package"]["documents"]
@@ -712,7 +726,7 @@ def render_package(ir: dict, out_dir: str | Path) -> dict:
         seen.add(did)
         if document.get("render_targets") != SUPPORTED_RENDER_TARGETS:
             raise ValueError(f"unsupported render targets for {did!r}: {document.get('render_targets')!r}")
-        result[did] = render_all(ir, out_dir, document_index=index)
+        result[did] = render_all(ir, out_dir, document_index=index, backend=backend)
     return result
 
 # --- extractors (real round-trip) ----------------------------------------------
