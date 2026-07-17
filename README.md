@@ -150,6 +150,7 @@ k-teacher-workflow-router로 내 요청을 분석하고 적절한 K-Teacher Skil
 - canonical new-lesson workflow: `new-lesson-package` → `workflows/new-lesson-design.md`
 - install targets: Codex, Claude Code, Google Antigravity
 - validation lane (8 validators): `python tests/validate_skill_pack.py && python tests/validate_workflow_envelope.py && python tests/validate_lesson_package_ir.py && python tests/validate_backport_marker.py && python tests/validate_renderer_parity.py && python tests/validate_release_gate_assets.py && python tests/validate_public_surface_regressions.py && python tests/validate_provider_skills.py`
+- full regression sweep: `tests/validate_*.py` 24개. HWPX backend의 물리적 쪽 나눔·open-safety·실제 4문서 패키지는 `tests/validate_hwpx_backend_contract.py`에서 별도로 검증합니다.
 - release-gate fixtures: `tests/golden/semantic-eval/valid.json`, `tests/golden/release-observability/valid.json`
 - semantic eval은 `workflow-envelope`, `lesson-package-ir`, `kteacher-backport-marker`, `renderer-parity` deterministic validator가 모두 통과된 뒤에만 실행되며, deterministic 실패를 override하지 않습니다.
 - semantic eval dimensions: `workflow-selection-quality`, `pedagogy-quality`, `rigor-preservation`, `usability-accessibility`, `post-verification-curriculum-alignment-quality`
@@ -186,6 +187,29 @@ k-teacher-workflow-router로 내 요청을 분석하고 적절한 K-Teacher Skil
 - `student-worksheet-builder` (오케스트레이터, direct-entry) — 단일 IR `content.blocks` 기반 학생 활동지: 물리성 게이트(분량·쓰기공간·페이지밀도·출구표·흑백안전·모둠중립), facet 블록 재귀, standalone quick-draft fail-closed. 의존: `standard-alignment-verify`·`secondary-material-builder`·`material-rubric-qa`.
 - `individualized-material-package-builder` (오케스트레이터, direct-entry) — **개별화** 수업 자료 패키지: 교사 `개별화 수업 운영안` 1개 + 학생 `Group A/B/C 활동지` 3개를 단일 IR에서 조립해 HWPX/DOCX/HTML 12개로 렌더링. 공통 목표·과제·성공기준·최난도 출구표는 모둠 간 동일하고 지원만 달라지며, 진단·수준·교사 프로파일 언어는 학생 표면에 노출되지 않는다(rigor 유지·fail-closed). 의존: `standard-alignment-verify`·`secondary-material-builder`·`material-rubric-qa`.
 
+### HWPX(한글 문서) 생성 상태 — 아직 완전하지 않습니다
+
+현재 HWPX 생성은 **실험과 검증이 진행 중인 기능**입니다. 패키지 구조가 유효하고 현재 fixture에서 열림·쪽 나눔·내용 parity가 확인됐다는 뜻이지, 모든 학교 양식과 한컴오피스 환경에서 조판이 완전하다는 뜻은 아닙니다.
+
+- 기본 backend는 기존 `python-hwpx` builder입니다. 검증된 현재 수업자료 묶음을 안정적으로 생성하기 위해 유지합니다.
+- `document_plan` backend는 명시적으로 선택할 때만 사용하는 experimental opt-in입니다. `hwpx-mcp-server==4.0.0`, `python-hwpx==3.1.0` 정확 버전에서만 활성화되며, 실패하면 builder로 조용히 대체하지 않고 출력을 거부합니다.
+- 현재 검증은 저장된 `Contents/section0.xml`의 물리적 page break, python-hwpx 재열기, `openSafety`, HTML preview 쪽수, ZIP 무결성, HWPX/DOCX/HTML 내용 parity를 포함합니다.
+- 현재 4문서 fixture에서는 교사용 운영안 3쪽, 학생용 Group A/B/C 활동지 각 2쪽을 생성하고 검증했습니다.
+
+아직 보장하지 못하는 범위:
+
+- 실제 한컴오피스 renderer에서 연 문서의 화면·인쇄 결과와 한컴 버전별 동일 조판
+- 사용자가 가져온 임의 HWPX 양식, 복잡한 표·도형·누름틀·다단 편집·머리말/꼬리말의 완전한 보존
+- `masterPage`·`history`·`version` manifest 참조와 관련된 잔여 fallback 경고의 완전한 제거
+- 현재 canonical IR과 4문서 fixture 밖의 모든 문서 유형에 대한 일반화
+
+따라서 지금 단계의 HWPX는 **검증된 제한 범위에서 사용할 수 있는 생성물**이며, “한컴에서 완전히 검증된 범용 학교문서 엔진”으로 소개하지 않습니다. experimental backend 설치와 검증은 다음과 같습니다.
+
+```bash
+pip install -r requirements-render-experimental.txt
+python tests/validate_hwpx_backend_contract.py
+```
+
 ### Constraints / license / provenance
 
 - GEPAI **원본** 소스는 커밋하지 않습니다. **정규화 공개 번들**(`providers/curriculum/bundle/2022/`)만 owner-authorized-MIT로 커밋하며(소스 SHA 검증·결정론적 생성·hermetic 재집계 3274=2952 ok+322 quarantine), 이는 저작권 사실일 뿐 공식 출처가 아니고 레코드는 fail-closed로 유지됩니다. 학교 평가계획 원문·PII·인증키는 커밋하지 않습니다.
@@ -195,6 +219,7 @@ k-teacher-workflow-router로 내 요청을 분석하고 적절한 K-Teacher Skil
 ### Roadmap
 
 - 국가 성취기준 `:web` 라이브 검증 확대(현재 공식 소스 자동 매칭은 환경 의존), 학교 평가계획 라이브 조회(유효 인증키 필요).
+- HWPX는 실제 한컴오피스 renderer 검증, 양식 profile 확대, 복잡한 표·누름틀·머리말/꼬리말 보존, manifest fallback 경고 제거를 순차적으로 진행합니다.
 
 ## Included skills
 
